@@ -1,7 +1,11 @@
+import { Button } from "./components/ui/button";
+
 function App() {
   return (
     <>
-      <h1>Hello World</h1>
+      <div className="bg-primary h-screen flex items-center justify-center">
+        <Button variant="outline">Click Me!</Button>
+      </div>
     </>
   );
 }

@@ -8,7 +8,7 @@
 `Python`
 `Flask`
 
-## The problem
+## The Problem
 
 The project aims to address the lack of online services that provide translation assistance for English speakers learning Moroccan Darija. This problem is particularly relevant in Morocco, where there are many foreigners, including tourists, who may struggle with communication due to language barriers.
 
