@@ -1,11 +1,24 @@
-import { Button } from "./components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import { ROUTES } from "./routes/routes";
+import Layout from "./pages/Layout";
+import Translator from "./pages/Translator";
+import About from "./pages/About";
+import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
     <>
-      <div className="bg-primary h-screen flex items-center justify-center">
-        <Button variant="outline">Click Me!</Button>
-      </div>
+      <Routes>
+        {/* main routes */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Translator />} />
+          <Route path={ROUTES.about} element={<About />} />
+          <Route path={ROUTES.contact} element={<Contact />} />
+          <Route path={ROUTES.notFound} element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </>
   );
 }
