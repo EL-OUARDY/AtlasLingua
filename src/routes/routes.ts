@@ -1,6 +1,16 @@
 export const ROUTES = {
   home: "/",
+  translate: "/translate",
+  dictionary: "/dictionary",
+  media_translation: "/media-translation",
+  learn: "/learn",
+  favorites: "/favorites",
+  history: "/history",
+  community: "/community",
+  contribution: "/contribution",
   about: "/about",
   contact: "/contact",
+  feedback: "/feedback",
+  live_assistance: "/live-assistance",
   notFound: "/404",
 };
