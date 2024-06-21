@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import MobileSideBar from "./MobileSideBar";
 import MainMenu from "./MainMenu";
 import { APP_NAME } from "@/shared/constants";
+import ThemeSwitch from "./ThemeSwitch";
 
 function Header() {
   return (
@@ -26,26 +27,34 @@ function Header() {
           <span className="">{APP_NAME}</span>
         </Link>
       </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="overflow-hidden md:rounded-full sm:ml-auto"
-          >
-            <User />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="md:ml-auto flex gap-2">
+        <ThemeSwitch />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="overflow-hidden md:rounded-full"
+            >
+              <User />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className=" cursor-pointer">
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className=" cursor-pointer">
+              Support
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className=" cursor-pointer">
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   );
 }
