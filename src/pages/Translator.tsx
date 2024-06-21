@@ -38,7 +38,7 @@ function Translator() {
             Translate English to Darija
           </h3>
           <p className="text-sm text-muted-foreground">
-            Get acurate translations with our easy-to-use application
+            Get acurate translations with our easy-to-use application.
           </p>
         </div>
       </div>
