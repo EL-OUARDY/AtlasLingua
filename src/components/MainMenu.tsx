@@ -17,39 +17,40 @@ import { ROUTES } from "@/routes/routes";
 
 const features: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Dictionary",
+    href: "#",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Unlock the richness of Darija with our comprehensive dictionary.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
+    title: "Summarization",
+    href: "#",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Transform lengthy audio and video into concise, actionable insights.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
+    title: "Community",
+    href: "#",
     description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+      "Join a vibrant ecosystem of language enthusiasts and native speakers.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Academy",
+    href: "#",
+    description:
+      "Access a vast, meticulously organized collection of Darija vocabularies.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
+    title: "Live Assistance",
+    href: "#",
     description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "Translations or cultural queries with personalized, on-demand assistance.",
   },
   {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
+    title: "AI-powered Translation",
+    href: "#",
     description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "Continually learns and adapts, delivering nuanced translations of both languages.",
   },
 ];
 
@@ -65,7 +66,7 @@ function MainMenu(props: Props) {
             Getting started
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid gap-4 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+            <ul className="grid gap-4 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[.65fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <a
@@ -77,28 +78,31 @@ function MainMenu(props: Props) {
                       {APP_NAME}
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
-                      Beautifully designed components that you can copy and
-                      paste into your apps. Accessible. Customizable. Open
-                      Source.
+                      Our app offers a comprehensive dictionary, AI-powered
+                      translations, and audio/video summaries to make learning
+                      effortless.
                     </p>
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/docs" title="Introduction">
-                Re-usable components built using Radix UI and Tailwind CSS.
+              <ListItem href="#" title="Quick Start Guide">
+                Discover how to navigate the app and utilize all of its powerful
+                translation features.
               </ListItem>
-              <ListItem href="/docs/installation" title="Installation">
-                How to install dependencies and structure your app.
+              <ListItem href="#" title="Our Vision">
+                Create a powerful platform that facilitates accurate and
+                intuitive translation.
               </ListItem>
-              <ListItem href="/docs/primitives/typography" title="Typography">
-                Styles for headings, paragraphs, lists...etc
+              <ListItem href="#" title="Contributions">
+                We aim to compile a comprehensive dataset and develop
+                sophisticated NLP models.
               </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger className="bg-background">
-            Components
+            Features
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
@@ -119,7 +123,7 @@ function MainMenu(props: Props) {
             to={ROUTES.contact}
             className={`bg-background ${navigationMenuTriggerStyle()}`}
           >
-            Contact Us
+            Contact us
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>

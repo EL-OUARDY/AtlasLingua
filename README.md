@@ -3,10 +3,11 @@
 ## “Advanced and Accurate English-Moroccan Darija Translation”
 
 `ReactJS`
+`Python`
+`TypeScript`
+`Flask`
 `TailwindCSS`
 `Shadcn/ui`
-`Python`
-`Flask`
 
 ## The Problem
 

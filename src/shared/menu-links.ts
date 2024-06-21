@@ -8,8 +8,8 @@ import {
   LucideIcon,
   MessageSquareText,
   MessagesSquare,
+  MonitorPlay,
   ShieldCheck,
-  SquarePlay,
 } from "lucide-react";
 
 interface ISideBarLink {
@@ -22,18 +22,18 @@ export const MenuLinks: ISideBarLink[] = [
   { text: "Translator", href: ROUTES.translate, icon: Languages },
   { text: "Dictionary", href: ROUTES.dictionary, icon: BookOpenText },
   {
-    text: "Media Translation",
-    href: ROUTES.media_translation,
-    icon: SquarePlay,
+    text: "Summarization",
+    href: ROUTES.summarization,
+    icon: MonitorPlay,
   },
-  { text: "Learn", href: ROUTES.learn, icon: GraduationCap },
+  { text: "Academy", href: ROUTES.academy, icon: GraduationCap },
   { text: "Community", href: ROUTES.community, icon: MessagesSquare },
-  { text: "Contribution", href: ROUTES.contribution, icon: Handshake },
   {
     text: "Live Assistance",
     href: ROUTES.live_assistance,
     icon: ShieldCheck,
   },
+  { text: "Contribution", href: ROUTES.contribution, icon: Handshake },
   { text: "Feedback", href: ROUTES.feedback, icon: MessageSquareText },
   { text: "About", href: ROUTES.about, icon: BadgeInfo },
 ];

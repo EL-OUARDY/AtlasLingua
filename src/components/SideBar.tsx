@@ -40,7 +40,7 @@ function SideBar() {
           to={ROUTES.home}
           className="flex items-center gap-2 font-semibold"
         >
-          <Hash className="h-6 w-6" />
+          <Hash className="h-7 w-7" />
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
         </Link>
         {isSideBarOpen && (
@@ -59,7 +59,7 @@ function SideBar() {
                   to={link.href}
                   className="w-full flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <link.icon className="h-5 w-5" />
+                  <link.icon className="h-6 w-6" />
                   {isSideBarOpen && <span className="">{link.text}</span>}
                 </NavLink>
               </TooltipTrigger>
@@ -86,7 +86,7 @@ function SideBar() {
                   to="#"
                   className="w-full  flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <PanelLeftOpen className="h-5 w-5" />
+                  <PanelLeftOpen className="h-6 w-6" />
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -106,7 +106,7 @@ function SideBar() {
                   to="#"
                   className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Settings className="h-5 w-5" />
+                  <Settings className="h-6 w-6" />
                   {isSideBarOpen && <span className="">Settings</span>}
                 </Link>
               </TooltipTrigger>
@@ -131,7 +131,7 @@ function SideBar() {
                     size="icon"
                     className="ml-auto h-8 w-8 flex items-center gap-4  py-2 text-muted-foreground hover:text-foreground"
                   >
-                    <PanelLeftClose className="h-5 w-5" />
+                    <PanelLeftClose className="h-6 w-6" />
                     <span className="sr-only">Collapse Menu</span>
                   </Button>
                 </TooltipTrigger>

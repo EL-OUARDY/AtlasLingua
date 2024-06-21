@@ -12,16 +12,20 @@ function Translator() {
   return (
     <>
       {/* <h1 className="text-lg font-semibold md:text-2xl">Translator</h1> */}
-      <Breadcrumb className="">
+      <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link to="#">Translator</Link>
+              <Link to="#" className="text-base">
+                Translator
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>English - Darija</BreadcrumbPage>
+            <BreadcrumbPage className="text-base">
+              English - Darija
+            </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>

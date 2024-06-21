@@ -7,7 +7,7 @@ import SideBar from "@/components/SideBar";
 
 function Layout() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey={APP_NAME + "-theme"}>
+    <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
       <ScrollArea className="h-screen w-screen selection:bg-secondary selection:text-foreground">
         <div id="page-wrapper" className="flex min-h-screen w-full bg-muted/40">
           <SideBar />
