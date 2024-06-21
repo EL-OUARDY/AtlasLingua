@@ -1,7 +1,9 @@
 function Summarization() {
   return (
     <>
-      <h1 className="text-lg font-semibold md:text-2xl">Summarization</h1>
+      <h1 className="hidden sm:block text-lg font-semibold md:text-2xl">
+        Summarization
+      </h1>
       <div
         className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
         x-chunk="dashboard-02-chunk-1"
@@ -11,8 +13,8 @@ function Summarization() {
             Have your media on your native language
           </h3>
           <p className="text-sm text-muted-foreground">
-            Leverage the power of our AI algorithms to get your media on your
-            native language.
+            Leverage the power of our AI algorithms to get your media translated
+            to your native language.
           </p>
         </div>
       </div>

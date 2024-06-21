@@ -27,7 +27,7 @@ function Header() {
           <span className="">{APP_NAME}</span>
         </Link>
       </div>
-      <div className="md:ml-auto flex gap-2">
+      <div className="sm:ml-auto flex gap-2">
         <ThemeSwitch />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

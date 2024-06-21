@@ -33,7 +33,7 @@ function ThemeSwitch() {
         <Button
           variant="outline"
           size="icon"
-          className="overflow-hidden md:rounded-full hidden md:flex "
+          className="overflow-hidden md:rounded-full hidden sm:flex"
         >
           {currTheme === "light" && (
             <Sun className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

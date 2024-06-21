@@ -38,7 +38,7 @@ function SideBar() {
       <div className="w-full flex h-14 items-center border-b lg:h-[60px]">
         <Link
           to={ROUTES.home}
-          className="flex items-center gap-2 font-semibold"
+          className="flex outline-none items-center gap-2 font-semibold"
         >
           <Hash className="h-7 w-7" />
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
@@ -57,7 +57,7 @@ function SideBar() {
               <TooltipTrigger asChild>
                 <NavLink
                   to={link.href}
-                  className="w-full flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                  className="w-full outline-none flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
                   <link.icon className="h-6 w-6" />
                   {isSideBarOpen && <span className="">{link.text}</span>}
@@ -104,7 +104,7 @@ function SideBar() {
               <TooltipTrigger asChild>
                 <Link
                   to="#"
-                  className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                  className="flex items-center outline-none gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Settings className="h-6 w-6" />
                   {isSideBarOpen && <span className="">Settings</span>}
