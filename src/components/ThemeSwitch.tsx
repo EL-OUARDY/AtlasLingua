@@ -47,6 +47,7 @@ function ThemeSwitch() {
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
+          direction="right"
           checked={theme === "light"}
           onClick={() => setTheme("light")}
           className=" cursor-pointer"
@@ -54,6 +55,7 @@ function ThemeSwitch() {
           Light
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
+          direction="right"
           checked={theme === "dark"}
           onClick={() => setTheme("dark")}
           className=" cursor-pointer"
@@ -61,6 +63,7 @@ function ThemeSwitch() {
           Dark
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
+          direction="right"
           checked={theme === "system"}
           onClick={() => setTheme("system")}
           className=" cursor-pointer"
