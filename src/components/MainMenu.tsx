@@ -47,7 +47,7 @@ const features: { title: string; href: string; description: string }[] = [
       "Translations or cultural queries with personalized, on-demand assistance.",
   },
   {
-    title: "AI-powered Translation",
+    title: "AI-Powered Translation",
     href: "#",
     description:
       "Continually learns and adapts, delivering nuanced translations of both languages.",

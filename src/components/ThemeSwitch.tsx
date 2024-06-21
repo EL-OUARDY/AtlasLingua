@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
 } from "./ui/dropdown-menu";
 import { useTheme } from "@/contexts/theme-provider";
 import { useEffect, useState } from "react";
@@ -46,24 +46,27 @@ function ThemeSwitch() {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
+        <DropdownMenuCheckboxItem
+          checked={theme === "light"}
           onClick={() => setTheme("light")}
           className=" cursor-pointer"
         >
           Light
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={theme === "dark"}
           onClick={() => setTheme("dark")}
           className=" cursor-pointer"
         >
           Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          checked={theme === "system"}
           onClick={() => setTheme("system")}
           className=" cursor-pointer"
         >
-          Systen
-        </DropdownMenuItem>
+          System
+        </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
