@@ -14,6 +14,7 @@ import Summarization from "./pages/Summarization";
 import LiveAssistance from "./pages/LiveAssistance";
 import Favorites from "./pages/Favorites";
 import History from "./pages/History";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path={ROUTES.community} element={<Community />} />
           <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />
           <Route path={ROUTES.contribution} element={<Contribution />} />
+          <Route path={ROUTES.notifications} element={<Notifications />} />
           <Route path={ROUTES.history} element={<History />} />
           <Route path={ROUTES.feedback} element={<Feedback />} />
           <Route path={ROUTES.about} element={<About />} />
