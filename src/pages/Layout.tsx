@@ -4,6 +4,7 @@ import { APP_NAME } from "@/shared/constants";
 import Header from "@/components/Header";
 import { Outlet } from "react-router-dom";
 import SideBar from "@/components/SideBar";
+import MobileNavigationBar from "@/components/MobileNavigationBar";
 
 function Layout() {
   return (
@@ -16,6 +17,7 @@ function Layout() {
             <main className="flex flex-col flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-6">
               <Outlet />
             </main>
+            <MobileNavigationBar />
           </div>
         </div>
       </ScrollArea>

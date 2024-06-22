@@ -4,6 +4,7 @@ import {
   BookOpenText,
   GraduationCap,
   Handshake,
+  Heart,
   Languages,
   LucideIcon,
   MessageSquareText,
@@ -21,6 +22,7 @@ interface ISideBarLink {
 export const MenuLinks: ISideBarLink[] = [
   { text: "Translator", href: ROUTES.translate, icon: Languages },
   { text: "Dictionary", href: ROUTES.dictionary, icon: BookOpenText },
+  { text: "Favorites", href: ROUTES.favorites, icon: Heart },
   {
     text: "Summarization",
     href: ROUTES.summarization,

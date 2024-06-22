@@ -1,4 +1,4 @@
-import { PanelLeft, Settings, Hash } from "lucide-react";
+import { PanelLeft, Hash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -55,15 +55,6 @@ function MobileSideBar() {
                 {link.text}
               </NavLink>
             ))}
-
-            <Link
-              to="#"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <Settings className="h-5 w-5" />
-              Settings
-            </Link>
           </nav>
         </ScrollArea>
       </SheetContent>

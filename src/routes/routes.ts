@@ -6,6 +6,7 @@ export const ROUTES = {
   academy: "/academy",
   favorites: "/favorites",
   history: "/history",
+  notifications: "/notifications",
   community: "/community",
   contribution: "/contribution",
   about: "/about",
