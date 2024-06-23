@@ -2,9 +2,9 @@ import { ROUTES } from "@/routes/routes";
 import {
   BadgeInfo,
   BookOpenText,
-  GraduationCap,
+  Library,
   Handshake,
-  Heart,
+  Star,
   Languages,
   LucideIcon,
   MessageSquareText,
@@ -27,8 +27,8 @@ export const MenuLinks: ISideBarLink[] = [
     href: ROUTES.media,
     icon: MonitorPlay,
   },
-  { text: "Favorites", href: ROUTES.favorites, icon: Heart },
-  { text: "Academy", href: ROUTES.academy, icon: GraduationCap },
+  { text: "Favorites", href: ROUTES.favorites, icon: Star },
+  { text: "Learn", href: ROUTES.learn, icon: Library },
   { text: "Community", href: ROUTES.community, icon: MessagesSquare },
   {
     text: "Live Assistance",

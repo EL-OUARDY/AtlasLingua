@@ -1,4 +1,4 @@
-import { User, Hash } from "lucide-react";
+import { User, Hash, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,8 +17,16 @@ import ThemeSwitch from "./ThemeSwitch";
 
 function Header() {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
       <MobileSideBar />
+      <Button
+        variant="outline"
+        size="icon"
+        className="overflow-hidden md:rounded-full sm:hidden"
+      >
+        <Bell className="h-5 w-5" />
+        <span className="sr-only">Notifications</span>
+      </Button>
       <MainMenu className="hidden md:block" />
 
       <div className="flex items-center m-auto sm:hidden">
@@ -36,7 +44,7 @@ function Header() {
               size="icon"
               className="overflow-hidden md:rounded-full"
             >
-              <User />
+              <User className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

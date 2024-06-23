@@ -35,7 +35,7 @@ const features: { title: string; href: string; description: string }[] = [
       "Join a vibrant ecosystem of language enthusiasts and native speakers.",
   },
   {
-    title: "Academy",
+    title: "Learn",
     href: "#",
     description:
       "Access a vast, meticulously organized collection of Darija vocabularies.",

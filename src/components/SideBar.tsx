@@ -33,7 +33,7 @@ function SideBar() {
   return (
     <aside
       className={`${
-        isSideBarOpen ? "md:w-[220px] lg:w-[260px]" : ""
+        isSideBarOpen ? "w-[220px] md:w-[220px] lg:w-[260px]" : ""
       } z-10 hidden sm:flex flex-col min-w-14 sm:h-screen border-r bg-background px-6`}
     >
       <div className="w-full flex h-14 items-center border-b lg:h-[60px]">
@@ -46,7 +46,7 @@ function SideBar() {
         </Link>
         {isSideBarOpen && (
           <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-            <Link to={ROUTES.notifications}>
+            <Link to={"#"}>
               <Bell className="h-4 w-4" />
               <span className="sr-only">notifications</span>
             </Link>

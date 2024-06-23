@@ -1,20 +1,19 @@
 import { Route, Routes } from "react-router-dom";
 import { ROUTES } from "./routes/routes";
-import Layout from "./pages/Layout";
-import Translator from "./pages/Translator";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
-import Contact from "./pages/Contact";
-import Dictionary from "./pages/Dictionary";
-import Academy from "./pages/Academy";
-import Community from "./pages/Community";
-import Contribution from "./pages/Contribution";
-import Feedback from "./pages/Feedback";
-import Media from "./pages/Media";
-import LiveAssistance from "./pages/LiveAssistance";
-import Favorites from "./pages/Favorites";
-import History from "./pages/History";
-import Notifications from "./pages/Notifications";
+import Layout from "./components/pages/Layout";
+import Translator from "./components/pages/Translator";
+import About from "./components/pages/About";
+import NotFound from "./components/pages/NotFound";
+import Contact from "./components/pages/Contact";
+import Dictionary from "./components/pages/Dictionary";
+import Learn from "./components/pages/Learn";
+import Community from "./components/pages/Community";
+import Contribution from "./components/pages/Contribution";
+import Feedback from "./components/pages/Feedback";
+import Media from "./components/pages/Media";
+import LiveAssistance from "./components/pages/LiveAssistance";
+import Favorites from "./components/pages/Favorites";
+import History from "./components/pages/History";
 
 function App() {
   return (
@@ -27,11 +26,10 @@ function App() {
           <Route path={ROUTES.dictionary} element={<Dictionary />} />
           <Route path={ROUTES.favorites} element={<Favorites />} />
           <Route path={ROUTES.media} element={<Media />} />
-          <Route path={ROUTES.academy} element={<Academy />} />
+          <Route path={ROUTES.learn} element={<Learn />} />
           <Route path={ROUTES.community} element={<Community />} />
           <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />
           <Route path={ROUTES.contribution} element={<Contribution />} />
-          <Route path={ROUTES.notifications} element={<Notifications />} />
           <Route path={ROUTES.history} element={<History />} />
           <Route path={ROUTES.feedback} element={<Feedback />} />
           <Route path={ROUTES.about} element={<About />} />
