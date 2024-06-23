@@ -14,9 +14,11 @@ function Layout() {
           <SideBar />
           <div className="h-screen flex flex-col sm:gap-4 sm:py-4 flex-1">
             <Header />
-            <main className="flex flex-col flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-6">
-              <Outlet />
-            </main>
+            <ScrollArea className="h-full">
+              <main className="h-full flex flex-grow flex-col flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-6">
+                <Outlet />
+              </main>
+            </ScrollArea>
             <MobileNavigationBar />
           </div>
         </div>

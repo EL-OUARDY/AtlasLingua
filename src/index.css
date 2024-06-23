@@ -76,6 +76,9 @@
 }
 
 /* active links */
+div[data-radix-scroll-area-viewport] > div:first-child {
+  height: 100%;
+}
 a.active {
   color: var(--primary);
 }
