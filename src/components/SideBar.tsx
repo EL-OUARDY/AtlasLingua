@@ -17,6 +17,7 @@ import { useState } from "react";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
+import { ScrollArea } from "./ui/scroll-area";
 
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
@@ -33,7 +34,7 @@ function SideBar() {
     <aside
       className={`${
         isSideBarOpen ? "md:w-[220px] lg:w-[260px]" : ""
-      } z-10 hidden min-w-14 flex-col border-r bg-background sm:flex px-6`}
+      } z-10 hidden sm:flex flex-col min-w-14 sm:h-screen border-r bg-background px-6`}
     >
       <div className="w-full flex h-14 items-center border-b lg:h-[60px]">
         <Link
@@ -52,29 +53,33 @@ function SideBar() {
           </Button>
         )}
       </div>
-      <nav className="flex flex-col flex-1 gap-2 sm:py-5">
-        {MenuLinks.map((link, index) => (
-          <TooltipProvider key={index}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <NavLink
-                  to={link.href}
-                  className="w-full outline-none flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <link.icon className="h-6 w-6" />
-                  {isSideBarOpen && <span className="">{link.text}</span>}
-                </NavLink>
-              </TooltipTrigger>
-              <TooltipContent
-                className={isSideBarOpen ? "hidden" : ""}
-                side="right"
-              >
-                {link.text}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ))}
-      </nav>
+      <ScrollArea className="h-full">
+        <div className="flex-grow overflow-auto">
+          <nav className="flex flex-col flex-1 gap-2 sm:py-5">
+            {MenuLinks.map((link, index) => (
+              <TooltipProvider key={index}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <NavLink
+                      to={link.href}
+                      className="w-full outline-none flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                    >
+                      <link.icon className="h-6 w-6" />
+                      {isSideBarOpen && <span className="">{link.text}</span>}
+                    </NavLink>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    className={isSideBarOpen ? "hidden" : ""}
+                    side="right"
+                  >
+                    {link.text}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </nav>
+        </div>
+      </ScrollArea>
       <nav className="flex flex-col items-center gap-2 sm:py-5">
         {!isSideBarOpen && (
           <TooltipProvider>
