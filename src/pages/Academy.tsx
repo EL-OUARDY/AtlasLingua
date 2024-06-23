@@ -4,10 +4,7 @@ function Academy() {
       <h1 className="hidden sm:block text-lg font-semibold md:text-2xl">
         Academy
       </h1>
-      <div
-        className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
-        x-chunk="dashboard-02-chunk-1"
-      >
+      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
         <div className="flex flex-col items-center gap-1 text-center">
           <h3 className="text-2xl font-bold tracking-tight">
             Your learning resources are here

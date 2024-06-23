@@ -2,7 +2,7 @@ export const ROUTES = {
   home: "/",
   translate: "/translate",
   dictionary: "/dictionary",
-  summarization: "/summarization",
+  media: "/media",
   academy: "/academy",
   favorites: "/favorites",
   history: "/history",

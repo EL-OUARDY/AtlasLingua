@@ -45,8 +45,10 @@ function SideBar() {
         </Link>
         {isSideBarOpen && (
           <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">Toggle notifications</span>
+            <Link to={ROUTES.notifications}>
+              <Bell className="h-4 w-4" />
+              <span className="sr-only">notifications</span>
+            </Link>
           </Button>
         )}
       </div>

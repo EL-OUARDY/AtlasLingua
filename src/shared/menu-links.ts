@@ -22,12 +22,12 @@ interface ISideBarLink {
 export const MenuLinks: ISideBarLink[] = [
   { text: "Translator", href: ROUTES.translate, icon: Languages },
   { text: "Dictionary", href: ROUTES.dictionary, icon: BookOpenText },
-  { text: "Favorites", href: ROUTES.favorites, icon: Heart },
   {
-    text: "Summarization",
-    href: ROUTES.summarization,
+    text: "Media",
+    href: ROUTES.media,
     icon: MonitorPlay,
   },
+  { text: "Favorites", href: ROUTES.favorites, icon: Heart },
   { text: "Academy", href: ROUTES.academy, icon: GraduationCap },
   { text: "Community", href: ROUTES.community, icon: MessagesSquare },
   {

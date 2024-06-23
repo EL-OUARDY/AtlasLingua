@@ -10,7 +10,7 @@ import Academy from "./pages/Academy";
 import Community from "./pages/Community";
 import Contribution from "./pages/Contribution";
 import Feedback from "./pages/Feedback";
-import Summarization from "./pages/Summarization";
+import Media from "./pages/Media";
 import LiveAssistance from "./pages/LiveAssistance";
 import Favorites from "./pages/Favorites";
 import History from "./pages/History";
@@ -26,7 +26,7 @@ function App() {
           <Route path={ROUTES.translate} element={<Translator />} />
           <Route path={ROUTES.dictionary} element={<Dictionary />} />
           <Route path={ROUTES.favorites} element={<Favorites />} />
-          <Route path={ROUTES.summarization} element={<Summarization />} />
+          <Route path={ROUTES.media} element={<Media />} />
           <Route path={ROUTES.academy} element={<Academy />} />
           <Route path={ROUTES.community} element={<Community />} />
           <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />
