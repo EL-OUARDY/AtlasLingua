@@ -18,7 +18,7 @@ import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
-import { useData } from "@/contexts/DataContext";
+import { useNotification } from "@/contexts/NotificationContext";
 
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
@@ -31,7 +31,7 @@ function SideBar() {
     localStorage.setItem(storageKey, state ? "open" : "closed");
   }
 
-  const { toggleNotification } = useData();
+  const { toggleNotification } = useNotification();
 
   return (
     <aside

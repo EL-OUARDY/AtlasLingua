@@ -10,10 +10,10 @@ import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
-import { useData } from "@/contexts/DataContext";
+import { useNotification } from "@/contexts/NotificationContext";
 
 function Notifications() {
-  const { isNotificationOpen, toggleNotification } = useData();
+  const { isNotificationOpen, toggleNotification } = useNotification();
 
   const notifications = [
     {
@@ -44,7 +44,7 @@ function Notifications() {
 
   return (
     <Dialog open={isNotificationOpen} onOpenChange={() => toggleNotification()}>
-      <DialogContent className="p-0 sm:w-[400px]">
+      <DialogContent className="p-0 w-[350px] sm:w-[450px]">
         <DialogHeader>
           <DialogTitle>
             <span className="sr-only">Notifications</span>
@@ -52,7 +52,7 @@ function Notifications() {
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <Card className="border-0 w-full">
-          <CardHeader className="">
+          <CardHeader className="pt-0">
             <CardTitle>Notifications</CardTitle>
           </CardHeader>
           <Separator />
@@ -63,9 +63,9 @@ function Notifications() {
                   key={i}
                   className=" flex items-center rounded-lg gap-4 p-3 hover:bg-secondary"
                 >
-                  <n.icon className="" />
+                  <n.icon className="size-6" />
                   <div className="grid gap-2 ">
-                    <p className="text-md font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                    <p className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
                       {n.content}
                     </p>
                     <div className="flex gap-2 items-center text-sm text-muted-foreground">

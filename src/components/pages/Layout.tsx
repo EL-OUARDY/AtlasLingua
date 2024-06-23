@@ -6,14 +6,14 @@ import Notifications from "@/components/Notifications";
 import { Outlet } from "react-router-dom";
 import SideBar from "@/components/SideBar";
 import MobileNavigationBar from "@/components/MobileNavigationBar";
-import { DataProvider } from "@/contexts/DataContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 function Layout() {
   return (
     <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
-      <ScrollArea className="h-screen w-screen selection:bg-secondary selection:text-foreground">
+      <ScrollArea className="h-screen w-screen">
         <div id="page-wrapper" className="flex min-h-screen w-full bg-muted/40">
-          <DataProvider>
+          <NotificationProvider>
             <SideBar />
             <section className="h-screen flex flex-col sm:gap-4 sm:py-4 flex-1">
               <Header />
@@ -25,7 +25,7 @@ function Layout() {
               <MobileNavigationBar />
             </section>
             <Notifications />
-          </DataProvider>
+          </NotificationProvider>
         </div>
       </ScrollArea>
     </ThemeProvider>

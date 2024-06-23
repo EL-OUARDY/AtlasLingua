@@ -1,22 +1,24 @@
 import React, { ReactNode, useContext, useState } from "react";
 
-interface IDataContext {
+interface INotificationContext {
   isNotificationOpen: boolean;
   toggleNotification: () => void;
 }
 
-const DataContext = React.createContext<IDataContext>({} as IDataContext);
+const NotificationContext = React.createContext<INotificationContext>(
+  {} as INotificationContext
+);
 
-// custom hook to expose the DataContext
-export function useData() {
-  return useContext(DataContext);
+// custom hook to expose the NotificationContext
+export function useNotification() {
+  return useContext(NotificationContext);
 }
 
 interface Props {
   children: ReactNode;
 }
 
-export function DataProvider({ children }: Props) {
+export function NotificationProvider({ children }: Props) {
   const [isNotificationOpen, setIsNotificationOpen] = useState<boolean>(false);
 
   function toggleNotification() {
@@ -24,13 +26,13 @@ export function DataProvider({ children }: Props) {
   }
 
   return (
-    <DataContext.Provider
+    <NotificationContext.Provider
       value={{
         isNotificationOpen: isNotificationOpen,
         toggleNotification: toggleNotification,
       }}
     >
       {children}
-    </DataContext.Provider>
+    </NotificationContext.Provider>
   );
 }
