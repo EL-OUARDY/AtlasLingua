@@ -123,7 +123,7 @@ function MainMenu(props: Props) {
             to={ROUTES.contact}
             className={`bg-background ${navigationMenuTriggerStyle()}`}
           >
-            Contact us
+            Support
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>

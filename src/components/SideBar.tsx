@@ -18,6 +18,7 @@ import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
+import { useData } from "@/contexts/DataContext";
 
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
@@ -30,13 +31,15 @@ function SideBar() {
     localStorage.setItem(storageKey, state ? "open" : "closed");
   }
 
+  const { toggleNotification } = useData();
+
   return (
     <aside
       className={`${
         isSideBarOpen ? "w-[220px] md:w-[220px] lg:w-[260px]" : ""
       } z-10 hidden sm:flex flex-col min-w-14 sm:h-screen border-r bg-background px-6`}
     >
-      <div className="w-full flex h-14 items-center border-b lg:h-[60px]">
+      <div className="w-full flex h-14 max-h-14 min-h-14 items-center border-b lg:h-[60px] lg:min-h-[60px] lg:max-h-[60px] ">
         <Link
           to={ROUTES.home}
           className="flex outline-none items-center gap-2 font-semibold"
@@ -45,11 +48,14 @@ function SideBar() {
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
         </Link>
         {isSideBarOpen && (
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-            <Link to={"#"}>
-              <Bell className="h-4 w-4" />
-              <span className="sr-only">notifications</span>
-            </Link>
+          <Button
+            variant="outline"
+            size="icon"
+            className="ml-auto h-8 w-8"
+            onClick={() => toggleNotification()}
+          >
+            <Bell className="h-4 w-4" />
+            <span className="sr-only">notifications</span>
           </Button>
         )}
       </div>

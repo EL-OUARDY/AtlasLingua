@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuCheckboxItem,
 } from "./ui/dropdown-menu";
-import { useTheme } from "@/contexts/theme-provider";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useEffect, useState } from "react";
 
 function ThemeSwitch() {

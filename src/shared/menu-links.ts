@@ -1,6 +1,5 @@
 import { ROUTES } from "@/routes/routes";
 import {
-  BadgeInfo,
   BookOpenText,
   Library,
   Handshake,
@@ -37,5 +36,4 @@ export const MenuLinks: ISideBarLink[] = [
   },
   { text: "Contribution", href: ROUTES.contribution, icon: Handshake },
   { text: "Feedback", href: ROUTES.feedback, icon: MessageSquareText },
-  { text: "About", href: ROUTES.about, icon: BadgeInfo },
 ];
