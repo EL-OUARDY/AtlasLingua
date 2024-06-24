@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 function Translator() {
   return (
     <>
-      <div className="flex justify-between items-center">
-        <h1 className="hidden sm:block text-xl font-bold tracking-tight md:text-2xl">
+      <div className="flex items-center justify-between">
+        <h1 className="hidden text-xl font-bold tracking-tight sm:block md:text-2xl">
           Translator
         </h1>
         <Breadcrumb>

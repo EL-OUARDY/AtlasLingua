@@ -44,14 +44,14 @@ function Notifications() {
 
   return (
     <Dialog open={isNotificationOpen} onOpenChange={() => toggleNotification()}>
-      <DialogContent className="p-0 w-[350px] sm:w-[450px]">
+      <DialogContent className="w-[350px] p-0 sm:w-[450px]">
         <DialogHeader>
           <DialogTitle>
             <span className="sr-only">Notifications</span>
           </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <Card className="border-0 w-full">
+        <Card className="w-full border-0">
           <CardHeader className="pt-0">
             <CardTitle>Notifications</CardTitle>
           </CardHeader>
@@ -61,18 +61,18 @@ function Notifications() {
               {notifications.map((n, i) => (
                 <div
                   key={i}
-                  className=" flex items-center rounded-lg gap-4 p-3 hover:bg-secondary"
+                  className="flex items-center gap-4 rounded-lg p-3 hover:bg-secondary"
                 >
                   <n.icon className="size-6" />
-                  <div className="grid gap-2 ">
-                    <p className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                  <div className="grid gap-2">
+                    <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
                       {n.content}
                     </p>
-                    <div className="flex gap-2 items-center text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <p>{n.type}</p>
                       <Badge
                         variant="outline"
-                        className="whitespace-nowrap overflow-hidden text-ellipsis"
+                        className="overflow-hidden text-ellipsis whitespace-nowrap"
                       >
                         {n.date}
                       </Badge>

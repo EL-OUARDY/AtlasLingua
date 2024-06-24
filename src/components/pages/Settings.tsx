@@ -23,21 +23,21 @@ function Settings() {
   ];
   return (
     <>
-      <div className="flex flex-col h-full p-6 sm:p-8 justify-center rounded-lg border border-dashed shadow-sm">
+      <div className="flex h-full flex-col justify-center rounded-lg border border-dashed p-6 shadow-sm sm:p-8">
         <div className="">
           <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-          <p className="text-muted-foreground mt-1">
+          <p className="mt-1 text-muted-foreground">
             Manage your account settings and set e-mail preferences.
           </p>
         </div>
         <Separator className="my-6" />
-        <div className="size-full flex flex-col lg:gap-12 lg:flex-row">
-          <aside className="flex flex-wrap flex-row justify-start lg:flex-col gap-2 lg:-mx-4 lg:w-[180px]">
+        <div className="flex size-full flex-col lg:flex-row lg:gap-12">
+          <aside className="flex flex-row flex-wrap justify-start gap-2 lg:-mx-4 lg:w-[180px] lg:flex-col">
             {navLinks.map((link, index) => (
               <NavLink
                 key={index}
                 to={link.href}
-                className="flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-10 px-4 py-2 bg-muted hover:bg-muted"
+                className="flex h-10 items-center whitespace-nowrap rounded-md bg-muted px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {link.title}
               </NavLink>
@@ -45,7 +45,7 @@ function Settings() {
           </aside>
           <Separator className="my-6 lg:hidden" />
 
-          <div className="flex flex-col gap-4 w-full lg:w-2/3">
+          <div className="flex w-full flex-col gap-4 lg:w-2/3">
             <Outlet />
           </div>
         </div>

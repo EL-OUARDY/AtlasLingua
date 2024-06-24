@@ -23,7 +23,7 @@ import { useNotification } from "@/contexts/NotificationContext";
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(
-    localStorage.getItem(storageKey) === "closed" ? false : true
+    localStorage.getItem(storageKey) === "closed" ? false : true,
   );
 
   function saveSideBarState(state: boolean) {
@@ -37,12 +37,12 @@ function SideBar() {
     <aside
       className={`${
         isSideBarOpen ? "w-[220px] md:w-[220px] lg:w-[260px]" : ""
-      } z-10 hidden sm:flex flex-col min-w-14 sm:h-screen border-r bg-background px-6`}
+      } z-10 hidden min-w-14 flex-col border-r bg-background px-6 sm:flex sm:h-screen`}
     >
-      <div className="w-full flex h-14 max-h-14 min-h-14 items-center border-b lg:h-[60px] lg:min-h-[60px] lg:max-h-[60px] ">
+      <div className="flex h-14 max-h-14 min-h-14 w-full items-center border-b lg:h-[60px] lg:max-h-[60px] lg:min-h-[60px]">
         <Link
           to={ROUTES.home}
-          className="flex outline-none items-center gap-2 font-semibold"
+          className="flex items-center gap-2 font-semibold outline-none"
         >
           <Hash className="h-7 w-7" />
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
@@ -61,14 +61,14 @@ function SideBar() {
       </div>
       <ScrollArea className="h-full">
         <div className="flex-grow overflow-auto">
-          <nav className="flex flex-col flex-1 gap-2 sm:py-5">
+          <nav className="flex flex-1 flex-col gap-2 sm:py-5">
             {MenuLinks.map((link, index) => (
               <TooltipProvider key={index}>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <NavLink
                       to={link.href}
-                      className="w-full outline-none flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                      className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
                     >
                       <link.icon className="h-6 w-6" />
                       {isSideBarOpen && <span className="">{link.text}</span>}
@@ -97,7 +97,7 @@ function SideBar() {
                     saveSideBarState(!isSideBarOpen);
                   }}
                   to="#"
-                  className="w-full  flex items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                  className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
                   <PanelLeftOpen className="h-6 w-6" />
                 </Link>
@@ -111,13 +111,13 @@ function SideBar() {
             </Tooltip>
           </TooltipProvider>
         )}
-        <div className="w-full flex items-center">
+        <div className="flex w-full items-center">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <NavLink
                   to={ROUTES.settings.home}
-                  className="flex items-center outline-none gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                  className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
                 >
                   <Settings className="h-6 w-6" />
                   {isSideBarOpen && <span className="">Settings</span>}
@@ -142,7 +142,7 @@ function SideBar() {
                     }}
                     variant="outline"
                     size="icon"
-                    className="ml-auto h-8 w-8 flex items-center gap-4  py-2 text-muted-foreground hover:text-foreground"
+                    className="ml-auto flex h-8 w-8 items-center gap-4 py-2 text-muted-foreground hover:text-foreground"
                   >
                     <PanelLeftClose className="h-6 w-6" />
                     <span className="sr-only">Collapse Menu</span>

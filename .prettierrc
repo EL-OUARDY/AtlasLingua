@@ -2,5 +2,6 @@
   "tabWidth": 2,
   "singleQuote": false,
   "jsxSingleQuote": false,
-  "quoteProps": "as-needed"
+  "quoteProps": "as-needed",
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

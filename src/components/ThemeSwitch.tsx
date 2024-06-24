@@ -20,7 +20,7 @@ function ThemeSwitch() {
       setCurrTheme(
         window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
-          : "light"
+          : "light",
       );
       return;
     }
@@ -50,7 +50,7 @@ function ThemeSwitch() {
           direction="right"
           checked={theme === "light"}
           onClick={() => setTheme("light")}
-          className=" cursor-pointer"
+          className="cursor-pointer"
         >
           Light
         </DropdownMenuCheckboxItem>
@@ -58,7 +58,7 @@ function ThemeSwitch() {
           direction="right"
           checked={theme === "dark"}
           onClick={() => setTheme("dark")}
-          className=" cursor-pointer"
+          className="cursor-pointer"
         >
           Dark
         </DropdownMenuCheckboxItem>
@@ -66,7 +66,7 @@ function ThemeSwitch() {
           direction="right"
           checked={theme === "system"}
           onClick={() => setTheme("system")}
-          className=" cursor-pointer"
+          className="cursor-pointer"
         >
           System
         </DropdownMenuCheckboxItem>

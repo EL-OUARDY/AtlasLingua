@@ -25,20 +25,20 @@ function Header() {
         onClick={() => toggleNotification()}
         variant="outline"
         size="icon"
-        className="overflow-hidden md:rounded-full sm:hidden"
+        className="overflow-hidden sm:hidden md:rounded-full"
       >
         <Bell className="h-5 w-5" />
         <span className="sr-only">Notifications</span>
       </Button>
       <MainMenu className="hidden md:block" />
 
-      <div className="flex items-center m-auto sm:hidden">
+      <div className="m-auto flex items-center sm:hidden">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Hash className="h-6 w-6" />
           <span className="hidden">{APP_NAME}</span>
         </Link>
       </div>
-      <div className="sm:ml-auto flex gap-2">
+      <div className="flex gap-2 sm:ml-auto">
         <ThemeSwitch />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -53,14 +53,14 @@ function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className=" cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer">
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem className=" cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer">
               Support
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className=" cursor-pointer">
+            <DropdownMenuItem className="cursor-pointer">
               Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
