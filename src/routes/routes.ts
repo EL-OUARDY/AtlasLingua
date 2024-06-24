@@ -18,5 +18,6 @@ export const ROUTES = {
     notifications: "/settings/notifications",
   },
   live_assistance: "/live-assistance",
+  privacy: "/privacy-policy",
   notFound: "/404",
 };

@@ -25,16 +25,21 @@ const FormSchema = z.object({
       required_error: "Please select an email to display.",
     })
     .email(),
-  bio: z.string().max(160).min(4),
+  bio: z.string().max(255).optional(),
 });
+
+type ProfileFormValues = z.infer<typeof FormSchema>;
+
+// from database
+const defaultValues: Partial<ProfileFormValues> = {
+  username: "AtlasLingua",
+  email: "user@atlasLingua.com",
+};
 
 function ProfileSettings() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-    },
+    defaultValues: defaultValues,
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {

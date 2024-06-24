@@ -14,6 +14,7 @@ import Media from "./components/pages/Media";
 import LiveAssistance from "./components/pages/LiveAssistance";
 import Favorites from "./components/pages/Favorites";
 import History from "./components/pages/History";
+import Privacy from "./components/pages/Privacy";
 import Settings from "./components/pages/Settings";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { APP_NAME } from "@/shared/constants";
@@ -42,6 +43,7 @@ function App() {
             <Route path={ROUTES.feedback} element={<Feedback />} />
             <Route path={ROUTES.about} element={<About />} />
             <Route path={ROUTES.contact} element={<Contact />} />
+            <Route path={ROUTES.privacy} element={<Privacy />} />
             <Route path={ROUTES.settings.general} element={<Settings />}>
               <Route index element={<GeneralSettings />} />
               <Route
