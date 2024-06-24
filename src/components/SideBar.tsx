@@ -116,7 +116,7 @@ function SideBar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <NavLink
-                  to={ROUTES.settings.home}
+                  to={ROUTES.settings.general}
                   className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
                 >
                   <Settings className="h-6 w-6" />

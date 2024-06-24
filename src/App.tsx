@@ -42,12 +42,8 @@ function App() {
             <Route path={ROUTES.feedback} element={<Feedback />} />
             <Route path={ROUTES.about} element={<About />} />
             <Route path={ROUTES.contact} element={<Contact />} />
-            <Route path={ROUTES.settings.home} element={<Settings />}>
-              <Route index element={<ProfileSettings />} />
-              <Route
-                path={ROUTES.settings.general}
-                element={<GeneralSettings />}
-              />
+            <Route path={ROUTES.settings.general} element={<Settings />}>
+              <Route index element={<GeneralSettings />} />
               <Route
                 path={ROUTES.settings.profile}
                 element={<ProfileSettings />}

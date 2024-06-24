@@ -19,7 +19,7 @@ import { useNotification } from "@/contexts/NotificationContext";
 function Header() {
   const { toggleNotification } = useNotification();
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 py-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6 md:py-0">
       <MobileSideBar />
       <Button
         onClick={() => toggleNotification()}
