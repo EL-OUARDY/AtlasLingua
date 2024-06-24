@@ -115,13 +115,13 @@ function SideBar() {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link
-                  to="#"
+                <NavLink
+                  to={ROUTES.settings.home}
                   className="flex items-center outline-none gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
                   <Settings className="h-6 w-6" />
                   {isSideBarOpen && <span className="">Settings</span>}
-                </Link>
+                </NavLink>
               </TooltipTrigger>
               <TooltipContent
                 className={isSideBarOpen ? "hidden" : ""}

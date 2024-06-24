@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 function NotFound() {
   return (
     <>
-      <h1 className="hidden sm:block text-lg font-semibold md:text-2xl"></h1>
+      <h1 className="hidden sm:block text-xl font-bold tracking-tight md:text-2xl"></h1>
       <div
         className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
         x-chunk="dashboard-02-chunk-1"

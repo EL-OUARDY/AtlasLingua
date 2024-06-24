@@ -12,7 +12,7 @@ function Translator() {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h1 className="hidden sm:block text-lg font-semibold md:text-2xl">
+        <h1 className="hidden sm:block text-xl font-bold tracking-tight md:text-2xl">
           Translator
         </h1>
         <Breadcrumb>

@@ -35,7 +35,7 @@ function Header() {
       <div className="flex items-center m-auto sm:hidden">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Hash className="h-6 w-6" />
-          <span className="">{APP_NAME}</span>
+          <span className="hidden">{APP_NAME}</span>
         </Link>
       </div>
       <div className="sm:ml-auto flex gap-2">

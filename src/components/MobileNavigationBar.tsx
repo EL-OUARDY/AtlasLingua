@@ -36,7 +36,7 @@ function MobileNavigationBar() {
         <span className="sr-only">Favorites</span>
       </Link>
       <Link
-        to={"#"}
+        to={ROUTES.settings.home}
         className="border-2 border-secondary hover:bg-secondary rounded-lg flex-1 flex py-2 justify-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
       >
         <Settings className="h-5 w-5" />

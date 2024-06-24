@@ -11,6 +11,12 @@ export const ROUTES = {
   about: "/about",
   contact: "/contact",
   feedback: "/feedback",
+  settings: {
+    home: "/settings",
+    profile: "/settings/profile",
+    appearance: "/settings/appearance",
+    notifications: "/settings/notifications",
+  },
   live_assistance: "/live-assistance",
   notFound: "/404",
 };
