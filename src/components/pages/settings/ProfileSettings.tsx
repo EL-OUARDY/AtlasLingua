@@ -33,6 +33,7 @@ function ProfileSettings() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: "",
+      email: "",
     },
   });
 
@@ -80,7 +81,7 @@ function ProfileSettings() {
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="user@atlaslingua"
+                    placeholder="user@atlaslingua.com"
                     {...field}
                   />
                 </FormControl>
@@ -113,7 +114,7 @@ function ProfileSettings() {
             )}
           />
           <Button type="submit" className="w-fit">
-            Submit
+            Save changes
           </Button>
         </form>
       </Form>

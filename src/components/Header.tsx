@@ -15,6 +15,7 @@ import MainMenu from "./MainMenu";
 import { APP_NAME } from "@/shared/constants";
 import ThemeSwitch from "./ThemeSwitch";
 import { useNotification } from "@/contexts/NotificationContext";
+import { ROUTES } from "@/routes/routes";
 
 function Header() {
   const { toggleNotification } = useNotification();
@@ -53,12 +54,16 @@ function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Support
-            </DropdownMenuItem>
+            <Link to={ROUTES.settings.profile}>
+              <DropdownMenuItem className="cursor-pointer">
+                Profile
+              </DropdownMenuItem>
+            </Link>
+            <Link to={ROUTES.contact}>
+              <DropdownMenuItem className="cursor-pointer">
+                Support
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer">
               Logout
