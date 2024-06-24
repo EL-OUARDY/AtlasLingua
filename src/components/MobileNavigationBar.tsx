@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function MobileNavigationBar() {
   return (
-    <div className="flex justify-between gap-4 bg-background p-2 sm:hidden">
+    <div className="flex justify-between gap-4 bg-background p-2 md:hidden">
       <Link
         to={ROUTES.dictionary}
         className="flex flex-1 justify-center gap-4 rounded-lg border-2 border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"

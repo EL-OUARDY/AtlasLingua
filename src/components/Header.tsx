@@ -19,26 +19,26 @@ import { useNotification } from "@/contexts/NotificationContext";
 function Header() {
   const { toggleNotification } = useNotification();
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6">
       <MobileSideBar />
       <Button
         onClick={() => toggleNotification()}
         variant="outline"
         size="icon"
-        className="overflow-hidden sm:hidden md:rounded-full"
+        className="overflow-hidden md:hidden md:rounded-full"
       >
         <Bell className="h-5 w-5" />
         <span className="sr-only">Notifications</span>
       </Button>
       <MainMenu className="hidden md:block" />
 
-      <div className="m-auto flex items-center sm:hidden">
+      <div className="m-auto flex items-center md:hidden">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Hash className="h-6 w-6" />
-          <span className="hidden">{APP_NAME}</span>
+          <span className="hidden sm:block">{APP_NAME}</span>
         </Link>
       </div>
-      <div className="flex gap-2 sm:ml-auto">
+      <div className="flex gap-2 md:ml-auto">
         <ThemeSwitch />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -28,7 +28,7 @@ const FormSchema = z.object({
   bio: z.string().max(160).min(4),
 });
 
-export function ProfileSettings() {
+function ProfileSettings() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -120,3 +120,5 @@ export function ProfileSettings() {
     </>
   );
 }
+
+export default ProfileSettings;

@@ -5,6 +5,10 @@ import { ROUTES } from "@/routes/routes";
 function Settings() {
   const navLinks = [
     {
+      title: "General",
+      href: ROUTES.settings.general,
+    },
+    {
       title: "Profile",
       href: ROUTES.settings.profile,
     },
@@ -15,10 +19,6 @@ function Settings() {
     {
       title: "Notifications",
       href: ROUTES.settings.notifications,
-    },
-    {
-      title: "Account",
-      href: "/",
     },
   ];
   return (
@@ -32,12 +32,15 @@ function Settings() {
         </div>
         <Separator className="my-6" />
         <div className="flex size-full flex-col lg:flex-row lg:gap-12">
-          <aside className="flex flex-row flex-wrap justify-start gap-2 lg:-mx-4 lg:w-[180px] lg:flex-col">
+          <aside
+            id="settings-nav"
+            className="flex flex-row flex-wrap justify-start gap-2 lg:-mx-4 lg:w-[180px] lg:flex-col"
+          >
             {navLinks.map((link, index) => (
               <NavLink
                 key={index}
                 to={link.href}
-                className="flex h-10 items-center whitespace-nowrap rounded-md bg-muted px-4 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                className="flex h-10 items-center whitespace-nowrap rounded-md bg-background px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-accent-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
               >
                 {link.title}
               </NavLink>

@@ -17,7 +17,8 @@ import History from "./components/pages/History";
 import Settings from "./components/pages/Settings";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { APP_NAME } from "@/shared/constants";
-import { ProfileSettings } from "./components/pages/settings/ProfileSettings";
+import ProfileSettings from "./components/pages/settings/ProfileSettings";
+import GeneralSettings from "./components/pages/settings/GeneralSettings";
 import AppearanceSettings from "./components/pages/settings/AppearanceSettings";
 import NotificationSettings from "./components/pages/settings/NotificationSettings";
 
@@ -43,6 +44,10 @@ function App() {
             <Route path={ROUTES.contact} element={<Contact />} />
             <Route path={ROUTES.settings.home} element={<Settings />}>
               <Route index element={<ProfileSettings />} />
+              <Route
+                path={ROUTES.settings.general}
+                element={<GeneralSettings />}
+              />
               <Route
                 path={ROUTES.settings.profile}
                 element={<ProfileSettings />}

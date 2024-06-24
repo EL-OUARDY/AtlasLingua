@@ -13,6 +13,7 @@ export const ROUTES = {
   feedback: "/feedback",
   settings: {
     home: "/settings",
+    general: "/settings/general",
     profile: "/settings/profile",
     appearance: "/settings/appearance",
     notifications: "/settings/notifications",

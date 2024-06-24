@@ -44,7 +44,7 @@ function Notifications() {
 
   return (
     <Dialog open={isNotificationOpen} onOpenChange={() => toggleNotification()}>
-      <DialogContent className="w-[350px] p-0 sm:w-[450px]">
+      <DialogContent className="w-11/12 p-0 sm:w-[450px]">
         <DialogHeader>
           <DialogTitle>
             <span className="sr-only">Notifications</span>
@@ -63,7 +63,7 @@ function Notifications() {
                   key={i}
                   className="flex items-center gap-4 rounded-lg p-3 hover:bg-secondary"
                 >
-                  <n.icon className="size-6" />
+                  <n.icon className="size-5 sm:size-6" />
                   <div className="grid gap-2">
                     <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
                       {n.content}

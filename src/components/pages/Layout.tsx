@@ -12,10 +12,10 @@ function Layout() {
       <div id="page-wrapper" className="flex min-h-screen w-full bg-muted/40">
         <NotificationProvider>
           <SideBar />
-          <section className="flex h-screen flex-1 flex-col sm:gap-4 sm:py-4">
+          <section className="flex h-screen flex-1 flex-col md:gap-4 md:py-4">
             <Header />
             <ScrollArea className="h-full">
-              <main className="flex h-full flex-1 flex-grow flex-col gap-4 p-4 sm:px-6 sm:py-0 md:gap-6">
+              <main className="flex h-full flex-1 flex-grow flex-col gap-4 p-4 md:gap-6 md:px-6 md:py-0">
                 <Outlet />
               </main>
             </ScrollArea>
