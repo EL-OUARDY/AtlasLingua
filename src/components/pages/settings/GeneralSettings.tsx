@@ -74,7 +74,7 @@ function GeneralSettings() {
                       <FormLabel className="text-base">Show arabic</FormLabel>
                       <FormDescription>
                         Display translation with arabic letters along side with
-                        the Darija one.
+                        the Darija translation.
                       </FormDescription>
                     </div>
                     <FormControl>

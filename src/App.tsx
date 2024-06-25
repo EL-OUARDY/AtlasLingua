@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import { ROUTES } from "./routes/routes";
 import Layout from "./components/pages/Layout";
+import Login from "./components/pages/Login";
+import Signup from "./components/pages/Signup";
 import Translator from "./components/pages/Translator";
 import About from "./components/pages/About";
 import NotFound from "./components/pages/NotFound";
@@ -10,7 +12,6 @@ import Learn from "./components/pages/Learn";
 import Community from "./components/pages/Community";
 import Contribution from "./components/pages/Contribution";
 import Feedback from "./components/pages/Feedback";
-import Media from "./components/pages/Media";
 import LiveAssistance from "./components/pages/LiveAssistance";
 import Favorites from "./components/pages/Favorites";
 import History from "./components/pages/History";
@@ -31,10 +32,11 @@ function App() {
           {/* main routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Translator />} />
+            <Route path={ROUTES.login} element={<Login />} />
+            <Route path={ROUTES.signup} element={<Signup />} />
             <Route path={ROUTES.translate} element={<Translator />} />
             <Route path={ROUTES.dictionary} element={<Dictionary />} />
             <Route path={ROUTES.favorites} element={<Favorites />} />
-            <Route path={ROUTES.media} element={<Media />} />
             <Route path={ROUTES.learn} element={<Learn />} />
             <Route path={ROUTES.community} element={<Community />} />
             <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />

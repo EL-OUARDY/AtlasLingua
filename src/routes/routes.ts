@@ -1,8 +1,9 @@
 export const ROUTES = {
   home: "/",
+  login: "/login",
+  signup: "/signup",
   translate: "/translate",
   dictionary: "/dictionary",
-  media: "/media",
   learn: "/learn",
   favorites: "/favorites",
   history: "/history",

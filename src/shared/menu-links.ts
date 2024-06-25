@@ -8,7 +8,6 @@ import {
   LucideIcon,
   MessageSquareText,
   MessagesSquare,
-  MonitorPlay,
   ShieldCheck,
   BadgeInfo,
 } from "lucide-react";
@@ -31,12 +30,6 @@ export const MenuLinks: ISideBarLink[] = [
     text: "Dictionary",
     href: ROUTES.dictionary,
     icon: BookOpenText,
-    onlyMobile: false,
-  },
-  {
-    text: "Media",
-    href: ROUTES.media,
-    icon: MonitorPlay,
     onlyMobile: false,
   },
   { text: "Favorites", href: ROUTES.favorites, icon: Star, onlyMobile: false },
