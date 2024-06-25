@@ -106,7 +106,7 @@ function NotificationSettings() {
               </FormItem>
             )}
           />
-          <div>
+          <div className="lg:w-4/5">
             <h3 className="mb-4 text-lg font-medium">Email Notifications</h3>
             <div className="space-y-4">
               <FormField

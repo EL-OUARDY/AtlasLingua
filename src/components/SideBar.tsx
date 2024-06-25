@@ -62,27 +62,29 @@ function SideBar() {
       <ScrollArea className="h-full">
         <div className="flex-grow overflow-auto">
           <nav className="flex flex-1 flex-col gap-2 sm:py-5">
-            {MenuLinks.map((link, index) => (
-              <TooltipProvider key={index}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <NavLink
-                      to={link.href}
-                      className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
+            {MenuLinks.filter((link) => link.onlyMobile == false).map(
+              (link, index) => (
+                <TooltipProvider key={index}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <NavLink
+                        to={link.href}
+                        className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
+                      >
+                        <link.icon className="h-6 w-6" />
+                        {isSideBarOpen && <span className="">{link.text}</span>}
+                      </NavLink>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      className={isSideBarOpen ? "hidden" : ""}
+                      side="right"
                     >
-                      <link.icon className="h-6 w-6" />
-                      {isSideBarOpen && <span className="">{link.text}</span>}
-                    </NavLink>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    className={isSideBarOpen ? "hidden" : ""}
-                    side="right"
-                  >
-                    {link.text}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
+                      {link.text}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ),
+            )}
           </nav>
         </div>
       </ScrollArea>

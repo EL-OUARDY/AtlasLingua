@@ -12,47 +12,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Hash } from "lucide-react";
 import { Link } from "react-router-dom";
-import { APP_NAME } from "@/shared/constants";
+import { APP_INFO, APP_NAME, FEATURES, GET_STARTED } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
-
-const features: { title: string; href: string; description: string }[] = [
-  {
-    title: "Dictionary",
-    href: "#",
-    description:
-      "Unlock the richness of Darija with our comprehensive dictionary.",
-  },
-  {
-    title: "Summarization",
-    href: "#",
-    description:
-      "Transform lengthy audio and video into concise, actionable insights.",
-  },
-  {
-    title: "Community",
-    href: "#",
-    description:
-      "Join a vibrant ecosystem of language enthusiasts and native speakers.",
-  },
-  {
-    title: "Learn",
-    href: "#",
-    description:
-      "Access a vast, meticulously organized collection of Darija vocabularies.",
-  },
-  {
-    title: "Live Assistance",
-    href: "#",
-    description:
-      "Translations or cultural queries with personalized, on-demand assistance.",
-  },
-  {
-    title: "AI-Powered Translation",
-    href: "#",
-    description:
-      "Continually learns and adapts, delivering nuanced translations of both languages.",
-  },
-];
 
 interface Props {
   className?: string;
@@ -78,25 +39,16 @@ function MainMenu(props: Props) {
                       {APP_NAME}
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
-                      Our app offers a comprehensive dictionary, AI-powered
-                      translations, and audio/video summaries to make learning
-                      effortless.
+                      {APP_INFO}
                     </p>
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="#" title="Quick Start Guide">
-                Discover how to navigate the app and utilize all of its powerful
-                translation features.
-              </ListItem>
-              <ListItem href="#" title="Our Vision">
-                Create a powerful platform that facilitates accurate and
-                intuitive translation.
-              </ListItem>
-              <ListItem href="#" title="Contributions">
-                We aim to compile a comprehensive dataset and develop
-                sophisticated NLP models.
-              </ListItem>
+              {GET_STARTED.map((item, index) => (
+                <ListItem key={index} href={item.href} title={item.title}>
+                  {item.description}
+                </ListItem>
+              ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -106,7 +58,7 @@ function MainMenu(props: Props) {
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {features.map((component) => (
+              {FEATURES.map((component) => (
                 <ListItem
                   key={component.title}
                   title={component.title}

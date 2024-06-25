@@ -49,7 +49,7 @@ function Settings() {
           </aside>
           <Separator className="my-6" />
 
-          <div className="flex w-full flex-col gap-4 lg:w-5/6">
+          <div className="flex w-full flex-col gap-4 xl:w-5/6">
             <Outlet />
           </div>
         </div>
