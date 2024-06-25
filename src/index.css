@@ -58,6 +58,25 @@
   }
 }
 
+/* edy */
+@font-face {
+  font-family: "Geist";
+  src:
+    url("/fonts/Geist-Regular.woff2") format("woff2"),
+    url("/fonts/Geist-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Geist";
+  src:
+    url("/fonts/Geist-Bold.woff2") format("woff2"),
+    url("/fonts/Geist-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
 /* active links */
 div[data-radix-scroll-area-viewport] > div:first-child {
   height: 100%;

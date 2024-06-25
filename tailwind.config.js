@@ -1,4 +1,7 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   darkMode: ["class"],
   content: [
@@ -23,6 +26,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Geist", ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
