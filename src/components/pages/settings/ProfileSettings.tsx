@@ -58,7 +58,7 @@ function ProfileSettings() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+          className="flex w-full flex-col gap-4 sm:w-[360px] md:w-[420px]"
         >
           <FormField
             control={form.control}

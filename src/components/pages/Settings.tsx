@@ -31,10 +31,10 @@ function Settings() {
           </p>
         </div>
         <Separator className="my-6" />
-        <div className="flex size-full flex-col lg:flex-row lg:gap-12">
+        <div className="flex size-full flex-col">
           <aside
             id="settings-nav"
-            className="flex flex-row flex-wrap justify-start gap-2 lg:-mx-4 lg:w-[180px] lg:flex-col"
+            className="flex flex-row flex-wrap justify-start gap-2"
           >
             {navLinks.map((link, index) => (
               <NavLink
@@ -47,9 +47,9 @@ function Settings() {
               </NavLink>
             ))}
           </aside>
-          <Separator className="my-6 lg:hidden" />
+          <Separator className="my-6" />
 
-          <div className="flex w-full flex-col gap-4 lg:w-2/3">
+          <div className="flex w-full flex-col gap-4 lg:w-5/6">
             <Outlet />
           </div>
         </div>

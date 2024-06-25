@@ -64,7 +64,7 @@ function GeneralSettings() {
                 Select the default settings for your translation tool.
               </FormDescription>
             </div>
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-4">
               <FormField
                 control={form.control}
                 name="show_arabic"
@@ -82,6 +82,7 @@ function GeneralSettings() {
                         checked={field.value}
                         onCheckedChange={field.onChange}
                         name={field.name}
+                        className="ml-2"
                       />
                     </FormControl>
                   </FormItem>
@@ -106,6 +107,7 @@ function GeneralSettings() {
                         checked={field.value}
                         onCheckedChange={field.onChange}
                         name={field.name}
+                        className="ml-2"
                       />
                     </FormControl>
                   </FormItem>
@@ -113,6 +115,7 @@ function GeneralSettings() {
               />
             </div>
           </div>
+
           <FormField
             control={form.control}
             name="items"
