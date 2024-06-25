@@ -98,7 +98,7 @@ function GeneralSettings() {
                       </FormLabel>
                       <FormDescription>
                         Make translations easy to read by replacing confusing
-                        characters. <br /> <i>(Exemple. ch {"=>"} sh)</i>
+                        characters. <br /> <i>{"Example: ch => sh"}</i>
                       </FormDescription>
                     </div>
                     <FormControl>
