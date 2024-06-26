@@ -59,6 +59,11 @@
 }
 
 /* edy */
+.light body {
+  background-image: url("img/beams.jpg");
+  @apply bg-cover bg-center;
+}
+
 @font-face {
   font-family: "Geist";
   src:
