@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 function Signup() {
   return (
     <div className="flex flex-1 items-center justify-center rounded-lg border border-none p-0 shadow-sm sm:border-dashed sm:p-6">
-      <Card className="mx-auto w-full md:w-[400px]">
+      <Card className="mx-auto w-full md:w-[450px]">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
