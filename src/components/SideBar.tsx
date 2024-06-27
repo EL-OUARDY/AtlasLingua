@@ -36,7 +36,9 @@ function SideBar() {
   return (
     <aside
       className={`${
-        isSideBarOpen ? "w-[220px] lg:w-[260px]" : ""
+        isSideBarOpen
+          ? "w-[220px] min-w-[220px] lg:w-[260px] lg:min-w-[260px]"
+          : ""
       } z-10 hidden h-screen min-w-14 flex-col border-r bg-background px-6 md:flex`}
     >
       <div className="flex h-14 max-h-14 min-h-14 w-full items-center border-b lg:h-[60px] lg:max-h-[60px] lg:min-h-[60px]">

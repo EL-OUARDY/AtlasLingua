@@ -8,8 +8,8 @@ import {
   LucideIcon,
   MessageSquareText,
   MessagesSquare,
-  ShieldCheck,
   BadgeInfo,
+  MessageCircleQuestion,
 } from "lucide-react";
 
 interface ISideBarLink {
@@ -43,7 +43,7 @@ export const MenuLinks: ISideBarLink[] = [
   {
     text: "Live Assistance",
     href: ROUTES.live_assistance,
-    icon: ShieldCheck,
+    icon: MessageCircleQuestion,
     onlyMobile: false,
   },
   {
