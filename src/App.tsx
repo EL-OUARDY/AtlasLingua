@@ -30,10 +30,10 @@ function App() {
       <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
         <Routes>
           {/* main routes */}
+          <Route path={ROUTES.login} element={<Login />} />
+          <Route path={ROUTES.signup} element={<Signup />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Translator />} />
-            <Route path={ROUTES.login} element={<Login />} />
-            <Route path={ROUTES.signup} element={<Signup />} />
             <Route path={ROUTES.translate} element={<Translator />} />
             <Route path={ROUTES.dictionary} element={<Dictionary />} />
             <Route path={ROUTES.favorites} element={<Favorites />} />
