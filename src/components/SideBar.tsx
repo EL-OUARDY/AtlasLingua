@@ -23,10 +23,17 @@ import { useNotification } from "@/contexts/NotificationContext";
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(
-    localStorage.getItem(storageKey) === "closed" ? false : true,
+    localStorage.getItem(storageKey) === "closed"
+      ? false
+      : localStorage.getItem(storageKey) === "open"
+        ? true
+        : window.innerWidth <= 1200 // sidebar should not be open on screens less than 1200px
+          ? false
+          : true,
   );
 
   function saveSideBarState(state: boolean) {
+    setIsSideBarOpen(state);
     // save the state of sidebar in local storage
     localStorage.setItem(storageKey, state ? "open" : "closed");
   }
@@ -35,6 +42,7 @@ function SideBar() {
 
   return (
     <aside
+      id={isSideBarOpen ? "sidebar-open" : "sidebar-closed"}
       className={`${
         isSideBarOpen
           ? "w-[220px] min-w-[220px] lg:w-[260px] lg:min-w-[260px]"
@@ -71,9 +79,9 @@ function SideBar() {
                     <TooltipTrigger asChild>
                       <NavLink
                         to={link.href}
-                        className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
+                        className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground [#sidebar-closed_&]:justify-center"
                       >
-                        <link.icon className="h-6 w-6" />
+                        <link.icon className="size-5" />
                         {isSideBarOpen && <span className="">{link.text}</span>}
                       </NavLink>
                     </TooltipTrigger>
@@ -97,13 +105,12 @@ function SideBar() {
               <TooltipTrigger asChild>
                 <Link
                   onClick={() => {
-                    setIsSideBarOpen(!isSideBarOpen);
                     saveSideBarState(!isSideBarOpen);
                   }}
                   to="#"
                   className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <PanelLeftOpen className="h-6 w-6" />
+                  <PanelLeftOpen className="size-5" />
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -123,7 +130,7 @@ function SideBar() {
                   to={ROUTES.settings.general}
                   className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
                 >
-                  <Settings className="h-6 w-6" />
+                  <Settings className="size-5" />
                   {isSideBarOpen && <span className="">Settings</span>}
                 </NavLink>
               </TooltipTrigger>
@@ -141,14 +148,13 @@ function SideBar() {
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => {
-                      setIsSideBarOpen(!isSideBarOpen);
                       saveSideBarState(!isSideBarOpen);
                     }}
                     variant="outline"
                     size="icon"
                     className="ml-auto flex h-8 w-8 items-center gap-4 py-2 text-muted-foreground hover:text-foreground"
                   >
-                    <PanelLeftClose className="h-6 w-6" />
+                    <PanelLeftClose className="size-5" />
                     <span className="sr-only">Collapse Menu</span>
                   </Button>
                 </TooltipTrigger>

@@ -22,8 +22,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTablePagination } from "./pages/dictionary/DataTablePagination";
-import { DataTableToolbar } from "./pages/dictionary/DataTableToolbar";
+import { DataTablePagination } from "./dictionary/datatable/DataTablePagination";
+import { DataTableToolbar } from "./dictionary/datatable/DataTableToolbar";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 interface DataTableProps<TData, TValue> {
@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="grid h-full grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4">
       <DataTableToolbar table={table} />
       <ScrollArea className="rounded-md border bg-background dark:bg-transparent">
         <Table>

@@ -14,7 +14,10 @@ function Layout() {
   useEffect(() => {
     // scroll to top everytime a new page displayed
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.children[1].scrollTop = 0;
+      scrollAreaRef.current.children[1].scrollTo({
+        top: 0,
+        behavior: "instant",
+      });
     }
   }, [location]);
 

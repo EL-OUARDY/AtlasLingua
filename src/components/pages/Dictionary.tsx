@@ -1,5 +1,5 @@
 import { IDictionary } from "@/models/Dictionary";
-import { columns } from "./dictionary/TableColumns";
+import { columns } from "../dictionary/datatable/TableColumns";
 import { DataTable } from "../DataTable";
 import { Separator } from "../ui/separator";
 
