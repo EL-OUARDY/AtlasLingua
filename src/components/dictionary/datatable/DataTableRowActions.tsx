@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Ellipsis } from "lucide-react";
+import { Copy, Ellipsis, Expand, Flag } from "lucide-react";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -25,21 +25,23 @@ export function DataTableRowActions<TData>({
           variant="ghost"
           className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
         >
-          <Ellipsis className="h-4 w-4" />
+          <Ellipsis className="size-4" />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
+      <DropdownMenuContent align="end" className="w-[120px]">
         <DropdownMenuItem onClick={() => console.log(row.getValue("id"))}>
-          Details
+          <Expand className="mr-2 size-4" /> Details
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => navigator.clipboard.writeText(row.getValue("darija"))}
         >
-          Copy
+          <Copy className="mr-2 size-4" /> Copy
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Report</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Flag className="mr-2 size-4" /> Report
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

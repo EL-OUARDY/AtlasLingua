@@ -6,6 +6,8 @@ export interface IDictionary {
   type: "noun" | "verb" | "adjective" | "adverb" | "preposition" | "pronoun ";
   verified: boolean;
   favorite: boolean;
+  popularity?: number;
+  date?: string;
 }
 
 export const vacabularyTypes = [
