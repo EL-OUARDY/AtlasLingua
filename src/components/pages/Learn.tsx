@@ -5,6 +5,7 @@ import ScrollableMenu from "../ScrollableMenu";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
+import Combobox from "../ComboBox";
 
 function Learn() {
   const [selectedCategory, setSelectedCategory] = useState<string>("family");
@@ -29,7 +30,7 @@ function Learn() {
           />
         </div>
       </div>
-      <Separator className="my-6" />
+      <Separator className="my-6 hidden sm:block" />
       <div className="flex flex-col gap-4">
         <ScrollableMenu
           onChange={(link) => setSelectedCategory(link)}
@@ -37,6 +38,14 @@ function Learn() {
           selected={selectedCategory}
           className="hidden h-fit flex-row gap-4 sm:flex"
         />
+
+        <div className="mt-4 sm:hidden">
+          <Combobox
+            text="category"
+            onChange={(link) => setSelectedCategory(link)}
+            items={dummyCategories.map((x) => ({ value: x, label: x }))}
+          />
+        </div>
 
         <div className="grid h-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {dummyData

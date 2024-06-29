@@ -1,4 +1,5 @@
 import {
+  Calendar,
   ChevronDownIcon,
   CircleIcon,
   Copy,
@@ -94,10 +95,18 @@ function WordCard({ word, className }: Props) {
       </CardHeader>
       <CardContent className="p-4 sm:p-6">
         <div className="flex justify-between space-x-4 text-sm text-muted-foreground">
-          <div className="flex items-center capitalize">
-            <CircleIcon className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
-            {word.category}
-          </div>
+          {word.category && (
+            <div className="flex items-center capitalize">
+              <CircleIcon className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
+              {word.category}
+            </div>
+          )}
+          {word.date && (
+            <div className="flex items-center capitalize">
+              <Calendar className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
+              June 27, 2024
+            </div>
+          )}
           <div className="flex items-center gap-2">
             {word.popularity && (
               <div className="flex items-center">
