@@ -6,8 +6,9 @@ interface Props {
   links: string[];
   selected?: string;
   onChange: (link: string) => void;
+  className: string;
 }
-function ScrollableMenu({ links, selected, onChange }: Props) {
+function ScrollableMenu({ links, selected, onChange, className }: Props) {
   const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
   const scrollStep = 200;
 
@@ -18,7 +19,7 @@ function ScrollableMenu({ links, selected, onChange }: Props) {
     });
   }
   return (
-    <div className="flex h-fit flex-row gap-4 rounded-lg">
+    <div className={className}>
       <div
         onClick={() => moveScroll(-scrollStep)}
         className="flex cursor-pointer items-center justify-center rounded-lg border px-3 py-2 capitalize hover:bg-secondary"
@@ -37,7 +38,7 @@ function ScrollableMenu({ links, selected, onChange }: Props) {
             </div>
           ))}
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="horizontal" className="cursor-grab" />
       </ScrollArea>
       <div
         onClick={() => moveScroll(scrollStep)}
