@@ -1,6 +1,6 @@
 # English ⇔ Darija Translator Project
 
-## “Advanced and Accurate English-Moroccan Darija Translation”
+### “Advanced and Accurate English-Moroccan Darija Translation”
 
 `ReactJS`
 `Python`
