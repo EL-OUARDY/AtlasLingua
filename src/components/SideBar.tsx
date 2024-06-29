@@ -81,7 +81,7 @@ function SideBar() {
                         to={link.href}
                         className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground [#sidebar-closed_&]:justify-center"
                       >
-                        <link.icon className="size-5" />
+                        <link.icon className="size-6" />
                         {isSideBarOpen && <span className="">{link.text}</span>}
                       </NavLink>
                     </TooltipTrigger>
@@ -110,7 +110,7 @@ function SideBar() {
                   to="#"
                   className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <PanelLeftOpen className="size-5" />
+                  <PanelLeftOpen className="size-6" />
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -130,7 +130,7 @@ function SideBar() {
                   to={ROUTES.settings.general}
                   className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
                 >
-                  <Settings className="size-5" />
+                  <Settings className="size-6" />
                   {isSideBarOpen && <span className="">Settings</span>}
                 </NavLink>
               </TooltipTrigger>
@@ -154,7 +154,7 @@ function SideBar() {
                     size="icon"
                     className="ml-auto flex h-8 w-8 items-center gap-4 py-2 text-muted-foreground hover:text-foreground"
                   >
-                    <PanelLeftClose className="size-5" />
+                    <PanelLeftClose className="size-6" />
                     <span className="sr-only">Collapse Menu</span>
                   </Button>
                 </TooltipTrigger>
