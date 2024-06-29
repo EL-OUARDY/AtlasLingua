@@ -1,8 +1,18 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerClose,
+  Drawer,
+} from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME, APP_INFO } from "@/shared/constants";
-import { Hash } from "lucide-react";
+import { ChevronUp, Hash } from "lucide-react";
 import { Link } from "react-router-dom";
 
 type Role = "login" | "signup";
@@ -67,6 +77,33 @@ function AuthLayout({ children, role, description }: Props) {
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
           {children}
+          <div className="fixed bottom-0 left-0 flex w-full items-center justify-center pb-6 lg:hidden">
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-muted hover:bg-transparent"
+                >
+                  <ChevronUp className="size-8 cursor-pointer" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="mx-auto w-full max-w-sm">
+                  <DrawerHeader className="text-left">
+                    <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
+                    <DrawerDescription>
+                      {description ? description : APP_INFO}
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <DrawerFooter>
+                    <DrawerClose asChild>
+                      <Button variant="outline">Hide</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
       </div>
     </div>

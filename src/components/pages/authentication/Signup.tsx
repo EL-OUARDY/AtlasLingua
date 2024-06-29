@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import { NavLink } from "react-router-dom";
-import AuthLayout from "./AuthLayout";
+import AuthLayout from "../../layouts/AuthLayout";
 
 function Signup() {
   return (

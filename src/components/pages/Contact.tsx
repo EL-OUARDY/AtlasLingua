@@ -10,7 +10,7 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import AuthLayout from "./authentication/AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 
 function Contact() {
   const description =
