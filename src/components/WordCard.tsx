@@ -46,7 +46,8 @@ function WordCard({ word, className }: Props) {
             {word.darija} <Expand className="ml-2 h-4 w-4 cursor-pointer" />
           </CardTitle>
           <CardDescription className="capitalize">
-            {word.english}
+            {word.english} <br />
+            {word.arabic}
           </CardDescription>
         </div>
         <div className="flex h-fit items-center space-x-1 rounded-md bg-secondary text-secondary-foreground">
@@ -97,7 +98,7 @@ function WordCard({ word, className }: Props) {
         <div className="flex justify-between space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center capitalize">
             <CircleIcon className="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
-            {word.type}
+            {word.category}
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center">
