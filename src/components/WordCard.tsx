@@ -49,48 +49,48 @@ function WordCard({ word, className }: Props) {
             {word.english} <br />
             {word.arabic}
           </CardDescription>
-        </div>
-        <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-2 text-secondary-foreground">
-          <Button variant="secondary" className="p-0 shadow-none">
-            {word.favorite && (
-              <>
-                <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
-                {/* <span className="ml-1 hidden md:inline">Saved</span> */}
-              </>
-            )}
-            {!word.favorite && (
-              <>
-                <StarIcon className="size-4 cursor-pointer" />
-                {/* <span className="ml-1 hidden md:inline">Save</span> */}
-              </>
-            )}
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" className="p-0 shadow-none">
-                <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              alignOffset={-5}
-              className=""
-              forceMount
-            >
-              <DropdownMenuItem>
-                <ListCollapse className="mr-2 h-4 w-4" /> Details
-              </DropdownMenuItem>
+          <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-2 text-secondary-foreground">
+            <Button variant="secondary" className="p-0 shadow-none">
+              {word.favorite && (
+                <>
+                  <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
+                  {/* <span className="ml-1 hidden md:inline">Saved</span> */}
+                </>
+              )}
+              {!word.favorite && (
+                <>
+                  <StarIcon className="size-4 cursor-pointer" />
+                  {/* <span className="ml-1 hidden md:inline">Save</span> */}
+                </>
+              )}
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" className="p-0 shadow-none">
+                  <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                alignOffset={-5}
+                className=""
+                forceMount
+              >
+                <DropdownMenuItem>
+                  <ListCollapse className="mr-2 h-4 w-4" /> Details
+                </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <Copy className="mr-2 h-4 w-4" /> Copy
-              </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Copy className="mr-2 h-4 w-4" /> Copy
+                </DropdownMenuItem>
 
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Flag className="mr-2 h-4 w-4" /> Report
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Flag className="mr-2 h-4 w-4" /> Report
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="p-4 sm:p-6">

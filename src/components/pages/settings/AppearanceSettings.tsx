@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ChevronDownIcon } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -91,7 +90,6 @@ function AppearanceSettings() {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
-                  <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
                 </div>
                 <FormDescription>
                   Set the font you want to use in the dashboard.
