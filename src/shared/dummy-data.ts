@@ -1823,16 +1823,6 @@ export const dummyData: IDictionary[] = [
     category: "numbers",
   },
   {
-    id: 190,
-    english: "zero",
-    darija: "ziro",
-    type: "noun",
-    arabic: "زيرو",
-    favorite: false,
-    verified: false,
-    category: "numbers",
-  },
-  {
     id: 191,
     english: "one",
     darija: "wahd",

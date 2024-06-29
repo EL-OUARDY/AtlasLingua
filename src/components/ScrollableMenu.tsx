@@ -32,7 +32,7 @@ function ScrollableMenu({ links, selected, onChange, className }: Props) {
             <div
               key={index}
               onClick={() => onChange(link)}
-              className={`${selected === link && "bg-background"} cursor-pointer rounded-lg border px-3 py-2 capitalize hover:bg-secondary`}
+              className={`${selected === link && "bg-background hover:bg-background"} cursor-pointer rounded-lg border px-3 py-2 capitalize hover:bg-secondary`}
             >
               {link}
             </div>

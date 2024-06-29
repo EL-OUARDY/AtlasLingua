@@ -9,10 +9,11 @@ type Role = "login" | "signup";
 
 interface Props {
   children: React.ReactNode;
-  role: Role;
+  role?: Role;
+  description?: string;
 }
 
-function AuthLayout({ children, role }: Props) {
+function AuthLayout({ children, role, description }: Props) {
   return (
     <div className="relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       {role == "signup" && (
@@ -58,7 +59,7 @@ function AuthLayout({ children, role }: Props) {
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
-            <p className="text-lg">{APP_INFO}</p>
+            <p className="text-lg">{description ? description : APP_INFO}</p>
             <footer className="text-sm">@{APP_NAME}</footer>
           </blockquote>
         </div>

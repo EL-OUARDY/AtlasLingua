@@ -46,24 +46,32 @@ function WordCard({ word, className }: Props) {
             {word.darija} <Expand className="ml-2 h-4 w-4 cursor-pointer" />
           </CardTitle>
           <CardDescription className="capitalize">
-            {word.english} <br />
+            <span className="font-bold text-orange-500">{word.english}</span>{" "}
+            <br />
             {word.arabic}
           </CardDescription>
           <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-2 text-secondary-foreground">
-            <Button variant="secondary" className="p-0 shadow-none">
-              {word.favorite && (
-                <>
-                  <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
-                  {/* <span className="ml-1 hidden md:inline">Saved</span> */}
-                </>
-              )}
-              {!word.favorite && (
-                <>
-                  <StarIcon className="size-4 cursor-pointer" />
-                  {/* <span className="ml-1 hidden md:inline">Save</span> */}
-                </>
-              )}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="secondary" className="p-0 shadow-none">
+                    {word.favorite && (
+                      <>
+                        <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
+                      </>
+                    )}
+                    {!word.favorite && (
+                      <>
+                        <StarIcon className="size-4 cursor-pointer" />
+                      </>
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {word.favorite ? "Remove from favorites" : "Add to favorites"}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="p-0 shadow-none">

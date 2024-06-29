@@ -32,9 +32,10 @@ function Favorites() {
         {dummyData
           .filter((x) => x.english.includes(searchQuery) && x.favorite)
           .map((item, index) => {
-            item.date = "June 27, 2024";
-            item.category = null;
-            return <WordCard key={index} word={item} className="" />;
+            const x = { ...item };
+            x.category = null;
+            x.date = "June 27, 2024";
+            return <WordCard key={index} word={x} className="" />;
           })}
       </div>
     </div>

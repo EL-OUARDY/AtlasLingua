@@ -32,6 +32,7 @@ function App() {
           {/* main routes */}
           <Route path={ROUTES.login} element={<Login />} />
           <Route path={ROUTES.signup} element={<Signup />} />
+          <Route path={ROUTES.contact} element={<Contact />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Translator />} />
             <Route path={ROUTES.translate} element={<Translator />} />
@@ -44,7 +45,6 @@ function App() {
             <Route path={ROUTES.history} element={<History />} />
             <Route path={ROUTES.feedback} element={<Feedback />} />
             <Route path={ROUTES.about} element={<About />} />
-            <Route path={ROUTES.contact} element={<Contact />} />
             <Route path={ROUTES.privacy} element={<Privacy />} />
             <Route path={ROUTES.settings.general} element={<Settings />}>
               <Route index element={<GeneralSettings />} />
