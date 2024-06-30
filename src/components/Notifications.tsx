@@ -44,7 +44,7 @@ function Notifications() {
 
   return (
     <Dialog open={isNotificationOpen} onOpenChange={() => toggleNotification()}>
-      <DialogContent className="w-11/12 p-0 sm:w-[450px]">
+      <DialogContent className="w-11/12 rounded-lg p-0 sm:w-[450px]">
         <DialogHeader>
           <DialogTitle>
             <span className="sr-only">Notifications</span>
@@ -57,7 +57,7 @@ function Notifications() {
           </CardHeader>
           <Separator />
           <ScrollArea className="h-[400px]">
-            <CardContent className="flex flex-col gap-2 py-2">
+            <CardContent className="flex flex-col gap-2 p-2 sm:p-6">
               {notifications.map((n, i) => (
                 <div
                   key={i}
