@@ -9,7 +9,7 @@ import {
   MessageSquareText,
   MessagesSquare,
   BadgeInfo,
-  MessageCircleQuestion,
+  Mail,
 } from "lucide-react";
 
 interface ISideBarLink {
@@ -40,12 +40,12 @@ export const MenuLinks: ISideBarLink[] = [
     icon: MessagesSquare,
     onlyMobile: false,
   },
-  {
-    text: "Live Assistance",
-    href: ROUTES.live_assistance,
-    icon: MessageCircleQuestion,
-    onlyMobile: false,
-  },
+  // {
+  //   text: "Live Assistance",
+  //   href: ROUTES.live_assistance,
+  //   icon: MessageCircleQuestion,
+  //   onlyMobile: false,
+  // },
   {
     text: "Contribution",
     href: ROUTES.contribution,
@@ -63,5 +63,11 @@ export const MenuLinks: ISideBarLink[] = [
     href: ROUTES.about,
     icon: BadgeInfo,
     onlyMobile: false,
+  },
+  {
+    text: "Support",
+    href: ROUTES.contact,
+    icon: Mail,
+    onlyMobile: true,
   },
 ];
