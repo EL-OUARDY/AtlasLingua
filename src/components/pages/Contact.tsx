@@ -27,11 +27,15 @@ function Contact() {
         <CardContent className="grid gap-6">
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Your name" />
+            <Input id="name" placeholder="Your name" autoComplete="on" />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" placeholder="Your email address" />
+            <Input
+              id="email"
+              placeholder="Your email address"
+              autoComplete="on"
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="subject">Subject</Label>

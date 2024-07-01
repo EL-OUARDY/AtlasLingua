@@ -1,4 +1,4 @@
-import { dummyData } from "@/shared/dummy-data";
+import { dummyDictionaryData } from "@/shared/dummy-data";
 import WordCard from "../WordCard";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
@@ -20,6 +20,7 @@ function Favorites() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             value={searchQuery}
+            id="search"
             onChange={(e) => setSearchQuery(e.target.value)}
             type="search"
             placeholder="Search..."
@@ -29,8 +30,12 @@ function Favorites() {
       </div>
       <Separator className="my-6" />
       <div className="grid h-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {dummyData
-          .filter((x) => x.english.includes(searchQuery) && x.favorite)
+        {dummyDictionaryData
+          .filter(
+            (x) =>
+              x.english.toLowerCase().includes(searchQuery.toLowerCase()) &&
+              x.favorite,
+          )
           .map((item, index) => {
             const x = { ...item };
             x.category = null;

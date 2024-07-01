@@ -79,7 +79,7 @@ function Contribution() {
                   className="flex aspect-square h-24 w-full flex-col items-center justify-center rounded-md border border-dashed"
                 >
                   <span className="sr-only">Upload File</span>
-                  <Upload className="text-muted-foreground" />
+                  <Upload className="size-5 text-muted-foreground" />
                   <span className="mt-2 text-xs italic text-muted-foreground">
                     {selectedFileName}
                   </span>
@@ -102,7 +102,7 @@ function Contribution() {
                   <small className="text-muted-foreground">(optional)</small>
                 </Label>
                 <Textarea
-                  id="description"
+                  id="feedback"
                   placeholder="Briefly describe your contribution"
                 />
               </div>

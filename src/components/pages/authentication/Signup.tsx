@@ -29,16 +29,23 @@ function Signup() {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" placeholder="your name" required />
+              <Input
+                id="name"
+                name="name"
+                placeholder="your name"
+                required
+                autoComplete="on"
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="user@atlaslingua.com"
                 required
-                name="email"
+                autoComplete="on"
               />
             </div>
             <div className="grid gap-2">

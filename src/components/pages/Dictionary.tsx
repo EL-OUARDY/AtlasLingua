@@ -1,7 +1,7 @@
 import { columns } from "../dictionary/datatable/TableColumns";
 import { DataTable } from "../DataTable";
 import { Separator } from "../ui/separator";
-import { dummyData } from "@/shared/dummy-data";
+import { dummyDictionaryData } from "@/shared/dummy-data";
 
 function Dictionary() {
   return (
@@ -13,7 +13,7 @@ function Dictionary() {
         </p>
       </div>
       <Separator className="my-6" />
-      <DataTable data={dummyData} columns={columns} />
+      <DataTable data={dummyDictionaryData} columns={columns} />
     </div>
   );
 }

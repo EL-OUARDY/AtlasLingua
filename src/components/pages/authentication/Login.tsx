@@ -30,10 +30,11 @@ function Login() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="user@atlaslingua.com"
                 required
-                name="email"
+                autoComplete="on"
               />
             </div>
             <div className="grid gap-2">

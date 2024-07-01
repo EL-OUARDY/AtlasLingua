@@ -31,6 +31,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
   word: IDictionary;
@@ -112,7 +113,7 @@ function WordCard({ word, className }: Props) {
           {word.date && (
             <div className="flex items-center capitalize">
               <Calendar className="mr-1 h-3 w-3 stroke-sky-400" />
-              {word.date}
+              {formatDistanceToNow(word.date, { addSuffix: true })}
             </div>
           )}
           <div className="flex items-center gap-2">

@@ -1,4 +1,4 @@
-import { dummyCategories, dummyData } from "@/shared/dummy-data";
+import { dummyCategories, dummyDictionaryData } from "@/shared/dummy-data";
 import WordCard from "../WordCard";
 import { Separator } from "../ui/separator";
 import ScrollableMenu from "../ScrollableMenu";
@@ -23,6 +23,7 @@ function Learn() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             value={searchQuery}
+            id="search"
             onChange={(e) => setSearchQuery(e.target.value)}
             type="search"
             placeholder="Search..."
@@ -39,7 +40,7 @@ function Learn() {
           className="hidden h-fit flex-row gap-4 sm:flex"
         />
 
-        <div className="mt-4 sm:hidden">
+        <div className="mt-4 w-full sm:hidden">
           <Combobox
             text="category"
             onChange={(link) => setSelectedCategory(link)}
@@ -48,7 +49,7 @@ function Learn() {
         </div>
 
         <div className="grid h-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {dummyData
+          {dummyDictionaryData
             .filter(
               (x) =>
                 x.category == selectedCategory &&

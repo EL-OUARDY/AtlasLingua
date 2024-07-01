@@ -12,9 +12,12 @@ import {
 import { Button, buttonVariants } from "../ui/button";
 import { ImperativePanelGroupHandle, PanelGroup } from "react-resizable-panels";
 import { breakpoints } from "@/shared/screen-breakpoints";
+import { ScrollArea } from "../ui/scroll-area";
+import PostCard from "../community/PostCard";
+import { dummyCommunityPosts } from "@/shared/dummy-data";
 
 function Community() {
-  const [searchQuery, setSearchQuery] = useState<string>();
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
 
@@ -29,7 +32,7 @@ function Community() {
     function resizeContentPanel() {
       const wd = window.innerWidth;
 
-      if (wd > breakpoints.xl) setPanelSizes([70, 30]);
+      if (wd > breakpoints.lg) setPanelSizes([70, 30]);
       else setPanelSizes([100, 0]);
     }
     resizeContentPanel();
@@ -40,8 +43,12 @@ function Community() {
 
   function newPostButtonClick() {
     const wd = window.innerWidth;
-    if (wd > breakpoints.xl) setPanelSizes([70, 30]);
+    if (wd > breakpoints.lg) setPanelSizes([70, 30]);
     else setPanelSizes([0, 100]);
+  }
+
+  function showPost(id: number) {
+    console.log("Post selected ", id);
   }
 
   return (
@@ -65,7 +72,10 @@ function Community() {
                 <Search className="absolute left-2.5 top-2.5 hidden h-4 w-4 text-muted-foreground md:block" />
                 <Input
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  id="search"
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                  }}
                   type="search"
                   placeholder="Search..."
                   className="hidden w-full rounded-lg bg-background pl-8 md:block md:w-[150px] lg:w-[250px]"
@@ -76,6 +86,16 @@ function Community() {
               </div>
             </div>
             <Separator className="my-6" />
+            <ScrollArea className="">
+              <div className="grid grid-cols-1 gap-4 pt-0 md:grid-cols-2">
+                <PostCard
+                  onSelect={showPost}
+                  posts={dummyCommunityPosts.filter((x) =>
+                    x.content.toLowerCase().includes(searchQuery.toLowerCase()),
+                  )}
+                />
+              </div>
+            </ScrollArea>
 
             <div className="absolute bottom-4 right-4">
               <TooltipProvider>

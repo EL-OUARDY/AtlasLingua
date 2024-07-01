@@ -67,7 +67,11 @@ function ProfileSettings() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="AtlasLingua" {...field} />
+                  <Input
+                    placeholder="AtlasLingua"
+                    autoComplete="on"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your public display name. It can be your real name or
@@ -87,6 +91,7 @@ function ProfileSettings() {
                   <Input
                     type="email"
                     placeholder="user@atlaslingua.com"
+                    autoComplete="on"
                     {...field}
                   />
                 </FormControl>
