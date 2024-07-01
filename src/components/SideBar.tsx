@@ -45,7 +45,7 @@ function SideBar() {
       id={isSideBarOpen ? "sidebar-open" : "sidebar-closed"}
       className={`${
         isSideBarOpen
-          ? "w-[220px] min-w-[220px] lg:w-[260px] lg:min-w-[260px]"
+          ? "w-[220px] min-w-[220px] lg:w-[240px] lg:min-w-[240px]"
           : ""
       } z-10 hidden h-screen min-w-14 flex-col border-r bg-background px-6 md:flex`}
     >
@@ -75,7 +75,7 @@ function SideBar() {
             {MenuLinks.filter((link) => link.onlyMobile == false).map(
               (link, index) => (
                 <TooltipProvider key={index}>
-                  <Tooltip>
+                  <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <NavLink
                         to={link.href}

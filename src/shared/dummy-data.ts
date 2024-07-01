@@ -3370,6 +3370,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Learner",
     },
     date: "2024-07-01T14:30:00Z",
+    commentsNumber: 3,
   },
   {
     id: 7,
@@ -3384,6 +3385,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Contributor",
     },
     date: "2024-06-25T10:05:00Z",
+    commentsNumber: 1,
   },
   {
     id: 3,
@@ -3398,6 +3400,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Learner",
     },
     date: "2024-06-29T18:45:00Z",
+    commentsNumber: 5,
   },
   {
     id: 4,
@@ -3412,6 +3415,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Contributor",
     },
     date: "2024-06-28T11:20:00Z",
+    commentsNumber: 4,
   },
   {
     id: 5,
@@ -3426,6 +3430,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Learner",
     },
     date: "2024-06-27T15:50:00Z",
+    commentsNumber: 0,
   },
   {
     id: 6,
@@ -3440,6 +3445,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Contributor",
     },
     date: "2024-06-26T13:10:00Z",
+    commentsNumber: 4,
   },
 
   {
@@ -3455,6 +3461,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Learner",
     },
     date: "2024-06-24T16:40:00Z",
+    commentsNumber: 16,
   },
   {
     id: 9,
@@ -3469,6 +3476,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Contributor",
     },
     date: "2024-06-23T08:55:00Z",
+    commentsNumber: 9,
   },
   {
     id: 10,
@@ -3483,6 +3491,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Learner",
     },
     date: "2024-06-22T19:30:00Z",
+    commentsNumber: 0,
   },
   {
     id: 2,
@@ -3497,5 +3506,6 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       role: "Contributor",
     },
     date: "2024-06-30T09:15:00Z",
+    commentsNumber: 0,
   },
 ];

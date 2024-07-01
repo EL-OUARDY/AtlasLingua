@@ -29,6 +29,9 @@ module.exports = {
       fontFamily: {
         sans: ["Geist", ...defaultTheme.fontFamily.sans],
       },
+      gridTemplateColumns: {
+        'auto-fill-270': 'repeat(auto-fill, minmax(270px, 1fr))',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

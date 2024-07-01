@@ -27,7 +27,7 @@ function Layout() {
         <SideBar />
         <section className="flex h-screen flex-1 flex-col md:gap-4 md:py-4">
           <Header />
-          <ScrollArea ref={scrollAreaRef} className="h-full">
+          <ScrollArea ref={scrollAreaRef} className="flex-1">
             <main className="flex h-full flex-1 flex-grow flex-col gap-4 p-4 md:gap-6 md:px-6 md:py-0">
               <Outlet />
             </main>

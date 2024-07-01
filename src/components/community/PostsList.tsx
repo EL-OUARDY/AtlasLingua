@@ -8,24 +8,38 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { CheckCircle2Icon, MessageCircle, ThumbsUp } from "lucide-react";
+import {
+  CheckCircle2Icon,
+  EllipsisVertical,
+  Flag,
+  MessageCircle,
+  Share2Icon,
+  ThumbsUp,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "../ui/separator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface Props {
   posts: ICommunityPost[];
   onSelect: (id: number) => void;
 }
-function PostCard({ posts, onSelect }: Props) {
+function PostsList({ posts, onSelect }: Props) {
   const [selectedPost, setSelectedPost] = useState<number>(-1);
 
   return (
     <>
       {posts.map((post) => (
-        <button
+        <div
           key={post.id}
           className={cn(
-            "flex flex-col items-start gap-3 overflow-hidden rounded-lg border bg-background p-4 text-left text-sm transition-all dark:bg-transparent",
+            "relative flex h-fit flex-col items-start gap-3 overflow-hidden rounded-lg border bg-background p-4 text-left text-sm transition-all dark:bg-muted/40",
             selectedPost === post.id && "post-selected group !bg-muted",
           )}
           onClick={() => {
@@ -35,13 +49,35 @@ function PostCard({ posts, onSelect }: Props) {
         >
           <div className="flex w-full flex-col gap-1">
             <div className="flex items-center">
-              <div className="flex items-center gap-1">
-                <div className="text-lg font-semibold tracking-tighter">
-                  {post.user.name}
+              <div className="flex w-full items-center gap-1">
+                <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
+                  <div className="mr-auto flex items-center gap-2">
+                    {post.user.name}
+                    {post.user.role === "Contributor" && (
+                      <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
+                    )}
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <EllipsisVertical className="h-4 w-4 cursor-pointer text-secondary-foreground" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="end"
+                      alignOffset={-5}
+                      className=""
+                      forceMount
+                    >
+                      <DropdownMenuItem>
+                        <Share2Icon className="mr-2 h-4 w-4" /> Share
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Flag className="mr-2 h-4 w-4" /> Report
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-                {post.user.role === "Contributor" && (
-                  <CheckCircle2Icon className="flex size-4 rounded-full text-green-600" />
-                )}
               </div>
             </div>
             <div className="text-sm font-medium">{post.user.role}</div>
@@ -112,10 +148,10 @@ function PostCard({ posts, onSelect }: Props) {
               </div>
             </div>
           </div>
-        </button>
+        </div>
       ))}
     </>
   );
 }
 
-export default PostCard;
+export default PostsList;
