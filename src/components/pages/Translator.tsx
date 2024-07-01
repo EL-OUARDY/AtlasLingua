@@ -7,41 +7,42 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { Link } from "react-router-dom";
+import { Separator } from "../ui/separator";
 
 function Translator() {
   return (
     <>
-      <div className="flex items-center justify-between">
-        <h1 className="hidden text-xl font-bold tracking-tight sm:block md:text-2xl">
-          Translator
-        </h1>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="#" className="text-base">
-                  Translator
-                </Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="text-base">
-                English - Darija
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h3 className="text-2xl font-bold tracking-tight">
-            Translate English to Darija
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Get acurate translations with our easy-to-use application.
-          </p>
+      <div className="flex h-full flex-col rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Translator</h2>
+            <p className="mt-1 text-muted-foreground">
+              Accurate translations for everyday communication.
+            </p>
+          </div>
+          <div className="ml-auto hidden shrink-0 lg:block">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link to="#" className="text-base">
+                      Translator
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="text-base">
+                    English - Darija
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
         </div>
+        <Separator className="my-6" />
+
+        <div className="grid h-full w-full gap-8 rounded-lg md:gap-4"></div>
       </div>
     </>
   );
