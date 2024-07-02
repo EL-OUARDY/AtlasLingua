@@ -1,5 +1,11 @@
 import { ROUTES } from "@/routes/routes";
-import { Languages, BookOpenText, Star, Settings, Library } from "lucide-react";
+import {
+  Languages,
+  BookOpenText,
+  Star,
+  Settings,
+  MessagesSquare,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 function MobileNavigationBar() {
@@ -13,11 +19,11 @@ function MobileNavigationBar() {
         <span className="sr-only">Dictionary</span>
       </Link>
       <Link
-        to={ROUTES.learn}
+        to={ROUTES.community}
         className="flex flex-1 justify-center gap-4 rounded-lg border-2 border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
       >
-        <Library className="h-5 w-5" />
-        <span className="sr-only">Learn</span>
+        <MessagesSquare className="h-5 w-5" />
+        <span className="sr-only">Community</span>
       </Link>
       <Link
         to={ROUTES.translate}

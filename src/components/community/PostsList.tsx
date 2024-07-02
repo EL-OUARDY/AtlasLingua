@@ -53,7 +53,7 @@ function PostsList({ posts, onSelect }: Props) {
                 <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
                   <div className="mr-auto flex items-center gap-2">
                     {post.user.name}
-                    {post.user.role === "Contributor" && (
+                    {post.user.role === "contributor" && (
                       <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                     )}
                   </div>

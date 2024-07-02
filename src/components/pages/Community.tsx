@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Separator } from "../ui/separator";
-import { PenSquare, Search, X } from "lucide-react";
+import { Search, SquarePen, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { ResizableHandle, ResizablePanel } from "../ui/resizable";
 import {
@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import NewPost from "../community/NewPost";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -165,6 +166,9 @@ function Community() {
             placeholder="Search..."
             className="hidden w-full rounded-lg bg-background pl-8 md:block md:w-[150px] lg:w-[250px]"
           />
+          <Button className="hidden xl:flex" onClick={newPostButtonClick}>
+            <SquarePen className="mr-2 h-4 w-4" /> New Post
+          </Button>
           <Button variant={"outline"} size={"icon"} className="md:hidden">
             <Search className="size-4 md:size-5" />
           </Button>
@@ -175,7 +179,7 @@ function Community() {
               size={"icon"}
               className="lg:hidden"
             >
-              <PenSquare className="size-4 md:size-5" />
+              <SquarePen className="size-4 md:size-5" />
             </Button>
           )}
           {secondaryPanelVisible && (
@@ -229,7 +233,7 @@ function Community() {
                         onClick={newPostButtonClick}
                         className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 items-center justify-center shadow-lg`}
                       >
-                        <PenSquare className="size-4 text-muted-foreground hover:text-primary md:size-5" />
+                        <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
                       </a>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -244,7 +248,8 @@ function Community() {
         <ResizableHandle withHandle className="mx-4 hidden lg:flex" />
         <ResizablePanel defaultSize={30}>
           <div className="flex h-full items-center justify-center">
-            {selectedPostId && <Post postId={selectedPostId} />}
+            {/* {selectedPostId && <Post postId={selectedPostId} />} */}
+            {selectedPostId ? <Post postId={selectedPostId} /> : <NewPost />}
           </div>
         </ResizablePanel>
       </PanelGroup>

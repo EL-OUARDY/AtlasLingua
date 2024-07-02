@@ -3362,7 +3362,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Just learned how to say 'Thank you' in Darija: 'Shukran'! This app is amazing for picking up everyday phrases.",
     votes: 15,
-    tags: ["Beginner", "Phrases", "Learning"],
+    tags: ["Phrases", "Learning"],
     user: {
       name: "Sarah Johnson",
       avatar: "https://example.com/avatars/sarah.jpg",
@@ -3377,12 +3377,12 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Quick tip: 'Inshallah' is used a lot in daily Darija conversations. It means 'God willing' or 'hopefully'.",
     votes: 25,
-    tags: ["Tip", "Vocabulary", "Culture"],
+    tags: ["Vocabulary", "Culture"],
     user: {
       name: "Hassan Mansouri",
       avatar: "https://example.com/avatars/hassan.jpg",
       bio: "Moroccan linguistics student",
-      role: "Contributor",
+      role: "contributor",
     },
     date: "2024-06-25T10:05:00Z",
     commentsNumber: 1,
@@ -3392,7 +3392,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Anyone know how to say 'Where is the nearest cafe?' in Darija? Planning my trip to Marrakech!",
     votes: 5,
-    tags: ["Question", "Travel", "Phrases"],
+    tags: ["Question", "Travel"],
     user: {
       name: "Emma Wilson",
       avatar: "https://example.com/avatars/emma.jpg",
@@ -3407,12 +3407,12 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Just added 50 new food-related phrases to the database. Enjoy learning about Moroccan cuisine!",
     votes: 22,
-    tags: ["Update", "Food", "Vocabulary"],
+    tags: ["Update", "Food"],
     user: {
       name: "Fatima Zahra",
       avatar: "https://example.com/avatars/fatima.jpg",
       bio: "Moroccan chef and language enthusiast",
-      role: "Contributor",
+      role: "contributor",
     },
     date: "2024-06-28T11:20:00Z",
     commentsNumber: 4,
@@ -3422,7 +3422,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "The audio pronunciation feature is so helpful! I'm finally getting the hang of those tricky Darija sounds.",
     votes: 13,
-    tags: ["Feature", "Pronunciation", "Learning"],
+    tags: ["Pronunciation", "Learning"],
     user: {
       name: "David Lee",
       avatar: "https://example.com/avatars/david.jpg",
@@ -3437,12 +3437,12 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Suggestion: Can we add a section for Darija proverbs and their meanings? It would be great for cultural insight!",
     votes: 18,
-    tags: ["Suggestion", "Culture", "Proverbs"],
+    tags: ["Suggestion", "Proverbs"],
     user: {
       name: "Laila Bennani",
       avatar: "https://example.com/avatars/laila.jpg",
       bio: "Darija teacher and cultural expert",
-      role: "Contributor",
+      role: "contributor",
     },
     date: "2024-06-26T13:10:00Z",
     commentsNumber: 4,
@@ -3453,7 +3453,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "The difference between formal Arabic and Darija is fascinating. This app is really helping me navigate both!",
     votes: 9,
-    tags: ["Observation", "Language", "Learning"],
+    tags: ["Observation", "Learning"],
     user: {
       name: "Anna Schmidt",
       avatar: "https://example.com/avatars/anna.jpg",
@@ -3468,12 +3468,12 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Just updated the 'Transportation' category with 30 new entries. Navigating Morocco will be easier for travelers now!",
     votes: 14,
-    tags: ["Update", "Travel", "Vocabulary"],
+    tags: ["Update", "Travel"],
     user: {
       name: "Karim Idrissi",
       avatar: "https://example.com/avatars/karim.jpg",
       bio: "Tour guide and language enthusiast",
-      role: "Contributor",
+      role: "contributor",
     },
     date: "2024-06-23T08:55:00Z",
     commentsNumber: 9,
@@ -3483,7 +3483,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     content:
       "Love the new feature that shows regional variations of phrases. Darija in Tangier vs Marrakech - so interesting!",
     votes: 20,
-    tags: ["Feature", "Dialect", "Learning"],
+    tags: ["Dialect", "Learning"],
     user: {
       name: "Tom Parker",
       avatar: "https://example.com/avatars/tom.jpg",
@@ -3503,7 +3503,7 @@ export const dummyCommunityPosts: ICommunityPost[] = [
       name: "Youssef Alami",
       avatar: "https://example.com/avatars/youssef.jpg",
       bio: "Native Darija speaker from Casablanca",
-      role: "Contributor",
+      role: "contributor",
     },
     date: "2024-06-30T09:15:00Z",
     commentsNumber: 0,

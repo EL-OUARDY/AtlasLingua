@@ -66,7 +66,7 @@ function Post({ postId }: Props) {
                 <div className="flex items-center font-semibold">
                   <div className="mr-auto flex items-center gap-1">
                     {post.user.name}
-                    {post.user.role === "Contributor" && (
+                    {post.user.role === "contributor" && (
                       <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                     )}
                   </div>
@@ -240,10 +240,13 @@ function Post({ postId }: Props) {
                     />
                     <div className="flex items-center">
                       <Label
-                        htmlFor="mute"
+                        htmlFor="anonymous"
                         className="flex items-center gap-2 text-xs font-normal"
                       >
-                        <Switch id="mute" aria-label="Comment anonymously" />{" "}
+                        <Switch
+                          id="anonymous"
+                          aria-label="Comment anonymously"
+                        />{" "}
                         Comment anonymously
                       </Label>
                       <Button
