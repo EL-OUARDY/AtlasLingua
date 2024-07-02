@@ -19,6 +19,14 @@ import { APP_NAME } from "@/shared/constants";
 import Post from "../community/Post";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -86,13 +94,64 @@ function Community() {
 
   return (
     <div className="flex h-full flex-col rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
-      <div className="flex items-center gap-4 md:flex-row md:items-end">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Community</h2>
+      <div className="flex items-center gap-4 md:flex-row">
+        <div className="flex items-center">
+          {/* <h2 className="text-2xl font-bold tracking-tight">Community</h2> */}
           {/* <p className="mt-1 text-muted-foreground">
                   Make friends, share your thoughts and leverage the power of a
                   great community.
                 </p> */}
+          <Tabs
+            className="hidden md:block"
+            defaultValue="latest"
+            onValueChange={(x) => console.log(x)}
+          >
+            <div className="flex items-center">
+              <TabsList className="ml-auto">
+                <TabsTrigger
+                  value="latest"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  Latest
+                </TabsTrigger>
+                <TabsTrigger
+                  value="voted"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  Most Voted
+                </TabsTrigger>
+                <TabsTrigger
+                  value="unanswered"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  Unanswered
+                </TabsTrigger>
+                <TabsTrigger
+                  value="user"
+                  className="text-zinc-600 dark:text-zinc-200"
+                >
+                  My Posts
+                </TabsTrigger>
+              </TabsList>
+            </div>
+          </Tabs>
+
+          <div className="md:hidden">
+            <Select
+              onValueChange={(x) => console.log(x)}
+              defaultValue={"latest"}
+            >
+              <SelectTrigger className="w-[130px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="latest">Latest</SelectItem>
+                <SelectItem value="voted">Most Voted</SelectItem>
+                <SelectItem value="unanswered">Unanswered</SelectItem>
+                <SelectItem value="user">My Posts</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="relative ml-auto flex gap-2 md:grow-0">
           <Search className="absolute left-2.5 top-2.5 hidden h-4 w-4 text-muted-foreground md:block" />

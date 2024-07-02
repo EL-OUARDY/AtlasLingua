@@ -133,7 +133,7 @@ function PostsList({ posts, onSelect }: Props) {
                     <TooltipTrigger asChild>
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                         <svg
-                          className="mr-2 size-4 stroke-1"
+                          className="mr-2 size-3 stroke-1"
                           fill="currentColor"
                           icon-name="upvote-outline"
                           viewBox="0 0 20 20"
@@ -157,7 +157,7 @@ function PostsList({ posts, onSelect }: Props) {
                     <TooltipTrigger asChild>
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                         <svg
-                          className="mr-2 size-4 stroke-1"
+                          className="mr-2 size-3 stroke-1"
                           fill="currentColor"
                           icon-name="comment-outline"
                           viewBox="0 0 20 20"
