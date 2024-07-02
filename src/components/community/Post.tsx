@@ -42,6 +42,7 @@ function Post({ postId }: Props) {
 
   useEffect(() => {
     // get post data
+    setShowNewComment(false);
     setPost(dummyCommunityPosts.find((p) => p.id === postId));
   }, [postId]);
 

@@ -17,25 +17,38 @@ import PostsList from "../community/PostsList";
 import { dummyCommunityPosts } from "@/shared/dummy-data";
 import { APP_NAME } from "@/shared/constants";
 import Post from "../community/Post";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedPostId, setSelectedPostId] = useState<number | undefined>(-1);
-  const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
-  const [postsScrollAreaHeight, setPostsScrollAreaHeight] = useState<number>();
+  const [selectedPostId, setSelectedPostId] = useState<number | undefined>();
   const [secondaryPanelVisible, setSecondaryPanelVisible] =
     useState<boolean>(true);
+  const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
 
+  // FIX THIS LATER WITH CSS
+  const [postsScrollAreaHeight, setPostsScrollAreaHeight] = useState<number>();
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
   const postsScrollArea = useRef<React.ElementRef<typeof ScrollArea>>(null);
   const postsWrapper = useRef<HTMLDivElement>(null);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const newPost = searchParams.get("new_post");
+    const postId = searchParams.get("post_id");
+    setSelectedPostId(postId ? Number(postId) : undefined);
+    if (newPost) setSelectedPostId(undefined);
+
     // set panels size
     function resizeContentPanel() {
       // panels
       const wd = window.innerWidth;
       if (wd > breakpoints.lg) setPanelSizes([70, 30]);
+      else if (postId || newPost) setPanelSizes([0, 100]);
       else setPanelSizes([100, 0]);
       // posts scrollarea
       setPostsScrollAreaHeight(postsWrapper.current?.offsetHeight);
@@ -46,35 +59,29 @@ function Community() {
     setPostsLoaded(true);
 
     return () => window.removeEventListener("resize", resizeContentPanel); // clean up
-  }, []);
+  }, [location]);
 
   // Function to update the panel layout
   const setPanelSizes = (sizes: number[]) => {
     // track the state of secondary panel
     setSecondaryPanelVisible(sizes[1] === 0 ? false : true);
-
     if (panelGroupRef.current) {
       panelGroupRef.current.setLayout(sizes);
     }
   };
 
   function newPostButtonClick() {
-    setSelectedPostId(undefined);
-    // show panel for mobile
-    const wd = window.innerWidth;
-    if (wd < breakpoints.lg) setPanelSizes([0, 100]);
+    navigate(`${ROUTES.community}/?new_post=1`);
   }
 
-  function showPost(id: number) {
-    const wd = window.innerWidth;
-    if (wd < breakpoints.lg) setPanelSizes([0, 100]);
-    setSelectedPostId(id);
+  function showPostPanel(id: number) {
+    navigate(`${ROUTES.community}/?post_id=${id}`);
   }
 
-  function hidePost() {
+  function hidePostPanel() {
     const wd = window.innerWidth;
     if (wd < breakpoints.lg) setPanelSizes([100, 0]);
-    setSelectedPostId(undefined);
+    navigate(ROUTES.community);
   }
 
   return (
@@ -114,7 +121,7 @@ function Community() {
           )}
           {secondaryPanelVisible && (
             <Button
-              onClick={hidePost}
+              onClick={hidePostPanel}
               variant={"outline"}
               size={"icon"}
               className="lg:hidden"
@@ -143,7 +150,7 @@ function Community() {
               <div className="grid h-full gap-4 pt-0 sm:grid-cols-auto-fill-270">
                 {postsLoaded && (
                   <PostsList
-                    onSelect={showPost}
+                    onSelect={showPostPanel}
                     posts={dummyCommunityPosts.filter((x) =>
                       x.content
                         .toLowerCase()
