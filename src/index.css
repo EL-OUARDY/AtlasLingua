@@ -63,6 +63,7 @@
   background-image: url("img/beams.jpg");
   @apply bg-cover bg-center;
 }
+
 @font-face {
   font-family: "Geist";
   src:
@@ -79,6 +80,11 @@
     url("/fonts/Geist-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
+}
+
+/* remove tailwind ring */
+.no-ring {
+  @apply !ring-0 !ring-offset-0;
 }
 
 /* active links */

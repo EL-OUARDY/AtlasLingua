@@ -3509,3 +3509,55 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     commentsNumber: 0,
   },
 ];
+
+export const dummyPostComments = [
+  {
+    id: 101,
+    content:
+      "Great start, Sarah! 'Shukran' is used a lot. Try 'Baraka llahu fik' too for a more traditional Darija thanks!",
+    user: {
+      name: "Ahmed Benali",
+    },
+    date: "2024-07-01T15:00:00Z",
+    votes: 26,
+  },
+  {
+    id: 102,
+    content: "This app is a game-changer for learning Darija! Keep it up!",
+    user: {
+      name: "Emma Thompson",
+    },
+    date: "2024-06-28T15:15:00Z",
+    votes: 13,
+  },
+  {
+    id: 103,
+    content:
+      "Pro tip: The pronunciation is more like 'shokran'. The 'u' sound is closer to 'o' in Darija.",
+    user: {
+      name: "Youssef Alaoui",
+    },
+    date: "2024-05-17T15:30:00Z",
+    votes: 6,
+  },
+  {
+    id: 104,
+    content:
+      "Nice! I just learned this too. It's amazing how a simple 'thank you' can brighten someone's day.",
+    user: {
+      name: "Lisa Chen",
+    },
+    date: "2024-05-01T16:00:00Z",
+    votes: 3,
+  },
+  {
+    id: 105,
+    content:
+      "Awesome Sarah! Next challenge: learn how to respond when someone thanks you!",
+    user: {
+      name: "Carlos Rodriguez",
+    },
+    date: "2024-04-01T16:30:00Z",
+    votes: 0,
+  },
+];
