@@ -56,9 +56,9 @@ function Community() {
     function resizeContentPanel() {
       // panels
       const wd = window.innerWidth;
-      if (wd > breakpoints.lg) setPanelSizes([70, 30]);
-      else if (postId || newPost) setPanelSizes([0, 100]);
-      else setPanelSizes([100, 0]);
+      if (wd < breakpoints.lg)
+        if (postId || newPost) setPanelSizes([0, 100]);
+        else setPanelSizes([100, 0]);
       // posts scrollarea
       setPostsScrollAreaHeight(postsWrapper.current?.offsetHeight);
     }
