@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Separator } from "../ui/separator";
 import { Search, SquarePen, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { ResizableHandle, ResizablePanel } from "../ui/resizable";
@@ -12,7 +11,7 @@ import {
 import { Button, buttonVariants } from "../ui/button";
 import { ImperativePanelGroupHandle, PanelGroup } from "react-resizable-panels";
 import { breakpoints } from "@/shared/screen-breakpoints";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import PostsList from "../community/PostsList";
 import { dummyCommunityPosts } from "@/shared/dummy-data";
 import { APP_NAME } from "@/shared/constants";
@@ -36,16 +35,13 @@ function Community() {
     useState<boolean>(true);
   const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
 
-  // FIX THIS LATER WITH CSS
-  const [postsScrollAreaHeight, setPostsScrollAreaHeight] = useState<number>();
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
-  const postsScrollArea = useRef<React.ElementRef<typeof ScrollArea>>(null);
-  const postsWrapper = useRef<HTMLDivElement>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // get post id from the url
     const searchParams = new URLSearchParams(location.search);
     const newPost = searchParams.get("new_post");
     const postId = searchParams.get("post_id");
@@ -54,13 +50,19 @@ function Community() {
 
     // set panels size
     function resizeContentPanel() {
-      // panels
       const wd = window.innerWidth;
+      // on larger screens: expand post panel if it is smaller
+      if (panelGroupRef.current && wd > breakpoints.lg)
+        if (
+          panelGroupRef.current.getLayout()[0] === 0 ||
+          panelGroupRef.current.getLayout()[1] < 5
+        )
+          setPanelsLayout([70, 30]);
+
+      // on smaller screens: only show one panel
       if (wd < breakpoints.lg)
-        if (postId || newPost) setPanelSizes([0, 100]);
-        else setPanelSizes([100, 0]);
-      // posts scrollarea
-      setPostsScrollAreaHeight(postsWrapper.current?.offsetHeight);
+        if (postId || newPost) setPanelsLayout([0, 100]);
+        else setPanelsLayout([100, 0]);
     }
     resizeContentPanel();
     window.addEventListener("resize", resizeContentPanel);
@@ -71,8 +73,8 @@ function Community() {
   }, [location]);
 
   // Function to update the panel layout
-  const setPanelSizes = (sizes: number[]) => {
-    // track the state of secondary panel
+  const setPanelsLayout = (sizes: number[]) => {
+    // track the state of the post  panel
     setSecondaryPanelVisible(sizes[1] === 0 ? false : true);
     if (panelGroupRef.current) {
       panelGroupRef.current.setLayout(sizes);
@@ -88,13 +90,11 @@ function Community() {
   }
 
   function hidePostPanel() {
-    const wd = window.innerWidth;
-    if (wd < breakpoints.lg) setPanelSizes([100, 0]);
     navigate(ROUTES.community);
   }
 
   return (
-    <div className="flex h-full flex-col rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+    <div className="flex h-full flex-col overflow-auto rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
       <div className="flex items-center gap-4 md:flex-row">
         <div className="flex items-center">
           {/* <h2 className="text-2xl font-bold tracking-tight">Community</h2> */}
@@ -103,7 +103,7 @@ function Community() {
                   great community.
                 </p> */}
           <Tabs
-            className="hidden md:block"
+            className="hidden lg:block"
             defaultValue="latest"
             onValueChange={(x) => console.log(x)}
           >
@@ -137,7 +137,7 @@ function Community() {
             </div>
           </Tabs>
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Select
               onValueChange={(x) => console.log(x)}
               defaultValue={"latest"}
@@ -154,18 +154,20 @@ function Community() {
             </Select>
           </div>
         </div>
-        <div className="relative ml-auto flex gap-2 md:grow-0">
-          <Search className="absolute left-2.5 top-2.5 hidden h-4 w-4 text-muted-foreground md:block" />
-          <Input
-            value={searchQuery}
-            id="search"
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            type="search"
-            placeholder="Search..."
-            className="hidden w-full rounded-lg bg-background pl-8 md:block md:w-[150px] lg:w-[250px]"
-          />
+        <div className="ml-auto flex gap-2 md:grow-0">
+          <div className="relative hidden md:block">
+            <Search className="absolute left-2.5 top-2.5 hidden h-4 w-4 text-muted-foreground md:block" />
+            <Input
+              value={searchQuery}
+              id="search"
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              type="search"
+              placeholder="Search..."
+              className="hidden w-full rounded-lg bg-background pl-8 md:block md:w-[150px] lg:w-[250px]"
+            />
+          </div>
           <Button className="hidden xl:flex" onClick={newPostButtonClick}>
             <SquarePen className="mr-2 h-4 w-4" /> New Post
           </Button>
@@ -194,9 +196,8 @@ function Community() {
           )}
         </div>
       </div>
-      <Separator className="my-6" />
+      {/* <Separator className="my-6" /> */}
       <PanelGroup
-        style={{ maxHeight: postsScrollAreaHeight }}
         onLayout={(layout) =>
           localStorage.setItem(
             APP_NAME + "-community-layout",
@@ -205,11 +206,11 @@ function Community() {
         }
         ref={panelGroupRef}
         direction="horizontal"
-        className="flex h-full w-full rounded-lg data-[panel-group-direction=vertical]:flex-col"
+        className="mt-6 flex w-full flex-1 overflow-auto rounded-lg data-[panel-group-direction=vertical]:flex-col"
       >
         <ResizablePanel defaultSize={70}>
-          <div ref={postsWrapper} className="relative flex h-full flex-col">
-            <ScrollArea className="h-full w-full" ref={postsScrollArea}>
+          <div className="relative flex h-full flex-col">
+            <ScrollArea className="h-full w-full">
               <div className="grid h-full gap-4 pt-0 sm:grid-cols-auto-fill-270">
                 {postsLoaded && (
                   <PostsList
@@ -222,6 +223,7 @@ function Community() {
                   />
                 )}
               </div>
+              <ScrollBar orientation="horizontal" className="cursor-grab" />
             </ScrollArea>
 
             {selectedPostId && (
@@ -248,7 +250,6 @@ function Community() {
         <ResizableHandle withHandle className="mx-4 hidden lg:flex" />
         <ResizablePanel defaultSize={30}>
           <div className="flex h-full items-center justify-center">
-            {/* {selectedPostId && <Post postId={selectedPostId} />} */}
             {selectedPostId ? <Post postId={selectedPostId} /> : <NewPost />}
           </div>
         </ResizablePanel>

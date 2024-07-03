@@ -12,7 +12,7 @@ import { Separator } from "../ui/separator";
 function Translator() {
   return (
     <>
-      <div className="flex h-full flex-col rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+      <div className="flex h-full flex-col overflow-auto rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Translator</h2>
@@ -42,7 +42,7 @@ function Translator() {
         </div>
         <Separator className="my-6" />
 
-        <div className="grid h-full w-full gap-8 rounded-lg md:gap-4"></div>
+        <div className="grid flex-1 gap-8 overflow-auto rounded-lg md:gap-4"></div>
       </div>
     </>
   );

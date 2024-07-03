@@ -12,9 +12,9 @@ function Favorites() {
       <div className="flex flex-col gap-4 md:flex-row md:items-end">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Favorites</h2>
-          <p className="mt-1 text-muted-foreground">
+          {/* <p className="mt-1 text-muted-foreground">
             Get Easy Access to your Saved Entries.
-          </p>
+          </p> */}
         </div>
         <div className="relative flex-1 md:ml-auto md:grow-0">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

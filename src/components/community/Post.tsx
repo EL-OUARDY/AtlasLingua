@@ -47,7 +47,7 @@ function Post({ postId }: Props) {
   }, [postId]);
 
   return (
-    <div className="relative flex h-full w-full min-w-[180px] flex-col">
+    <div className="relative flex h-full w-full min-w-[180px] flex-col rounded-lg border p-4">
       {post && (
         <div className="flex max-h-full flex-1 flex-col">
           <div className="flex w-full items-start pb-4">

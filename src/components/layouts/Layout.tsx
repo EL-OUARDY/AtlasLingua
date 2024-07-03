@@ -25,14 +25,14 @@ function Layout() {
     <div id="page-wrapper" className="flex h-screen w-screen bg-muted/40">
       <NotificationProvider>
         <SideBar />
-        <ScrollArea className="h-screen w-screen">
-          <section className="flex h-screen flex-1 flex-col md:gap-4 md:py-4">
+        <ScrollArea className="h-screen w-screen overflow-auto">
+          <section className="flex h-screen flex-1 flex-col overflow-auto md:gap-4 md:py-4">
             <Header />
-            <ScrollArea ref={scrollAreaRef} className="flex-1">
-              <main className="flex h-full flex-1 flex-grow flex-col gap-4 p-4 md:gap-6 md:px-6 md:py-0">
+            <main className="flex h-full flex-1 flex-grow flex-col gap-4 overflow-auto p-4 md:gap-6 md:px-6 md:py-0">
+              <ScrollArea ref={scrollAreaRef} className="flex-1">
                 <Outlet />
-              </main>
-            </ScrollArea>
+              </ScrollArea>
+            </main>
             <MobileNavigationBar />
           </section>
           <ScrollBar orientation="horizontal" className="cursor-grab" />
