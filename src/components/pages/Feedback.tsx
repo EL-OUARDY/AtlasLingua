@@ -16,7 +16,7 @@ import { Label } from "../ui/label";
 
 function Feedback() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-start rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+    <div className="flex flex-1 flex-col items-center justify-start p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
       <div className="w-full">
         <h2 className="text-2xl font-bold tracking-tight">Feedback</h2>
         <p className="mt-1 text-muted-foreground">

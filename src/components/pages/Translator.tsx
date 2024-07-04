@@ -1,14 +1,7 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ROUTES } from "@/routes/routes";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { FileText, ImagePlay, FileType2, Paperclip } from "lucide-react";
 
 const translationTypes = [
@@ -39,7 +32,6 @@ const translationTypes = [
 ];
 
 function Translator() {
-  const navigate = useNavigate();
   const location = useLocation();
   const currentPath =
     location.pathname !== ROUTES.home
@@ -48,7 +40,7 @@ function Translator() {
 
   return (
     <>
-      <div className="flex h-full flex-col gap-4 overflow-auto rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+      <div className="flex h-full flex-col gap-4 overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
         {/* <div className="flex flex-col gap-4 md:flex-row md:items-end">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Translator</h2>
@@ -89,7 +81,7 @@ function Translator() {
                       <div className="flex items-center gap-3">
                         <item.icon className="size-5 xl:size-5" />
                         <div className="hidden flex-col text-left lg:flex">
-                          <span className="font-semibold text-foreground xl:text-base">
+                          <span className="text-foreground xl:text-base">
                             {item.type}
                           </span>
                           <span className="text-muted-foreground xl:text-sm">

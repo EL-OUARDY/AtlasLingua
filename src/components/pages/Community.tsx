@@ -94,7 +94,7 @@ function Community() {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-auto rounded-lg border border-dashed p-4 shadow-sm sm:p-6">
+    <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
       <div className="flex items-center gap-4 md:flex-row">
         <div className="flex items-center">
           {/* <h2 className="text-2xl font-bold tracking-tight">Community</h2> */}

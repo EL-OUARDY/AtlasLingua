@@ -14,7 +14,6 @@ import Contribution from "./components/pages/Contribution";
 import Feedback from "./components/pages/Feedback";
 import LiveAssistance from "./components/pages/LiveAssistance";
 import Favorites from "./components/pages/Favorites";
-import History from "./components/pages/History";
 import Privacy from "./components/pages/Privacy";
 import Settings from "./components/pages/Settings";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -64,7 +63,6 @@ function App() {
             <Route path={ROUTES.community} element={<Community />} />
             <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />
             <Route path={ROUTES.contribution} element={<Contribution />} />
-            <Route path={ROUTES.history} element={<History />} />
             <Route path={ROUTES.feedback} element={<Feedback />} />
             <Route path={ROUTES.about} element={<About />} />
             <Route path={ROUTES.privacy} element={<Privacy />} />
