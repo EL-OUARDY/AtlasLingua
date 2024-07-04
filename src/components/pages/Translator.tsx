@@ -1,11 +1,3 @@
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ROUTES } from "@/routes/routes";
@@ -17,12 +9,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { FileText, ImagePlay, FileType2, Paperclip } from "lucide-react";
 
 const translationTypes = [
-  { type: "Text", link: ROUTES.translate.index },
-  { type: "Media", link: ROUTES.translate.media },
-  { type: "Documents", link: ROUTES.translate.documents },
-  { type: "Summarization", link: ROUTES.translate.summarization },
+  {
+    type: "Text",
+    link: ROUTES.translate.index,
+    description: "AI-powered",
+    icon: FileType2,
+  },
+  {
+    type: "Media",
+    link: ROUTES.translate.media,
+    description: "Audios, Videos",
+    icon: ImagePlay,
+  },
+  {
+    type: "Documents",
+    link: ROUTES.translate.documents,
+    description: ".pdf, .docx, .pptx",
+    icon: Paperclip,
+  },
+  {
+    type: "Summarization",
+    link: ROUTES.translate.summarization,
+    description: "Smart recap",
+    icon: FileText,
+  },
 ];
 
 function Translator() {
@@ -63,69 +76,36 @@ function Translator() {
             </Breadcrumb>
           </div>
         </div> */}
-        <div className="flex items-center gap-4 overflow-auto">
-          <Tabs
-            className="hidden w-full flex-1 flex-col gap-4 sm:flex"
-            value={currentPath}
-          >
+        <div className="flex items-center gap-4">
+          <Tabs className="flex flex-1 flex-col gap-4" value={currentPath}>
             <div className="flex items-center">
-              <TabsList className="mr-auto">
+              <TabsList className="mr-auto h-fit">
                 {translationTypes.map((item, index) => (
-                  <Link to={item.link}>
+                  <Link key={index} to={item.link}>
                     <TabsTrigger
-                      key={index}
                       value={item.link}
-                      className="text-zinc-600 dark:text-zinc-200"
+                      className="rounded-lg px-4 text-zinc-600 dark:text-zinc-200"
                     >
-                      {item.type}
+                      <div className="flex items-center gap-3">
+                        <item.icon className="size-5 xl:size-5" />
+                        <div className="hidden flex-col text-left lg:flex">
+                          <span className="font-semibold text-foreground xl:text-base">
+                            {item.type}
+                          </span>
+                          <span className="text-muted-foreground xl:text-sm">
+                            {item.description}
+                          </span>
+                        </div>
+                      </div>
                     </TabsTrigger>
                   </Link>
                 ))}
               </TabsList>
             </div>
           </Tabs>
-          <div className="flex w-full items-center sm:hidden">
-            <h2 className="flex-1 text-2xl font-bold tracking-tight">
-              Translator
-            </h2>
-            <Select
-              value={currentPath}
-              onValueChange={(link) => navigate(link)}
-            >
-              <SelectTrigger className="w-[140px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {translationTypes.map((item, index) => (
-                  <SelectItem key={index} value={item.link} className="">
-                    {item.type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="hidden lg:block">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link to="#" className="text-base">
-                      Translator
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="text-base">
-                    English - Darija
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
         </div>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex flex-1">
           <Outlet />
         </ScrollArea>
       </div>
