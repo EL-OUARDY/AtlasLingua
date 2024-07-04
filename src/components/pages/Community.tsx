@@ -108,7 +108,7 @@ function Community() {
             onValueChange={(x) => console.log(x)}
           >
             <div className="flex items-center">
-              <TabsList className="ml-auto">
+              <TabsList className="">
                 <TabsTrigger
                   value="latest"
                   className="text-zinc-600 dark:text-zinc-200"
