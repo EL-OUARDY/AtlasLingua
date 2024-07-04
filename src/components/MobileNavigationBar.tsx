@@ -26,7 +26,7 @@ function MobileNavigationBar() {
         <span className="sr-only">Community</span>
       </Link>
       <Link
-        to={ROUTES.translate}
+        to={ROUTES.translate.index}
         className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground"
       >
         <div className="absolute bottom-2 rounded-full border-2 border-secondary bg-background p-4 hover:bg-secondary">

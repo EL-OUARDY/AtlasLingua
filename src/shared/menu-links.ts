@@ -22,7 +22,7 @@ interface ISideBarLink {
 export const MenuLinks: ISideBarLink[] = [
   {
     text: "Translator",
-    href: ROUTES.translate,
+    href: ROUTES.translate.index,
     icon: Languages,
     onlyMobile: false,
   },

@@ -1,6 +1,11 @@
 export const ROUTES = {
   home: "/",
-  translate: "/translate",
+  translate: {
+    index: "/translate",
+    media: "/translate/media",
+    documents: "/translate/documents",
+    summarization: "/translate/summarization",
+  },
   login: "/login",
   signup: "/signup",
   dictionary: "/dictionary",

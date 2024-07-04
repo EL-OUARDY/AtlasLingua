@@ -23,6 +23,10 @@ import ProfileSettings from "./components/pages/settings/ProfileSettings";
 import GeneralSettings from "./components/pages/settings/GeneralSettings";
 import AppearanceSettings from "./components/pages/settings/AppearanceSettings";
 import NotificationSettings from "./components/pages/settings/NotificationSettings";
+import TranslateText from "./components/translator/TranslateTexts";
+import TranslateMedia from "./components/translator/TranslateMedia";
+import TranslateDocuments from "./components/translator/TranslateDocuments";
+import Summarization from "./components/translator/Summarization";
 
 function App() {
   return (
@@ -34,8 +38,26 @@ function App() {
           <Route path={ROUTES.signup} element={<Signup />} />
           <Route path={ROUTES.contact} element={<Contact />} />
           <Route path="/" element={<Layout />}>
-            <Route index element={<Translator />} />
-            <Route path={ROUTES.translate} element={<Translator />} />
+            <Route path={"/"} element={<Translator />}>
+              <Route index element={<TranslateText />} />
+              <Route
+                path={ROUTES.translate.index}
+                element={<TranslateText />}
+              />
+              <Route
+                path={ROUTES.translate.media}
+                element={<TranslateMedia />}
+              />
+              <Route
+                path={ROUTES.translate.documents}
+                element={<TranslateDocuments />}
+              />
+              <Route
+                path={ROUTES.translate.summarization}
+                element={<Summarization />}
+              />
+            </Route>
+            <Route path={ROUTES.translate.index} element={<Translator />} />
             <Route path={ROUTES.dictionary} element={<Dictionary />} />
             <Route path={ROUTES.favorites} element={<Favorites />} />
             <Route path={ROUTES.learn} element={<Learn />} />
