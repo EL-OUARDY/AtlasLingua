@@ -1,15 +1,13 @@
 interface Props {
   className: string;
 }
-function USA({ className }: Props) {
+function USAIcon({ className }: Props) {
   return (
     <div className="transform transition-transform duration-300 hover:scale-110">
       <svg
         className={className}
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
-        width="256"
-        height="256"
         viewBox="0 0 256 256"
         xmlSpace="preserve"
       >
@@ -76,4 +74,4 @@ function USA({ className }: Props) {
   );
 }
 
-export default USA;
+export default USAIcon;

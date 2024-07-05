@@ -99,6 +99,11 @@ a.active {
   background-color: hsl(var(--secondary));
   color: hsl(var(--foreground));
 }
+
+textarea::selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
 /* settings nav */
 #settings-nav a.active {
   background: hsl(var(--muted));

@@ -1,7 +1,7 @@
 interface Props {
   className: string;
 }
-function Morocco({ className }: Props) {
+function MoroccoIcon({ className }: Props) {
   return (
     <div className="transform transition-transform duration-300 hover:scale-110">
       <svg
@@ -21,4 +21,4 @@ function Morocco({ className }: Props) {
   );
 }
 
-export default Morocco;
+export default MoroccoIcon;

@@ -1,8 +1,15 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ROUTES } from "@/routes/routes";
-import { ScrollArea } from "../ui/scroll-area";
-import { FileText, ImagePlay, FileType2, Paperclip } from "lucide-react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import {
+  FileText,
+  ImagePlay,
+  FileType2,
+  Paperclip,
+  HistoryIcon,
+} from "lucide-react";
+import { Button } from "../ui/button";
 
 const translationTypes = [
   {
@@ -81,9 +88,7 @@ function Translator() {
                       <div className="flex items-center gap-3">
                         <item.icon className="size-5 xl:size-5" />
                         <div className="hidden flex-col text-left lg:flex">
-                          <span className="text-foreground xl:text-base">
-                            {item.type}
-                          </span>
+                          <span className="text-foreground">{item.type}</span>
                           <span className="text-muted-foreground xl:text-sm">
                             {item.description}
                           </span>
@@ -93,12 +98,22 @@ function Translator() {
                   </Link>
                 ))}
               </TabsList>
+              {currentPath === ROUTES.translate.index && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="dark:bg-secondary dark:hover:bg-background md:hidden"
+                >
+                  <HistoryIcon className="size-5" />
+                </Button>
+              )}
             </div>
           </Tabs>
         </div>
 
         <ScrollArea className="flex flex-1">
           <Outlet />
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
     </>
