@@ -2,12 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Search, SquarePen, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { ResizableHandle, ResizablePanel } from "../ui/resizable";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
 import { Button, buttonVariants } from "../ui/button";
 import { ImperativePanelGroupHandle, PanelGroup } from "react-resizable-panels";
 import { breakpoints } from "@/shared/screen-breakpoints";
@@ -27,6 +21,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import NewPost from "../community/NewPost";
+import WTooltip from "../ui/custom/WTooltip";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -230,21 +225,14 @@ function Community() {
 
                 {selectedPostId && (
                   <div className="absolute bottom-4 right-4 hidden md:flex">
-                    <TooltipProvider>
-                      <Tooltip delayDuration={0}>
-                        <TooltipTrigger>
-                          <a
-                            onClick={newPostButtonClick}
-                            className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 items-center justify-center shadow-lg`}
-                          >
-                            <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
-                          </a>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>New post</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <WTooltip side="top" content="New post">
+                      <a
+                        onClick={newPostButtonClick}
+                        className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 items-center justify-center shadow-lg`}
+                      >
+                        <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
+                      </a>
+                    </WTooltip>
                   </div>
                 )}
               </div>

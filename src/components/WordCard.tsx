@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   StarIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -25,13 +25,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IDictionary } from "@/models/Dictionary";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
 import { formatDistanceToNow } from "date-fns";
+import WTooltip from "./ui/custom/WTooltip";
+import { Link } from "react-router-dom";
 
 interface Props {
   word: IDictionary;
@@ -51,28 +47,32 @@ function WordCard({ word, className }: Props) {
             <br />
             {word.arabic}
           </CardDescription>
-          <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-2 text-secondary-foreground">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="secondary" className="p-0 shadow-none">
-                    {word.favorite && (
-                      <>
-                        <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
-                      </>
-                    )}
-                    {!word.favorite && (
-                      <>
-                        <StarIcon className="size-4 cursor-pointer" />
-                      </>
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {word.favorite ? "Remove from favorites" : "Add to favorites"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
+            <WTooltip
+              side="top"
+              content={
+                word.favorite ? "Remove from favorites" : "Add to favorites"
+              }
+            >
+              <Link
+                to="#"
+                className={
+                  buttonVariants({ variant: "secondary" }) + " !p-0 shadow-none"
+                }
+              >
+                {word.favorite && (
+                  <>
+                    <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
+                  </>
+                )}
+                {!word.favorite && (
+                  <>
+                    <StarIcon className="size-4 cursor-pointer" />
+                  </>
+                )}
+              </Link>
+            </WTooltip>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" className="p-0 shadow-none">
@@ -123,21 +123,9 @@ function WordCard({ word, className }: Props) {
                 word.popularity
               </div>
             )}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ShieldCheck className="size-4 text-green-600" />
-                </TooltipTrigger>
-                <TooltipContent
-                  className="rounded-xl border border-secondary bg-background px-4 py-3 text-center"
-                  side="top"
-                >
-                  <p>
-                    Verified by <br /> the community
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <WTooltip side="top" content="Verified by <br /> the community">
+              <ShieldCheck className="size-4 text-green-600" />
+            </WTooltip>
           </div>
         </div>
       </CardContent>

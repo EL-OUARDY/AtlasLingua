@@ -5,13 +5,7 @@ import {
   Bell,
   Hash,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
 import { APP_NAME } from "@/shared/constants";
@@ -19,6 +13,7 @@ import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
 import { useNotification } from "@/contexts/NotificationContext";
+import WTooltip from "./ui/custom/WTooltip";
 
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
@@ -74,25 +69,20 @@ function SideBar() {
           <nav className="flex flex-1 flex-col gap-2 sm:py-5">
             {MenuLinks.filter((link) => link.onlyMobile == false).map(
               (link, index) => (
-                <TooltipProvider key={index}>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <NavLink
-                        to={link.href}
-                        className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground [#sidebar-closed_&]:justify-center"
-                      >
-                        <link.icon className="size-6" />
-                        {isSideBarOpen && <span className="">{link.text}</span>}
-                      </NavLink>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      className={isSideBarOpen ? "hidden" : ""}
-                      side="right"
-                    >
-                      {link.text}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <WTooltip
+                  key={index}
+                  className={isSideBarOpen ? "!hidden" : ""}
+                  side="right"
+                  content={link.text}
+                >
+                  <NavLink
+                    to={link.href}
+                    className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground [#sidebar-closed_&]:justify-center"
+                  >
+                    <link.icon className="size-6" />
+                    {isSideBarOpen && <span className="">{link.text}</span>}
+                  </NavLink>
+                </WTooltip>
               ),
             )}
           </nav>
@@ -100,69 +90,54 @@ function SideBar() {
       </ScrollArea>
       <nav className="flex flex-col items-center gap-2 sm:py-5">
         {!isSideBarOpen && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
+          <WTooltip
+            className={isSideBarOpen ? "!hidden" : ""}
+            side="right"
+            content="Expand Menu"
+          >
+            <Link
+              onClick={() => {
+                saveSideBarState(!isSideBarOpen);
+              }}
+              to="#"
+              className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+            >
+              <PanelLeftOpen className="size-6" />
+            </Link>
+          </WTooltip>
+        )}
+        <div className="flex w-full items-center">
+          <WTooltip
+            className={isSideBarOpen ? "!hidden" : ""}
+            side="right"
+            content="Settings"
+          >
+            <NavLink
+              to={ROUTES.settings.general}
+              className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
+            >
+              <Settings className="size-6" />
+              {isSideBarOpen && <span className="">Settings</span>}
+            </NavLink>
+          </WTooltip>
+          {isSideBarOpen && (
+            <div className="ml-auto">
+              <WTooltip side="right" content="Collapse Menu">
                 <Link
+                  to="#"
                   onClick={() => {
                     saveSideBarState(!isSideBarOpen);
                   }}
-                  to="#"
-                  className="flex w-full items-center gap-4 rounded-xl py-2 text-muted-foreground hover:text-foreground"
+                  className={
+                    buttonVariants({ variant: "outline", size: "icon" }) +
+                    " flex h-8 w-8 items-center gap-4 py-2 text-muted-foreground hover:text-foreground"
+                  }
                 >
-                  <PanelLeftOpen className="size-6" />
+                  <PanelLeftClose className="size-5" />
+                  <span className="sr-only">Collapse Menu</span>
                 </Link>
-              </TooltipTrigger>
-              <TooltipContent
-                className={isSideBarOpen ? "hidden" : ""}
-                side="right"
-              >
-                Expand Menu
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-        <div className="flex w-full items-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <NavLink
-                  to={ROUTES.settings.general}
-                  className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
-                >
-                  <Settings className="size-6" />
-                  {isSideBarOpen && <span className="">Settings</span>}
-                </NavLink>
-              </TooltipTrigger>
-              <TooltipContent
-                className={isSideBarOpen ? "hidden" : ""}
-                side="right"
-              >
-                Settings
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          {isSideBarOpen && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    onClick={() => {
-                      saveSideBarState(!isSideBarOpen);
-                    }}
-                    variant="outline"
-                    size="icon"
-                    className="ml-auto flex h-8 w-8 items-center gap-4 py-2 text-muted-foreground hover:text-foreground"
-                  >
-                    <PanelLeftClose className="size-6" />
-                    <span className="sr-only">Collapse Menu</span>
-                  </Button>
-                </TooltipTrigger>
-                {isSideBarOpen && (
-                  <TooltipContent side="right">Collapse Menu</TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
+              </WTooltip>
+            </div>
           )}
         </div>
       </nav>

@@ -1,15 +1,10 @@
 import { IDictionary } from "@/models/Dictionary";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { ColumnDef } from "@tanstack/react-table";
 import { ShieldCheck, Star } from "lucide-react";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "./DataTableRowActions";
+import WTooltip from "@/components/ui/custom/WTooltip";
 
 export const columns: ColumnDef<IDictionary>[] = [
   {
@@ -68,21 +63,9 @@ export const columns: ColumnDef<IDictionary>[] = [
       const verified = row.getValue("verified");
       if (verified)
         return (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <ShieldCheck className="size-5 text-green-600" />
-              </TooltipTrigger>
-              <TooltipContent
-                className="rounded-xl border border-secondary bg-background px-4 py-3 text-center"
-                side="top"
-              >
-                <p>
-                  Verified by <br /> the community
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <WTooltip side="top" content="Verified by <br /> the community">
+            <ShieldCheck className="size-5 text-green-600" />
+          </WTooltip>
         );
     },
     filterFn: (row, id, value) => {
@@ -100,33 +83,21 @@ export const columns: ColumnDef<IDictionary>[] = [
       const id = row.getValue("id");
       if (favorite)
         return (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="">
-                <Star
-                  onClick={() => console.log({ id: id, favourite: favorite })}
-                  className="size-5 cursor-pointer fill-orange-600 stroke-orange-500"
-                />
-              </TooltipTrigger>
-              <TooltipContent className="text-center">
-                Remove from <br /> your list
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <WTooltip side="top" content="Remove from <br /> your list">
+            <Star
+              onClick={() => console.log({ id: id, favourite: favorite })}
+              className="size-5 cursor-pointer fill-orange-600 stroke-orange-500"
+            />
+          </WTooltip>
         );
 
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="">
-              <Star
-                onClick={() => console.log({ id: id, favourite: favorite })}
-                className="size-5 cursor-pointer stroke-muted-foreground"
-              />
-            </TooltipTrigger>
-            <TooltipContent>Save</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <WTooltip side="top" content="Save">
+          <Star
+            onClick={() => console.log({ id: id, favourite: favorite })}
+            className="size-5 cursor-pointer stroke-muted-foreground"
+          />
+        </WTooltip>
       );
     },
   },

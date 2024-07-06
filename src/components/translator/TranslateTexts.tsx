@@ -1,4 +1,4 @@
-import { Language } from "@/models/Translator";
+import { ITranslate, Language } from "@/models/Translator";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
 import {
@@ -10,26 +10,62 @@ import {
   MessageSquareTextIcon,
   Mic,
   Share2Icon,
+  ShieldCheck,
   Star,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import MoroccoIcon from "../ui/icons/Morocco";
 import USAIcon from "../ui/icons/USA";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
 import { Textarea } from "../ui/textarea";
 import AiIcon from "../ui/icons/Ai";
 import { ScrollArea } from "../ui/scroll-area";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import WTooltip from "../ui/custom/WTooltip";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
   const [destinationLang, setDestinationLang] = useState<Language>("darija");
+  const [translation, setTranslation] = useState<ITranslate>({
+    source: "Hello",
+    destination: "Salam",
+    verified: true,
+    alternatives: [
+      {
+        alternative: "Ahlan",
+        verified: true,
+      },
+      {
+        alternative: "Marhaba",
+        verified: true,
+      },
+      {
+        alternative: "Sbah l'kheir",
+        verified: false,
+      },
+      {
+        alternative: "La bas?",
+        verified: false,
+      },
+    ],
+  });
+
+  // main translation function
+  function translate(text: string) {
+    console.log("Translating");
+    setTranslation({ source: text, destination: "" });
+
+    // call translation API service
+    if (translation.source && translation.source !== "") {
+      return; // call translation API service
+    }
+  }
+
+  function switchTranslation() {
+    setSourceLang(sourceLang === "english" ? "darija" : "english");
+    setDestinationLang(destinationLang === "english" ? "darija" : "english");
+    translate(translation.destination);
+  }
 
   return (
     <div className="flex h-full flex-col overflow-auto rounded-lg border dark:bg-transparent">
@@ -47,15 +83,7 @@ function TranslateText() {
             </h3>
           </div>
         </div>
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            setSourceLang(sourceLang === "english" ? "darija" : "english");
-            setDestinationLang(
-              destinationLang === "english" ? "darija" : "english",
-            );
-          }}
-        >
+        <Button variant={"ghost"} onClick={() => switchTranslation()}>
           <ArrowRightLeftIcon
             className={`${sourceLang === "english" ? "rotate-180" : ""} size-5 transform text-muted-foreground transition-transform duration-300 ease-in-out`}
           />
@@ -79,6 +107,8 @@ function TranslateText() {
         <div id="source-panel" className="flex flex-1 overflow-auto p-4">
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring dark:bg-secondary">
             <Textarea
+              value={translation.source}
+              onChange={(event) => translate(event.target.value)}
               id="translate-source"
               placeholder="Type your text here..."
               className="no-ring h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none"
@@ -86,36 +116,28 @@ function TranslateText() {
             <div className="sticky bottom-0 left-0 w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
               <div className="flex items-center p-2">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="dark:hover:bg-background/30"
-                        size="icon"
-                      >
-                        <Mic className="size-5 text-muted-foreground" />
-                        <span className="sr-only">Use Microphone</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Use Microphone</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="dark:hover:bg-background/30"
-                        size="icon"
-                      >
-                        <AiIcon className="size-5" />
-                        <span className="sr-only">AI</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">AI-Powered</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <WTooltip side="top" content="Use Microphone">
+                  <a
+                    className={
+                      buttonVariants({ variant: "ghost", size: "icon" }) +
+                      " dark:hover:bg-background/30"
+                    }
+                  >
+                    <Mic className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Use Microphone</span>
+                  </a>
+                </WTooltip>
+                <WTooltip side="top" content="AI-Powered">
+                  <a
+                    className={
+                      buttonVariants({ variant: "ghost", size: "icon" }) +
+                      " dark:hover:bg-background/30"
+                    }
+                  >
+                    <AiIcon className="size-5" />
+                    <span className="sr-only">AI-Powered</span>
+                  </a>
+                </WTooltip>
                 <Button type="submit" size="sm" className="ml-auto gap-1.5">
                   Translate
                   <CornerDownLeft className="size-4" />
@@ -136,67 +158,92 @@ function TranslateText() {
               id="translate-source"
               className="h-full flex-1 overflow-auto border-0 p-4 text-base text-foreground shadow-none selection:bg-primary selection:text-primary-foreground"
             >
-              {/*  */}
+              <div className="flex items-center gap-1">
+                {translation.destination}
+                {translation.verified && (
+                  <WTooltip
+                    side="top"
+                    content="Verified by <br /> the community"
+                  >
+                    <ShieldCheck className="size-4 text-green-600" />
+                  </WTooltip>
+                )}
+              </div>
+              {translation.alternatives && (
+                <div className="mt-4 flex flex-col gap-4">
+                  <Separator className="dark:bg-secondary-foreground/10" />
+                  <div className="flex flex-col gap-2">
+                    <h3 className="font-bold tracking-tight text-muted-foreground">
+                      Alternatives:
+                    </h3>
+                    {translation.alternatives.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-1 text-sm text-muted-foreground"
+                      >
+                        {item.alternative}
+                        {item.verified && (
+                          <WTooltip
+                            side="top"
+                            content="Verified by <br /> the community"
+                          >
+                            <ShieldCheck className="size-4 text-green-600" />
+                          </WTooltip>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </ScrollArea>
 
             <Separator className="dark:bg-secondary-foreground/10" />
             <div className="ml-auto">
               <div className="flex items-center p-2">
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="dark:hover:bg-background/30"
-                        size="icon"
-                      >
-                        <Copy className="size-5 text-muted-foreground" />
-                        <span className="sr-only">Copy</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Copy</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <WTooltip side="top" content="Copy">
+                  <a
+                    className={
+                      buttonVariants({ variant: "ghost", size: "icon" }) +
+                      " dark:hover:bg-background/30"
+                    }
+                  >
+                    <Copy className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Copy</span>
+                  </a>
+                </WTooltip>
 
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="dark:hover:bg-background/30"
-                        size="icon"
-                      >
-                        <Share2Icon className="size-5 text-muted-foreground" />
-                        <span className="sr-only">Share</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">Share</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                <TooltipProvider>
-                  <Tooltip delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className="dark:hover:bg-background/30"
-                        size="icon"
-                      >
-                        <Flag className="size-5 text-muted-foreground" />
-                        <span className="sr-only">Report Translation</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      Report Translation
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <WTooltip side="top" content="Share">
+                  <a
+                    className={
+                      buttonVariants({ variant: "ghost", size: "icon" }) +
+                      " dark:hover:bg-background/30"
+                    }
+                  >
+                    <Share2Icon className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Share</span>
+                  </a>
+                </WTooltip>
+                <WTooltip side="top" content="Report Translation">
+                  <a
+                    className={
+                      buttonVariants({ variant: "ghost", size: "icon" }) +
+                      " dark:hover:bg-background/30"
+                    }
+                  >
+                    <Flag className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Report Translation</span>
+                  </a>
+                </WTooltip>
               </div>
             </div>
           </div>
         </div>
       </div>
       <Separator className="hidden md:flex" />
-      <div className="hidden items-center justify-center p-4 md:flex">
+      <div
+        id="footer-controls"
+        className="hidden items-center justify-center p-4 md:flex"
+      >
         <div className="flex gap-8">
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
             <div className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">

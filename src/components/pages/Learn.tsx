@@ -48,7 +48,7 @@ function Learn() {
           />
         </div>
 
-        <div className="grid h-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
           {dummyDictionaryData
             .filter(
               (x) =>
