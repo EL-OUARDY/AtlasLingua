@@ -33,7 +33,7 @@ function TranslateText() {
 
   return (
     <div className="flex h-full flex-col overflow-auto rounded-lg border dark:bg-transparent">
-      <div className="flex items-center gap-2 px-4 py-2">
+      <div id="language-switch" className="flex items-center gap-2 px-4 py-2">
         <div className="flex-1">
           <div className="flex items-center gap-1">
             {sourceLang === "english" ? (
@@ -94,7 +94,7 @@ function TranslateText() {
                         className="dark:hover:bg-background/30"
                         size="icon"
                       >
-                        <Mic className="size-5" />
+                        <Mic className="size-5 text-muted-foreground" />
                         <span className="sr-only">Use Microphone</span>
                       </Button>
                     </TooltipTrigger>
@@ -160,7 +160,7 @@ function TranslateText() {
                         className="dark:hover:bg-background/30"
                         size="icon"
                       >
-                        <Copy className="size-5" />
+                        <Copy className="size-5 text-muted-foreground" />
                         <span className="sr-only">Copy</span>
                       </Button>
                     </TooltipTrigger>
@@ -176,7 +176,7 @@ function TranslateText() {
                         className="dark:hover:bg-background/30"
                         size="icon"
                       >
-                        <Share2Icon className="size-5" />
+                        <Share2Icon className="size-5 text-muted-foreground" />
                         <span className="sr-only">Share</span>
                       </Button>
                     </TooltipTrigger>
@@ -191,7 +191,7 @@ function TranslateText() {
                         className="dark:hover:bg-background/30"
                         size="icon"
                       >
-                        <Flag className="size-5" />
+                        <Flag className="size-5 text-muted-foreground" />
                         <span className="sr-only">Report Translation</span>
                       </Button>
                     </TooltipTrigger>
@@ -205,7 +205,7 @@ function TranslateText() {
           </div>
         </div>
       </div>
-      <Separator />
+      <Separator className="hidden md:flex" />
       <div className="hidden items-center justify-center p-4 md:flex">
         <div className="flex gap-8">
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">

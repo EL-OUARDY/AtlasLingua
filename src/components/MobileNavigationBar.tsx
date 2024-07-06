@@ -6,48 +6,48 @@ import {
   Settings,
   MessagesSquare,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function MobileNavigationBar() {
   return (
-    <div className="flex justify-between gap-3 bg-background p-2 px-4 md:hidden">
-      <Link
+    <div className="fixed bottom-0 z-30 flex w-full justify-between gap-3 border-t bg-background p-2 px-4 md:hidden">
+      <NavLink
         to={ROUTES.dictionary}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <BookOpenText className="h-5 w-5" />
+        <BookOpenText className="size-6" />
         <span className="sr-only">Dictionary</span>
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to={ROUTES.community}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <MessagesSquare className="h-5 w-5" />
+        <MessagesSquare className="size-6" />
         <span className="sr-only">Community</span>
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to={ROUTES.translate.index}
-        className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground"
+        className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground"
       >
-        <div className="absolute bottom-2 rounded-full border border-secondary bg-background p-4 hover:bg-secondary">
+        <div className="absolute bottom-2 rounded-full border border-secondary bg-background p-4">
           <Languages className="h-6 w-6" />
         </div>
         <span className="sr-only">Translate</span>
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to={ROUTES.favorites}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <Star className="h-5 w-5" />
+        <Star className="size-6" />
         <span className="sr-only">Favorites</span>
-      </Link>
-      <Link
+      </NavLink>
+      <NavLink
         to={ROUTES.settings.general}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:bg-secondary hover:text-foreground"
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <Settings className="h-5 w-5" />
+        <Settings className="size-6" />
         <span className="sr-only">Settings</span>
-      </Link>
+      </NavLink>
     </div>
   );
 }

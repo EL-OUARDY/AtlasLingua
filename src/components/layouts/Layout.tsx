@@ -28,7 +28,7 @@ function Layout() {
         <ScrollArea className="h-screen w-screen overflow-auto">
           <section className="flex h-screen flex-1 flex-col overflow-auto md:gap-4 md:py-4">
             <Header />
-            <main className="flex h-full flex-1 flex-grow flex-col gap-4 overflow-auto md:gap-6 md:p-4 md:px-6 md:py-0">
+            <main className="flex h-full flex-1 flex-grow flex-col gap-4 overflow-auto pb-14 md:gap-6 md:p-4 md:px-6 md:py-0">
               <ScrollArea ref={scrollAreaRef} className="flex-1">
                 <Outlet />
               </ScrollArea>

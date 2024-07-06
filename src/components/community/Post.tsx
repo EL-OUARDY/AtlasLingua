@@ -234,6 +234,7 @@ function Post({ postId }: Props) {
                 <form>
                   <div className="grid gap-4">
                     <Textarea
+                      id="comment"
                       defaultValue={"@Emma Wilson "}
                       className="no-ring p-4 text-sm"
                       placeholder={`Reply to ${post.user.name}...`}

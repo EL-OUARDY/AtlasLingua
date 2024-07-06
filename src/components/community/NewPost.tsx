@@ -72,6 +72,7 @@ function NewPost() {
         <form className="h-full pt-4">
           <div className="flex h-full flex-col gap-4">
             <Textarea
+              id="post-content"
               className="no-ring h-full max-h-72 p-4 text-sm"
               placeholder={`What's in your mind?`}
             />
