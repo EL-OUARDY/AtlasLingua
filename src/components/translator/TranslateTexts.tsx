@@ -136,17 +136,7 @@ function TranslateText() {
               id="translate-source"
               className="h-full flex-1 overflow-auto border-0 p-4 text-base text-foreground shadow-none selection:bg-primary selection:text-primary-foreground"
             >
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam
-              libero, quae ratione quibusdam nam laborum sint optio natus
-              ducimus nulla nobis illo quos earum. Consequatur cumque
-              dignissimos sunt eveniet mollitia!Lorem ipsum dolor sit amet
-              consectetur, adipisicing elit. Magnam libero, quae ratione
-              quibusdam nam laborum sint optio natus ducimus nulla nobis illo
-              quos earum. Consequatur cumque dignissimos sunt eveniet
-              mollitia!Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Magnam libero, quae ratione quibusdam nam laborum sint optio natus
-              ducimus nulla nobis illo quos earum. Consequatur cumque
-              dignissimos sunt eveniet mollitia!
+              {/*  */}
             </ScrollArea>
 
             <Separator className="dark:bg-secondary-foreground/10" />
