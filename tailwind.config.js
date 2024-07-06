@@ -32,6 +32,10 @@ module.exports = {
       gridTemplateColumns: {
         'auto-fill-270': 'repeat(auto-fill, minmax(270px, 1fr))',
       },
+      transitionDuration: {
+        '2000': '2000ms',
+        '3000': '3000ms',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

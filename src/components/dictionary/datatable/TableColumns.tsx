@@ -83,21 +83,17 @@ export const columns: ColumnDef<IDictionary>[] = [
       const id = row.getValue("id");
       if (favorite)
         return (
-          <WTooltip side="top" content="Remove from <br /> your list">
-            <Star
-              onClick={() => console.log({ id: id, favourite: favorite })}
-              className="size-5 cursor-pointer fill-orange-600 stroke-orange-500"
-            />
-          </WTooltip>
+          <Star
+            onClick={() => console.log({ id: id, favourite: favorite })}
+            className="size-5 cursor-pointer fill-orange-600 stroke-orange-500"
+          />
         );
 
       return (
-        <WTooltip side="top" content="Save">
-          <Star
-            onClick={() => console.log({ id: id, favourite: favorite })}
-            className="size-5 cursor-pointer stroke-muted-foreground"
-          />
-        </WTooltip>
+        <Star
+          onClick={() => console.log({ id: id, favourite: favorite })}
+          className="size-5 cursor-pointer stroke-muted-foreground"
+        />
       );
     },
   },

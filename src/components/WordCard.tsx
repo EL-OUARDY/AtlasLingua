@@ -48,30 +48,23 @@ function WordCard({ word, className }: Props) {
             {word.arabic}
           </CardDescription>
           <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
-            <WTooltip
-              side="top"
-              content={
-                word.favorite ? "Remove from favorites" : "Add to favorites"
+            <Link
+              to="#"
+              className={
+                buttonVariants({ variant: "secondary" }) + " !p-0 shadow-none"
               }
             >
-              <Link
-                to="#"
-                className={
-                  buttonVariants({ variant: "secondary" }) + " !p-0 shadow-none"
-                }
-              >
-                {word.favorite && (
-                  <>
-                    <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
-                  </>
-                )}
-                {!word.favorite && (
-                  <>
-                    <StarIcon className="size-4 cursor-pointer" />
-                  </>
-                )}
-              </Link>
-            </WTooltip>
+              {word.favorite && (
+                <>
+                  <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
+                </>
+              )}
+              {!word.favorite && (
+                <>
+                  <StarIcon className="size-4 cursor-pointer" />
+                </>
+              )}
+            </Link>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

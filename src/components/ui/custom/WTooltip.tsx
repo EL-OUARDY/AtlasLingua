@@ -23,11 +23,7 @@ function WTooltip({
   return (
     <TooltipProvider>
       <Tooltip delayDuration={0}>
-        <TooltipTrigger asChild>
-          <button className="reset m-0 size-fit cursor-default border-none bg-transparent p-0 text-inherit">
-            {children}
-          </button>
-        </TooltipTrigger>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           className={cn(!mobile ? "hidden" : "", className)}
           side={side}

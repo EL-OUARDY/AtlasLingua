@@ -102,7 +102,7 @@ function Translator() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="dark:bg-secondary dark:hover:bg-background md:hidden"
+                  className="dark:bg-secondary dark:hover:bg-background md:hidden landscape:flex lg:landscape:hidden"
                 >
                   <HistoryIcon className="size-5" />
                 </Button>

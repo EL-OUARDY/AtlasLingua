@@ -68,7 +68,7 @@ function TranslateText() {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-auto rounded-lg border dark:bg-transparent">
+    <div className="flex h-full min-h-[400px] flex-col overflow-auto rounded-lg border dark:bg-transparent">
       <div id="language-switch" className="flex items-center gap-2 px-4 py-2">
         <div className="flex-1">
           <div className="flex items-center gap-1">
@@ -116,17 +116,15 @@ function TranslateText() {
             <div className="sticky bottom-0 left-0 w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
               <div className="flex items-center p-2">
-                <WTooltip side="top" content="Use Microphone">
-                  <a
-                    className={
-                      buttonVariants({ variant: "ghost", size: "icon" }) +
-                      " dark:hover:bg-background/30"
-                    }
-                  >
-                    <Mic className="size-5 text-muted-foreground" />
-                    <span className="sr-only">Use Microphone</span>
-                  </a>
-                </WTooltip>
+                <a
+                  className={
+                    buttonVariants({ variant: "ghost", size: "icon" }) +
+                    " dark:hover:bg-background/30"
+                  }
+                >
+                  <Mic className="size-5 text-muted-foreground" />
+                  <span className="sr-only">Use Microphone</span>
+                </a>
                 <WTooltip side="top" content="AI-Powered">
                   <a
                     className={
@@ -200,29 +198,25 @@ function TranslateText() {
             <Separator className="dark:bg-secondary-foreground/10" />
             <div className="ml-auto">
               <div className="flex items-center p-2">
-                <WTooltip side="top" content="Copy">
-                  <a
-                    className={
-                      buttonVariants({ variant: "ghost", size: "icon" }) +
-                      " dark:hover:bg-background/30"
-                    }
-                  >
-                    <Copy className="size-5 text-muted-foreground" />
-                    <span className="sr-only">Copy</span>
-                  </a>
-                </WTooltip>
+                <a
+                  className={
+                    buttonVariants({ variant: "ghost", size: "icon" }) +
+                    " dark:hover:bg-background/30"
+                  }
+                >
+                  <Copy className="size-5 text-muted-foreground" />
+                  <span className="sr-only">Copy</span>
+                </a>
 
-                <WTooltip side="top" content="Share">
-                  <a
-                    className={
-                      buttonVariants({ variant: "ghost", size: "icon" }) +
-                      " dark:hover:bg-background/30"
-                    }
-                  >
-                    <Share2Icon className="size-5 text-muted-foreground" />
-                    <span className="sr-only">Share</span>
-                  </a>
-                </WTooltip>
+                <a
+                  className={
+                    buttonVariants({ variant: "ghost", size: "icon" }) +
+                    " dark:hover:bg-background/30"
+                  }
+                >
+                  <Share2Icon className="size-5 text-muted-foreground" />
+                  <span className="sr-only">Share</span>
+                </a>
                 <WTooltip side="top" content="Report Translation">
                   <a
                     className={
@@ -242,7 +236,7 @@ function TranslateText() {
       <Separator className="hidden md:flex" />
       <div
         id="footer-controls"
-        className="hidden items-center justify-center p-4 md:flex"
+        className="hidden items-center justify-center p-4 md:flex landscape:hidden lg:landscape:flex"
       >
         <div className="flex gap-8">
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
