@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   EllipsisVertical,
   Trash2,
+  Star,
 } from "lucide-react";
 import WTooltip from "../ui/custom/WTooltip";
 import {
@@ -65,8 +66,8 @@ function TranslationHistory() {
       date: "2024-07-10T11:20:15Z",
     },
     {
-      source: "Bghit wahd l'atay",
-      destination: "I want a tea",
+      source: "Bghit kas dyal atay",
+      destination: "I want a cup of tea",
       verified: false,
       date: "2024-07-10T13:45:00Z",
     },
@@ -89,7 +90,7 @@ function TranslationHistory() {
       date: "2024-07-10T18:05:10Z",
     },
     {
-      source: "Brd l'hal",
+      source: "Bard l7al",
       destination: "It's cold",
       verified: true,
       date: "2024-07-10T19:20:30Z",
@@ -110,7 +111,7 @@ function TranslationHistory() {
 
   return (
     <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-      <SheetContent className="flex h-screen flex-col">
+      <SheetContent className="flex flex-col">
         <SheetHeader className="">
           <SheetTitle className="text-2xl font-bold tracking-tight">
             History
@@ -140,6 +141,10 @@ function TranslationHistory() {
                           >
                             <DropdownMenuItem>
                               <ListCollapse className="mr-2 h-4 w-4" /> Show
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem>
+                              <Star className="mr-2 h-4 w-4" /> Save
                             </DropdownMenuItem>
 
                             <DropdownMenuItem>
