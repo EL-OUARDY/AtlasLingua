@@ -22,6 +22,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import WTooltip from "../ui/custom/WTooltip";
+import { useHistory } from "@/contexts/HistoryContext";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -49,6 +50,8 @@ function TranslateText() {
       },
     ],
   });
+
+  const { setIsHistoryOpen } = useHistory();
 
   // main translation function
   function translate(text: string) {
@@ -240,15 +243,23 @@ function TranslateText() {
       >
         <div className="flex gap-8">
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-            <div className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">
+            <Link
+              to={ROUTES.favorites}
+              className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary"
+            >
               <Star className="size-4 text-muted-foreground md:size-5" />
-            </div>
+            </Link>
+
             <h3>Saved</h3>
           </div>
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-            <div className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">
+            <Link
+              to="#"
+              onClick={() => setIsHistoryOpen(true)}
+              className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary"
+            >
               <History className="size-4 text-muted-foreground md:size-5" />
-            </div>
+            </Link>
             <h3>History</h3>
           </div>
           <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
