@@ -104,7 +104,7 @@ function WordCard({ word, className }: Props) {
             </div>
           )}
           {word.date && (
-            <div className="flex items-center capitalize">
+            <div className="flex items-center">
               <Calendar className="mr-1 h-3 w-3 stroke-sky-400" />
               {formatDistanceToNow(word.date, { addSuffix: true })}
             </div>
@@ -116,9 +116,11 @@ function WordCard({ word, className }: Props) {
                 word.popularity
               </div>
             )}
-            <WTooltip side="top" content="Verified by <br /> the community">
-              <ShieldCheck className="size-4 text-green-600" />
-            </WTooltip>
+            {word.verified && (
+              <WTooltip side="top" content="Verified by <br /> the community">
+                <ShieldCheck className="size-4 text-green-600" />
+              </WTooltip>
+            )}
           </div>
         </div>
       </CardContent>
