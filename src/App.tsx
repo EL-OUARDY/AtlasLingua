@@ -24,7 +24,6 @@ import AppearanceSettings from "./components/pages/settings/AppearanceSettings";
 import NotificationSettings from "./components/pages/settings/NotificationSettings";
 import TranslateText from "./components/translator/TranslateTexts";
 import TranslateMedia from "./components/translator/TranslateMedia";
-import TranslateDocuments from "./components/translator/TranslateDocuments";
 import Summarization from "./components/translator/Summarization";
 
 function App() {
@@ -46,10 +45,6 @@ function App() {
               <Route
                 path={ROUTES.translate.media}
                 element={<TranslateMedia />}
-              />
-              <Route
-                path={ROUTES.translate.documents}
-                element={<TranslateDocuments />}
               />
               <Route
                 path={ROUTES.translate.summarization}

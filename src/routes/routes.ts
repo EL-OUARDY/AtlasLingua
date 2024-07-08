@@ -3,7 +3,6 @@ export const ROUTES = {
   translate: {
     index: "/translate",
     media: "/translate/media",
-    documents: "/translate/documents",
     summarization: "/translate/summarization",
   },
   login: "/login",

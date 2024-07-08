@@ -2,13 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ROUTES } from "@/routes/routes";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import {
-  FileText,
-  ImagePlay,
-  FileType2,
-  Paperclip,
-  HistoryIcon,
-} from "lucide-react";
+import { FileText, ImagePlay, FileType2, HistoryIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useHistory } from "@/contexts/HistoryContext";
 import TranslationHistory from "../translator/TranslationHistory";
@@ -25,12 +19,6 @@ const translationTypes = [
     link: ROUTES.translate.media,
     description: "Audios, Videos",
     icon: ImagePlay,
-  },
-  {
-    type: "Documents",
-    link: ROUTES.translate.documents,
-    description: ".pdf, .docx, .pptx",
-    icon: Paperclip,
   },
   {
     type: "Summarization",
