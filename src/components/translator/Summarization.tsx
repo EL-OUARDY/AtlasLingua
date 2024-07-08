@@ -17,10 +17,10 @@ import { ScrollArea } from "../ui/scroll-area";
 import WTooltip from "../ui/custom/WTooltip";
 
 function Summarization() {
-  const [sourceLang, setSourceLang] = useState<Language>("english");
+  const [sourceLang, setSourceLang] = useState<Language>("darija");
   return (
     <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg lg:h-full lg:grid-cols-2">
-      <div className="flex h-full flex-col gap-4 rounded-lg bg-background p-4">
+      <div className="flex h-full flex-col gap-4 rounded-lg bg-background p-4 md:p-6">
         <div className="">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
             Summarization
@@ -43,7 +43,8 @@ function Summarization() {
           <SelectContent>
             <SelectItem value="english">
               <div className="flex w-full items-center gap-2 text-base font-bold">
-                <USAIcon className="size-4" /> <span>English</span>
+                <USAIcon className="size-4" />
+                <span>English</span>
               </div>
             </SelectItem>
             <SelectItem value="darija">
@@ -57,14 +58,14 @@ function Summarization() {
         <Textarea
           className="no-ring min-h-[150px] flex-1 bg-secondary px-4 py-2"
           id="summary"
-          placeholder="Please include the text you want to summarize."
+          placeholder={`Please include the ${sourceLang} text you want to summarize.`}
         />
         <Button type="submit" size="sm" className="ml-auto gap-1.5">
           Summarize
           <CornerDownLeft className="size-4" />
         </Button>
       </div>
-      <div className="h-full overflow-auto rounded-lg bg-background p-4">
+      <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
         <div className="flex h-full flex-col gap-4">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Output:

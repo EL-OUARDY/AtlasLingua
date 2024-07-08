@@ -33,19 +33,11 @@ function TranslateText() {
     verified: true,
     alternatives: [
       {
+        alternative: "Mrahba",
+        verified: true,
+      },
+      {
         alternative: "Ahlan",
-        verified: true,
-      },
-      {
-        alternative: "Marhaba",
-        verified: true,
-      },
-      {
-        alternative: "Sbah l'kheir",
-        verified: false,
-      },
-      {
-        alternative: "La bas?",
         verified: false,
       },
     ],
@@ -109,9 +101,9 @@ function TranslateText() {
       <div className="flex flex-1 flex-col flex-wrap overflow-hidden md:flex-row">
         <div
           id="source-panel"
-          className="flex flex-1 overflow-auto bg-secondary p-4 dark:bg-transparent"
+          className="flex flex-1 overflow-auto bg-background p-4 dark:bg-transparent"
         >
-          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring dark:bg-secondary">
+          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
             <Textarea
               value={translation.source}
               onChange={(event) => translate(event.target.value)}
@@ -152,9 +144,9 @@ function TranslateText() {
         <Separator orientation="vertical" className="hidden md:block" />
         <div
           id="destination-panel"
-          className="flex h-full flex-1 flex-col overflow-auto bg-secondary p-4 dark:bg-transparent"
+          className="flex h-full flex-1 flex-col overflow-auto bg-background p-4 dark:bg-transparent"
         >
-          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring dark:bg-secondary">
+          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
             <ScrollArea
               thumbColor="dark:bg-secondary-foreground/10"
               id="translate-source"
