@@ -61,19 +61,19 @@ function PostsList({ posts, onSelect }: Props) {
                       className=""
                       forceMount
                     >
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
                         <Edit3Icon className="mr-2 h-4 w-4" /> Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
                         <Trash2Icon className="mr-2 h-4 w-4" /> Delete
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
                         <Share2Icon className="mr-2 h-4 w-4" /> Share
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
                         <Flag className="mr-2 h-4 w-4" /> Report
                       </DropdownMenuItem>
                     </DropdownMenuContent>

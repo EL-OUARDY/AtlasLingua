@@ -108,3 +108,20 @@ textarea::selection {
 #settings-nav a.active {
   background: hsl(var(--muted));
 }
+
+/* custom scroll bar */
+
+*::-webkit-scrollbar-track {
+  background-color: hsl(var(--secondary));
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  background-color: hsl(var(--secondary));
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: hsl(var(--background));
+}

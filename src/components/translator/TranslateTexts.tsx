@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Star,
 } from "lucide-react";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import MoroccoIcon from "../ui/icons/Morocco";
 import USAIcon from "../ui/icons/USA";
 import { Textarea } from "../ui/textarea";
@@ -71,7 +71,7 @@ function TranslateText() {
   }
 
   return (
-    <div className="flex h-full min-h-[400px] flex-col overflow-auto rounded-lg border dark:bg-transparent">
+    <div className="flex h-full min-h-[400px] flex-col overflow-auto rounded-lg border bg-background dark:bg-transparent">
       <div id="language-switch" className="flex items-center gap-2 px-4 py-2">
         <div className="flex-1">
           <div className="flex items-center gap-1">
@@ -107,7 +107,10 @@ function TranslateText() {
       </div>
       <Separator />
       <div className="flex flex-1 flex-col flex-wrap overflow-hidden md:flex-row">
-        <div id="source-panel" className="flex flex-1 overflow-auto p-4">
+        <div
+          id="source-panel"
+          className="flex flex-1 overflow-auto bg-secondary p-4 dark:bg-transparent"
+        >
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring dark:bg-secondary">
             <Textarea
               value={translation.source}
@@ -119,25 +122,23 @@ function TranslateText() {
             <div className="sticky bottom-0 left-0 w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
               <div className="flex items-center p-2">
-                <a
-                  className={
-                    buttonVariants({ variant: "ghost", size: "icon" }) +
-                    " dark:hover:bg-background/30"
-                  }
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="dark:hover:bg-background/30"
                 >
                   <Mic className="size-5 text-muted-foreground" />
                   <span className="sr-only">Use Microphone</span>
-                </a>
+                </Button>
                 <WTooltip side="top" content="AI-Powered">
-                  <a
-                    className={
-                      buttonVariants({ variant: "ghost", size: "icon" }) +
-                      " dark:hover:bg-background/30"
-                    }
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="dark:hover:bg-background/30"
                   >
                     <AiIcon className="size-5" />
                     <span className="sr-only">AI-Powered</span>
-                  </a>
+                  </Button>
                 </WTooltip>
                 <Button type="submit" size="sm" className="ml-auto gap-1.5">
                   Translate
@@ -151,7 +152,7 @@ function TranslateText() {
         <Separator orientation="vertical" className="hidden md:block" />
         <div
           id="destination-panel"
-          className="flex h-full flex-1 flex-col overflow-auto p-4"
+          className="flex h-full flex-1 flex-col overflow-auto bg-secondary p-4 dark:bg-transparent"
         >
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-background focus-within:ring-1 focus-within:ring-ring dark:bg-secondary">
             <ScrollArea
@@ -201,35 +202,32 @@ function TranslateText() {
             <Separator className="dark:bg-secondary-foreground/10" />
             <div className="ml-auto">
               <div className="flex items-center p-2">
-                <a
-                  className={
-                    buttonVariants({ variant: "ghost", size: "icon" }) +
-                    " dark:hover:bg-background/30"
-                  }
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="dark:hover:bg-background/30"
                 >
                   <Copy className="size-5 text-muted-foreground" />
                   <span className="sr-only">Copy</span>
-                </a>
+                </Button>
 
-                <a
-                  className={
-                    buttonVariants({ variant: "ghost", size: "icon" }) +
-                    " dark:hover:bg-background/30"
-                  }
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="dark:hover:bg-background/30"
                 >
                   <Share2Icon className="size-5 text-muted-foreground" />
                   <span className="sr-only">Share</span>
-                </a>
+                </Button>
                 <WTooltip side="top" content="Report Translation">
-                  <a
-                    className={
-                      buttonVariants({ variant: "ghost", size: "icon" }) +
-                      " dark:hover:bg-background/30"
-                    }
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="dark:hover:bg-background/30"
                   >
                     <Flag className="size-5 text-muted-foreground" />
                     <span className="sr-only">Report Translation</span>
-                  </a>
+                  </Button>
                 </WTooltip>
               </div>
             </div>

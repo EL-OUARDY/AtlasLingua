@@ -24,7 +24,7 @@ function Feedback() {
         </p>
       </div>
       <Separator className="my-6" />
-      <div className="grid h-full w-full gap-8 rounded-lg bg-background p-4 sm:p-6 md:gap-4 xl:grid-cols-[1fr_1fr]">
+      <div className="grid h-full w-full gap-8 rounded-lg bg-background p-4 sm:p-6 md:gap-4 lg:grid-cols-[1fr_1fr]">
         <div className="h-full">
           <div className="flex h-full w-full select-none flex-col justify-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
             <Hash className="h-6 w-6" />
