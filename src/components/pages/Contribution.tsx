@@ -12,7 +12,6 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import { Separator } from "../ui/separator";
 import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 
@@ -23,15 +22,15 @@ function Contribution() {
   >();
   return (
     <>
-      <div className="flex flex-1 flex-col items-center justify-start p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
-        <div className="w-full">
+      <div className="flex h-full flex-1 flex-col items-center justify-start shadow-sm">
+        {/* <div className="w-full">
           <h2 className="text-2xl font-bold tracking-tight">Contribution</h2>
           <p className="mt-1 text-muted-foreground">
             Help us bridge languages. Your input is invaluable.
           </p>
         </div>
-        <Separator className="my-6" />
-        <div className="grid h-full w-full gap-8 rounded-lg bg-background p-4 sm:p-6 md:gap-4 lg:grid-cols-[1fr_1fr]">
+        <Separator className="my-6" /> */}
+        <div className="grid h-full w-full flex-1 gap-8 rounded-lg bg-background p-4 sm:p-6 md:gap-4 lg:grid-cols-[1fr_1fr]">
           <div className="h-full">
             <div className="flex h-full w-full select-none flex-col justify-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
               <Hash className="h-6 w-6" />
@@ -57,7 +56,9 @@ function Contribution() {
           </div>
           <Card>
             <CardHeader>
-              <CardTitle>Contribute to Our Project</CardTitle>
+              <CardTitle className="text-xl md:text-2xl">
+                Contribute to Our Project
+              </CardTitle>
               <CardDescription>
                 Join our mission to improve language learning. Contribute now!
               </CardDescription>

@@ -12,7 +12,7 @@ import { useState } from "react";
 import USAIcon from "../ui/icons/USA";
 import MoroccoIcon from "../ui/icons/Morocco";
 import { Button } from "../ui/button";
-import { Copy, Flag, Share2Icon } from "lucide-react";
+import { Copy, CornerDownLeft, Flag, Share2Icon } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import WTooltip from "../ui/custom/WTooltip";
 
@@ -55,14 +55,18 @@ function Summarization() {
           </SelectContent>
         </Select>
         <Textarea
-          className="no-ring min-h-[150px] flex-1 bg-secondary p-2"
+          className="no-ring min-h-[150px] flex-1 bg-secondary px-4 py-2"
           id="summary"
           placeholder="Please include the text you want to summarize."
         />
+        <Button type="submit" size="sm" className="ml-auto gap-1.5">
+          Summarize
+          <CornerDownLeft className="size-4" />
+        </Button>
       </div>
       <div className="h-full overflow-auto rounded-lg bg-background p-4">
         <div className="flex h-full flex-col gap-4">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-bold tracking-tight text-foreground">
             Output:
           </h2>
           <ScrollArea
