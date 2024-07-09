@@ -74,7 +74,7 @@ function AuthLayout({ children, role, description }: Props) {
           </blockquote>
         </div>
       </div>
-      <div className="lg:p-8">
+      <div className="w-full lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
           {children}
           <div className="fixed bottom-0 left-0 flex w-full items-center justify-center pb-2 md:pb-4 lg:hidden">
