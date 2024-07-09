@@ -59,9 +59,12 @@
 }
 
 /* edy styles */
-.light body {
+body {
   background-image: url("img/beams.jpg");
   @apply bg-cover bg-center;
+}
+.dark body {
+  background-image: none;
 }
 
 @font-face {

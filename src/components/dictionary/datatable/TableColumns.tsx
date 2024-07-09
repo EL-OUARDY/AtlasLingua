@@ -1,6 +1,6 @@
 import { IDictionary } from "@/models/Dictionary";
 import { ColumnDef } from "@tanstack/react-table";
-import { ShieldCheck, Star } from "lucide-react";
+import { HelpCircle, ShieldCheck, Star } from "lucide-react";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "./DataTableRowActions";
@@ -36,7 +36,13 @@ export const columns: ColumnDef<IDictionary>[] = [
   {
     accessorKey: "arabic",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Arabic" />
+      <DataTableColumnHeader column={column} title="Arabic">
+        <WTooltip side="right" content="Darija written <br> in Arabic letters">
+          <div className="flex items-center gap-2">
+            Arabic <HelpCircle className="size-4" />
+          </div>
+        </WTooltip>
+      </DataTableColumnHeader>
     ),
   },
   {

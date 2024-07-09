@@ -106,7 +106,7 @@ function TranslateMedia() {
                 placeholder="https://youtube.com/***"
                 className="no-ring"
               />
-              <Button variant="secondary" className="shrink-0 text-sm">
+              <Button variant="default" className="shrink-0 text-sm">
                 <Languages className="mr-1 size-4" />
                 Translate
               </Button>
@@ -144,7 +144,7 @@ function TranslateMedia() {
                 type="file"
                 className="hidden"
               />
-              <Button className="h-full" variant={"outline"}>
+              <Button className="h-full" variant={"default"}>
                 Start
               </Button>
             </div>
@@ -156,9 +156,17 @@ function TranslateMedia() {
       </div>
       <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
         <div className="flex h-full flex-col gap-4">
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Output:
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold tracking-tight text-foreground">
+              Output:
+            </h2>
+            <Button
+              variant={"link"}
+              className="font-bold tracking-tighter underline"
+            >
+              Show Darija Transcript
+            </Button>
+          </div>
           <ScrollArea
             className="flex-1 rounded-lg bg-secondary p-4"
             thumbColor="dark:bg-secondary-foreground/10"
