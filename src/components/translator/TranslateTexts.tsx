@@ -63,7 +63,7 @@ function TranslateText() {
   }
 
   return (
-    <div className="flex h-full min-h-[400px] flex-col overflow-auto rounded-lg border bg-background dark:bg-transparent">
+    <div className="flex h-full flex-col overflow-auto rounded-lg border bg-background dark:bg-transparent">
       <div id="language-switch" className="flex items-center gap-2 px-4 py-2">
         <div className="flex-1">
           <div className="flex items-center gap-1">

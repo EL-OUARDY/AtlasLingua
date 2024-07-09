@@ -109,7 +109,13 @@ textarea::selection {
 }
 /* settings nav */
 #settings-nav a.active {
-  background: hsl(var(--muted));
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.dark #settings-nav a.active {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
 }
 
 /* custom scroll bar */
