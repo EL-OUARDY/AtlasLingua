@@ -30,9 +30,9 @@ function Contribution() {
           </p>
         </div>
         <Separator className="my-6" /> */}
-        <div className="grid h-full w-full flex-1 gap-8 rounded-lg p-4 sm:p-6 md:gap-4 md:bg-background lg:grid-cols-[1fr_1fr]">
+        <div className="grid h-full w-full flex-1 gap-8 rounded-lg p-4 sm:p-6 md:gap-4 md:bg-background xl:grid-cols-[1fr_1fr]">
           <div className="h-full">
-            <div className="flex h-full w-full select-none flex-col justify-start rounded-md bg-gradient-to-b from-background/50 to-background p-6 no-underline outline-none focus:shadow-md dark:from-muted/50 dark:to-muted">
+            <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-background/50 to-background p-6 no-underline outline-none focus:shadow-md dark:from-muted/50 dark:to-muted md:from-muted/50 md:to-muted">
               <Hash className="h-6 w-6" />
               <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
               <p className="leading-tight text-muted-foreground">
@@ -54,7 +54,7 @@ function Contribution() {
               </p>
             </div>
           </div>
-          <Card>
+          <Card className="flex flex-col justify-center">
             <CardHeader>
               <CardTitle className="text-xl md:text-2xl">
                 Contribute to Our Project

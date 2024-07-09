@@ -65,9 +65,11 @@ function Header() {
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              Logout
-            </DropdownMenuItem>
+            <Link to={ROUTES.login}>
+              <DropdownMenuItem className="cursor-pointer">
+                Login
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
