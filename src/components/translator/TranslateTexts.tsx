@@ -98,10 +98,10 @@ function TranslateText() {
         </div>
       </div>
       <Separator />
-      <div className="flex flex-1 flex-col flex-wrap overflow-hidden md:flex-row">
+      <div className="flex flex-1 flex-col flex-wrap overflow-hidden lg:flex-row landscape:sm:flex-row">
         <div
           id="source-panel"
-          className="flex flex-1 overflow-auto bg-background p-4 dark:bg-transparent"
+          className="flex h-full flex-1 overflow-auto bg-background p-4 dark:bg-transparent"
         >
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
             <Textarea
@@ -140,8 +140,14 @@ function TranslateText() {
             </div>
           </div>
         </div>
-        <Separator orientation="horizontal" className="md:hidden" />
-        <Separator orientation="vertical" className="hidden md:block" />
+        <Separator
+          orientation="horizontal"
+          className="lg:hidden landscape:sm:hidden"
+        />
+        <Separator
+          orientation="vertical"
+          className="hidden lg:block landscape:sm:block"
+        />
         <div
           id="destination-panel"
           className="flex h-full flex-1 flex-col overflow-auto bg-background p-4 dark:bg-transparent"

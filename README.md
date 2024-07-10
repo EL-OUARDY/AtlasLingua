@@ -9,7 +9,17 @@
 `TailwindCSS`
 `Shadcn/ui`
 
-## Overview
+![English ⇔ Darija Translator Project](/screenshot.png)
+
+## Table of Contents
+
+- [Overview](#overview)
+- [The Problem](#the-problem)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Contact](#contact-me)
+
+# Overview
 
 This project is my final portfolio submission for the **ALX** Software Engineering program (**Holberton School**). It represents the culmination of my learning journey and showcases the skills I've developed throughout the course.
 
@@ -26,8 +36,8 @@ The project aims to address the lack of online services that provide translation
 - **Frontend**:
 
   - `React.js` with **TypeScript** for dynamic user interface
-  - `Shadcn/ui` library for enhanced UI features
   - `Tailwind CSS`
+  - `Shadcn/ui` library for enhanced UI features
 
 - **Backend**:
 
@@ -36,6 +46,8 @@ The project aims to address the lack of online services that provide translation
 - **Database**:
   - `MySQL` for structured data
   - `Firebase` for real-time data storage and synchronization
+
+## Installation
 
 ## Contact Me
 

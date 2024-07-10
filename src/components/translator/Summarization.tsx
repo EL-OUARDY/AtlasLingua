@@ -19,7 +19,7 @@ import WTooltip from "../ui/custom/WTooltip";
 function Summarization() {
   const [sourceLang, setSourceLang] = useState<Language>("darija");
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg lg:h-full lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
       <div className="flex h-full flex-col gap-4 rounded-lg bg-background p-4 md:p-6">
         <div className="">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">

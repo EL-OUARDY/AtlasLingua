@@ -12,14 +12,14 @@ function TranslateMedia() {
     string | undefined
   >();
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg lg:h-full lg:grid-cols-2">
-      <div className="flex h-full items-center justify-center rounded-lg bg-background p-6">
-        <div className="flex flex-col gap-3 xl:max-w-[500px]">
-          <div className="text-center">
+    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
+      <div className="flex h-full rounded-lg bg-background p-6">
+        <div className="flex flex-1 flex-col gap-4">
+          <div className="text-center sm:text-left">
             <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
               Darija Social Media <br /> Audio & Video Translator
             </h2>
-            <div className="my-3 flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <div className="my-3 flex items-center justify-center gap-4 text-sm text-muted-foreground sm:justify-start">
               <svg
                 className="size-8"
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@ function TranslateMedia() {
           </div>
           <Separator />
           <div className="flex flex-col">
-            <div className="grid gap-2">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-[1fr_.2fr]">
               <Input
                 placeholder="https://youtube.com/***"
                 className="no-ring"
@@ -145,7 +145,7 @@ function TranslateMedia() {
                 className="hidden"
               />
               <Button className="h-full" variant={"default"}>
-                Start
+                <Languages className="size-5" />
               </Button>
             </div>
             <small className="text-muted-foreground/50">
