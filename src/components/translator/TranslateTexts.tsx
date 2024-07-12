@@ -12,8 +12,6 @@ import {
   Share2Icon,
   ShieldCheck,
   Star,
-  Volume2,
-  Volume2Icon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import MoroccoIcon from "../ui/icons/Morocco";
