@@ -1,18 +1,11 @@
-import {
-  Settings,
-  PanelLeftOpen,
-  PanelLeftClose,
-  Bell,
-  Hash,
-} from "lucide-react";
-import { buttonVariants, Button } from "@/components/ui/button";
+import { Settings, PanelLeftOpen, PanelLeftClose, Hash } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
-import { useNotification } from "@/contexts/NotificationContext";
 import WTooltip from "./ui/custom/WTooltip";
 
 function SideBar() {
@@ -33,8 +26,6 @@ function SideBar() {
     localStorage.setItem(storageKey, state ? "open" : "closed");
   }
 
-  const { toggleNotification } = useNotification();
-
   return (
     <aside
       id={isSideBarOpen ? "sidebar-open" : "sidebar-closed"}
@@ -52,17 +43,6 @@ function SideBar() {
           <Hash className="h-7 w-7" />
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
         </Link>
-        {isSideBarOpen && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="ml-auto h-8 w-8"
-            onClick={() => toggleNotification()}
-          >
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">notifications</span>
-          </Button>
-        )}
       </div>
       <ScrollArea className="h-full">
         <div className="flex-grow overflow-auto">

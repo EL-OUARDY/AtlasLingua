@@ -28,7 +28,7 @@ function Header() {
         size="icon"
         className="overflow-hidden md:hidden md:rounded-full"
       >
-        <Bell className="h-5 w-5" />
+        <Bell className="size-5" />
         <span className="sr-only">Notifications</span>
       </Button>
       <MainMenu className="hidden md:block" />
@@ -40,6 +40,17 @@ function Header() {
         </Link>
       </div>
       <div className="flex gap-2 md:ml-auto">
+        <div className="hidden md:block">
+          <Button
+            variant="outline"
+            size="icon"
+            className="overflow-hidden md:rounded-full"
+            onClick={() => toggleNotification()}
+          >
+            <Bell className="size-5" />
+            <span className="sr-only">notifications</span>
+          </Button>
+        </div>
         <ThemeSwitch />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -48,7 +59,7 @@ function Header() {
               size="icon"
               className="overflow-hidden md:rounded-full"
             >
-              <User className="h-5 w-5" />
+              <User className="size-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
