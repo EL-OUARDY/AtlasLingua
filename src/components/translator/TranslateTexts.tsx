@@ -12,6 +12,8 @@ import {
   Share2Icon,
   ShieldCheck,
   Star,
+  Volume2,
+  Volume2Icon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import MoroccoIcon from "../ui/icons/Morocco";
@@ -117,7 +119,7 @@ function TranslateText() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="dark:hover:bg-background/30"
+                  className="hover:bg-background/60 dark:hover:bg-background/30"
                 >
                   <Mic className="size-5 text-muted-foreground" />
                   <span className="sr-only">Use Microphone</span>
@@ -126,7 +128,7 @@ function TranslateText() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="dark:hover:bg-background/30"
+                    className="hover:bg-background/60 dark:hover:bg-background/30"
                   >
                     <AiIcon className="size-5" />
                     <span className="sr-only">AI-Powered</span>
@@ -198,36 +200,59 @@ function TranslateText() {
             </ScrollArea>
 
             <Separator className="dark:bg-secondary-foreground/10" />
-            <div className="ml-auto">
-              <div className="flex items-center p-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="dark:hover:bg-background/30"
+            <div className="flex items-center p-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="mr-auto hover:bg-background/60 dark:hover:bg-background/30"
+              >
+                <svg
+                  className="size-6 text-muted-foreground"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
                 >
-                  <Copy className="size-5 text-muted-foreground" />
-                  <span className="sr-only">Copy</span>
-                </Button>
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15.5 8.43A4.985 4.985 0 0 1 17 12a4.984 4.984 0 0 1-1.43 3.5m2.794 2.864A8.972 8.972 0 0 0 21 12a8.972 8.972 0 0 0-2.636-6.364M12 6.135v11.73a1 1 0 0 1-1.64.768L6 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2l4.36-3.633a1 1 0 0 1 1.64.768Z"
+                  />
+                </svg>
 
+                <span className="sr-only">Speak</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-background/60 dark:hover:bg-background/30"
+              >
+                <Copy className="size-5 text-muted-foreground" />
+                <span className="sr-only">Copy</span>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-background/60 dark:hover:bg-background/30"
+              >
+                <Share2Icon className="size-5 text-muted-foreground" />
+                <span className="sr-only">Share</span>
+              </Button>
+              <WTooltip side="top" content="Report Translation">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="dark:hover:bg-background/30"
+                  className="hover:bg-background/60 dark:hover:bg-background/30"
                 >
-                  <Share2Icon className="size-5 text-muted-foreground" />
-                  <span className="sr-only">Share</span>
+                  <Flag className="size-5 text-muted-foreground" />
+                  <span className="sr-only">Report Translation</span>
                 </Button>
-                <WTooltip side="top" content="Report Translation">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="dark:hover:bg-background/30"
-                  >
-                    <Flag className="size-5 text-muted-foreground" />
-                    <span className="sr-only">Report Translation</span>
-                  </Button>
-                </WTooltip>
-              </div>
+              </WTooltip>
             </div>
           </div>
         </div>
