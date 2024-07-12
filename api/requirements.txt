@@ -3,6 +3,7 @@ blinker==1.8.2
 click==8.1.7
 Flask==3.0.3
 Flask-JWT-Extended==4.6.0
+flask-marshmallow==1.2.1
 Flask-Migrate==4.0.7
 Flask-SQLAlchemy==3.1.1
 greenlet==3.0.3
@@ -10,6 +11,9 @@ itsdangerous==2.2.0
 Jinja2==3.1.4
 Mako==1.3.5
 MarkupSafe==2.1.5
+marshmallow==3.21.3
+mysqlclient==2.2.4
+packaging==24.1
 PyJWT==2.8.0
 python-dotenv==1.0.1
 SQLAlchemy==2.0.31
