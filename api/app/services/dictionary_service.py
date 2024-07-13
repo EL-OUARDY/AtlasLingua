@@ -1,5 +1,7 @@
 from app.models.dictionary import Dictionary
 
 
-def get_list():
-    return Dictionary.query.all()
+class AuthService:
+    @staticmethod
+    def get_list():
+        return Dictionary.query.all()

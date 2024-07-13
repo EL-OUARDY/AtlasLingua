@@ -4,8 +4,9 @@ from app.models.base_model import BaseModel
 
 class Dictionary(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    darija = db.Column(db.String(80), nullable=False)
-    english = db.Column(db.String(80), nullable=False)
+    darija = db.Column(db.String(255), nullable=False)
+    english = db.Column(db.String(255), nullable=False)
+    arabic = db.Column(db.String(255), nullable=True)
     type = db.Column(
         db.Enum(
             "noun", "verb", "adjective", "adverb", "preposition", "pronoun "
@@ -14,4 +15,5 @@ class Dictionary(db.Model, BaseModel):
     )
     verified = db.Column(db.Boolean, nullable=False)
     views_number = db.Column(db.Integer, nullable=False, default=0)
-    source = db.Column(db.String(80), nullable=True)
+    source = db.Column(db.String(255), nullable=True)
+    family_id = db.Column(db.Integer, nullable=True)
