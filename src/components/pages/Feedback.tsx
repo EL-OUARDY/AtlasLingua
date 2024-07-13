@@ -20,7 +20,7 @@ function Feedback() {
       <div className="w-full">
         <h2 className="text-2xl font-bold tracking-tight">Feedback</h2>
         <p className="mt-1 text-muted-foreground">
-          Share Your Thoughts: Help Us Improve Together.
+          Share Your Thoughts: Help Us Improve.
         </p>
       </div>
       <Separator className="my-6" />

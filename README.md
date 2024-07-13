@@ -17,6 +17,7 @@
 - [The Problem](#the-problem)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
+- [About me](#about-me)
 - [Contact](#contact-me)
 
 # Overview
@@ -49,7 +50,13 @@ The project aims to address the lack of online services that provide translation
 
 ## Installation
 
-## Contact Me
+..
+
+## About
+
+My name is Ouadia EL-Ouardy, and I’m a dedicated programmer. I wrote my first line of code in 2016 during a training program in my city. After that, I continued learning as a self-taught student, eventually gaining solid knowledge in web development. This enabled me to land freelance projects and successfully deliver many of them. Despite this progress, I always felt there was something missing in my education, which led me to join ALX in 2023. The journey at ALX has been incredibly enjoyable and far exceeded my expectations, providing me with more knowledge and skills than I could have imagined. This project is part of my ALX portfolio, and I built it with all my heart, putting everything I know into action. I also decided to take this project further and make it available for people to use.
+
+## Contact
 
 **Ouadia EL-Ouardy** \
 **Email:** ouadia@elouardy.com \
