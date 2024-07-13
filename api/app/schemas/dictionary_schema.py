@@ -6,9 +6,11 @@ class DictionarySchema(ma.Schema):
     darija = ma.String(required=True)
     english = ma.String(required=True)
     type = ma.String()
+    category = ma.String()
     verified = ma.Boolean(required=True)
-    views_number = ma.Integer(required=True)
+    popularity = ma.Integer(required=True)
     source = ma.String()
+    group_id = ma.Integer()
 
 
 dictionary_schema = DictionarySchema()

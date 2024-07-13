@@ -23,7 +23,6 @@ export interface IDictionary {
     | "planets"
     | "professions"
     | "body"
-    | "time"
     | "plants"
     | null;
   verified: boolean;

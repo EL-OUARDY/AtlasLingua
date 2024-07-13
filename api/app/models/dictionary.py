@@ -9,11 +9,35 @@ class Dictionary(db.Model, BaseModel):
     arabic = db.Column(db.String(255), nullable=True)
     type = db.Column(
         db.Enum(
-            "noun", "verb", "adjective", "adverb", "preposition", "pronoun "
+            "noun", "verb", "adjective", "adverb", "preposition", "pronoun"
         ),
         nullable=False,
     )
+    category = db.Column(
+        db.Enum(
+            "family",
+            "education",
+            "clothes",
+            "food",
+            "colors",
+            "sports",
+            "numbers",
+            "health",
+            "animals",
+            "places",
+            "religion",
+            "time",
+            "emotions",
+            "nature",
+            "objects",
+            "planets",
+            "professions",
+            "body",
+            "plants",
+        ),
+        nullable=True,
+    )
     verified = db.Column(db.Boolean, nullable=False)
-    views_number = db.Column(db.Integer, nullable=False, default=0)
+    popularity = db.Column(db.Integer, nullable=False, default=0)
     source = db.Column(db.String(255), nullable=True)
-    family_id = db.Column(db.Integer, nullable=True)
+    group_id = db.Column(db.Integer, nullable=True)

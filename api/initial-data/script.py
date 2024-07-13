@@ -1,5 +1,7 @@
 from sqlalchemy import text
 from db import engine
+import csv
+from datetime import datetime
 
 
 def insert_into_dictionary(
@@ -7,39 +9,44 @@ def insert_into_dictionary(
     english,
     arabic,
     type_,
+    category,
     verified,
-    views_number=0,
+    popularity=0,
     source=None,
-    family_id=None,
+    group_id=None,
 ):
     """Insert into dictionary table"""
+
     # Raw SQL insert query
     raw_query = text(
         """
-        INSERT INTO dictionary (darija, english, arabic, type, verified, views_number, source, family_id)
-        VALUES (:darija, :english, :arabic, :type, :verified, :views_number, :source, :family_id)
-    """
+        INSERT INTO dictionary (darija, english, arabic, type, category, verified, popularity, source, group_id, created_at, updated_at)
+        VALUES (:darija, :english, :arabic, :type, :category, :verified, :popularity, :source, :group_id, :created_at, :updated_at)
+        """
     )
 
     # Execute the raw SQL query
     with engine.connect() as connection:
         trans = connection.begin()
         try:
-            connection.execute(
+            result = connection.execute(
                 raw_query,
                 {
                     "darija": darija,
                     "english": english,
                     "arabic": arabic,
                     "type": type_,
+                    "category": category,
                     "verified": verified,
-                    "views_number": views_number,
+                    "popularity": popularity,
                     "source": source,
-                    "family_id": family_id,
+                    "group_id": group_id,
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
                 },
             )
             # Fetch the id of the inserted record
-            inserted_id = trans.lastrowid
+            inserted_id = result.lastrowid
             trans.commit()
             return inserted_id
         except:
@@ -48,15 +55,28 @@ def insert_into_dictionary(
 
 
 if __name__ == "__main__":
-    # Insert a new dictionary entry
-    insert_into_dictionary(
-        darija="mi7fada",
-        english="bag",
-        arabic="",
-        type_="noun",
-        verified=False,
-        views_number=10,
-        source="initial",
-        family_id=None,
-    )
-    print("Data inserted successfully.")
+    rown_inserted = 0
+    csv_file = "./files/semantic/animals.csv"
+    with open(csv_file, "r", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            # Insert a new dictionary entry
+            f_id = None
+            for col in range(1, 5):
+                if row.get(f"n{col}"):
+                    id = insert_into_dictionary(
+                        darija=row[f"n{col}"],
+                        english=row["eng"],
+                        arabic=row["darija_ar"],
+                        type_="noun",
+                        category="animals",
+                        verified=True,
+                        popularity=0,
+                        source="initial",
+                        group_id=f_id,
+                    )
+                    rown_inserted += 1
+                # get group_id from the first added record
+                f_id = id if f_id is None else f_id
+
+    print(f"{rown_inserted} records has been inserted.")
