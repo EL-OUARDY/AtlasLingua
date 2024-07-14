@@ -85,10 +85,10 @@ if __name__ == "__main__":
                             english=row["eng"],
                             arabic=row["darija_ar"],
                             word_type=_type,
-                            category="",
+                            category=None,
                             verified=True,
                             popularity=0,
-                            source="initial",
+                            source=f"initial_syntactic_{_type}",
                             group_id=f_id,
                         )
                         rown_inserted += 1

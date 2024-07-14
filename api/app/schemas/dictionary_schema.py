@@ -9,8 +9,6 @@ class DictionarySchema(ma.Schema):
     category = ma.String(required=False)
     verified = ma.Boolean(required=True)
     popularity = ma.Integer(required=True)
-    source = ma.String()
-    group_id = ma.Integer()
 
 
 dictionary_schema = DictionarySchema()

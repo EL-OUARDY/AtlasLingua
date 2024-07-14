@@ -98,7 +98,7 @@ if __name__ == "__main__":
                             category=file_category,
                             verified=True,
                             popularity=0,
-                            source="initial",
+                            source=f"initial_semantic_{file_category}",
                             group_id=f_id,
                         )
                         rown_inserted += 1

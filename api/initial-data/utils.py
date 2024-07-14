@@ -57,23 +57,28 @@ def insert_into_dictionary(
 if __name__ == "__main__":
 
     rown_inserted = 0
-    csv_file = "./files/x-tra/shorts.csv"
+    csv_file = "./files/x-tra/utils.csv"
 
     with open(csv_file, "r", encoding="utf-8") as file:
         reader = csv.DictReader(file)
         for row in reader:
             # Insert a new dictionary entry
-            id = insert_into_dictionary(
-                darija=row["darija"],
-                english=row["english"],
-                arabic=row["darija_ar"],
-                word_type=None,
-                category=None,
-                verified=True,
-                popularity=0,
-                source="initial_shorts",
-                group_id=None,
-            )
-            rown_inserted += 1
+            f_id = None
+            for col in range(1, 10):
+                if row.get(f"n{col}"):
+                    id = insert_into_dictionary(
+                        darija=row[f"n{col}"],
+                        english=row["eng"],
+                        arabic=row["darija_ar"],
+                        word_type=None,
+                        category=None,
+                        verified=True,
+                        popularity=0,
+                        source="initial_utils",
+                        group_id=f_id,
+                    )
+                    rown_inserted += 1
+                # get group_id from the first added record
+                f_id = id if f_id is None else f_id
 
     print(f"{rown_inserted} records has been inserted from {csv_file}")
