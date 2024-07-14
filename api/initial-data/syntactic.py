@@ -57,31 +57,21 @@ def insert_into_dictionary(
 if __name__ == "__main__":
 
     data = [
-        {"file": "./files/semantic/family.csv", "category": "family"},
-        {"file": "./files/semantic/education.csv", "category": "education"},
-        {"file": "./files/semantic/clothes.csv", "category": "clothes"},
-        {"file": "./files/semantic/food.csv", "category": "food"},
-        {"file": "./files/semantic/colors.csv", "category": "colors"},
-        {"file": "./files/semantic/sport.csv", "category": "sports"},
-        {"file": "./files/semantic/numbers.csv", "category": "numbers"},
-        {"file": "./files/semantic/health.csv", "category": "health"},
-        {"file": "./files/semantic/animals.csv", "category": "animals"},
-        {"file": "./files/semantic/places.csv", "category": "places"},
-        {"file": "./files/semantic/religion.csv", "category": "religion"},
-        {"file": "./files/semantic/time.csv", "category": "time"},
-        {"file": "./files/semantic/emotions.csv", "category": "emotions"},
-        {"file": "./files/semantic/environment.csv", "category": "environment"},
-        {"file": "./files/semantic/economy.csv", "category": "economy"},
-        {"file": "./files/semantic/professions.csv", "category": "professions"},
-        {"file": "./files/semantic/body.csv", "category": "body"},
-        {"file": "./files/semantic/plants.csv", "category": "plants"},
-        {"file": "./files/semantic/art.csv", "category": "art"},
+        {"file": "./files/syntactic/nouns.csv", "word_type": "noun"},
+        {"file": "./files/syntactic/verbs.csv", "word_type": "verb"},
+        {"file": "./files/syntactic/adjectives.csv", "word_type": "adjective"},
+        {"file": "./files/syntactic/adverbs.csv", "word_type": "adverb"},
+        {
+            "file": "./files/syntactic/prepositions.csv",
+            "word_type": "preposition",
+        },
+        {"file": "./files/syntactic/pronouns.csv", "word_type": "pronoun"},
     ]
 
     for d in data:
         rown_inserted = 0
         csv_file = d["file"]
-        file_category = d["category"]
+        _type = d["word_type"]
 
         with open(csv_file, "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
@@ -94,8 +84,8 @@ if __name__ == "__main__":
                             darija=row[f"n{col}"],
                             english=row["eng"],
                             arabic=row["darija_ar"],
-                            word_type="noun",
-                            category=file_category,
+                            word_type=_type,
+                            category="",
                             verified=True,
                             popularity=0,
                             source="initial",
