@@ -18,12 +18,12 @@ export interface IDictionary {
     | "religion"
     | "time"
     | "emotions"
-    | "nature"
-    | "objects"
-    | "planets"
+    | "environment"
+    | "economy"
     | "professions"
     | "body"
     | "plants"
+    | "art"
     | null;
   verified: boolean;
   favorite: boolean;
