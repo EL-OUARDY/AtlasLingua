@@ -1,12 +1,12 @@
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Header from "@/components/Header";
-import Notifications from "@/components/Notifications";
 import { Outlet, useLocation } from "react-router-dom";
 import SideBar from "@/components/SideBar";
 import MobileNavigationBar from "@/components/MobileNavigationBar";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { useEffect, useRef } from "react";
 import { HistoryProvider } from "@/contexts/HistoryContext";
+import { Toaster } from "../ui/sonner";
 
 function Layout() {
   const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
@@ -39,9 +39,9 @@ function Layout() {
             </section>
             <ScrollBar orientation="horizontal" className="cursor-grab" />
           </ScrollArea>
-          <Notifications />
         </NotificationProvider>
       </HistoryProvider>
+      <Toaster className="" />
     </div>
   );
 }

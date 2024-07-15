@@ -15,6 +15,7 @@ import { CATEGORIES } from "@/models/Dictionary";
 import dictionaryService from "@/services/dictionaryService";
 import { IDictionary } from "@/models/Dictionary";
 import { CanceledError } from "axios";
+import { toast } from "sonner";
 
 function Learn() {
   const [dictionaryData, setDictionaryData] = useState<IDictionary[]>([]);
@@ -31,7 +32,13 @@ function Learn() {
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
-        console.log("error", err.message);
+        toast("Failed to load data. Please refresh the page", {
+          description: err.message,
+          action: {
+            label: "OK",
+            onClick: () => window.location.reload(),
+          },
+        });
       })
       .finally(() => {
         setLoading(false);

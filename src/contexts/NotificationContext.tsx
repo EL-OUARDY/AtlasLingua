@@ -1,3 +1,4 @@
+import Notifications from "@/components/Notifications";
 import React, { ReactNode, useContext, useState } from "react";
 
 interface INotificationContext {
@@ -6,7 +7,7 @@ interface INotificationContext {
 }
 
 const NotificationContext = React.createContext<INotificationContext>(
-  {} as INotificationContext
+  {} as INotificationContext,
 );
 
 // custom hook to expose the NotificationContext
@@ -33,6 +34,7 @@ export function NotificationProvider({ children }: Props) {
       }}
     >
       {children}
+      <Notifications />
     </NotificationContext.Provider>
   );
 }
