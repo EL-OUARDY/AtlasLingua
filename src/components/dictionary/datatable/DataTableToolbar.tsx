@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { DataTableViewOptions } from "./DataTableViewOptions";
 import { DataTableFacetedFilter } from "./DataTableGetFacetedFilter";
-import { vacabularyTypes } from "@/models/Dictionary";
+import { VOCABULARY_TYPES } from "@/models/Dictionary";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -33,7 +33,7 @@ export function DataTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("type")}
             title="Type"
-            options={vacabularyTypes}
+            options={VOCABULARY_TYPES}
           />
         )}
 

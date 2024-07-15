@@ -110,12 +110,14 @@ function WordCard({ word, className }: Props) {
             </div>
           )}
           <div className="flex items-center gap-2">
-            {word.popularity && (
+            {/* {!word.popularity ? (
               <div className="flex items-center">
                 <StarIcon className="mr-1 size-4" />
-                word.popularity
+                {word.popularity}
               </div>
-            )}
+            ) : (
+              ""
+            )} */}
             {word.verified && (
               <WTooltip side="top" content="Verified by <br /> the community">
                 <ShieldCheck className="size-4 text-green-600" />

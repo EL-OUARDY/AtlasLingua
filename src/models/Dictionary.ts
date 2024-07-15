@@ -3,7 +3,13 @@ export interface IDictionary {
   english: string;
   darija: string;
   arabic: string;
-  type: "noun" | "verb" | "adjective" | "adverb" | "preposition" | "pronoun ";
+  word_type:
+    | "noun"
+    | "verb"
+    | "adjective"
+    | "adverb"
+    | "preposition"
+    | "pronoun ";
   category:
     | "family"
     | "education"
@@ -26,12 +32,33 @@ export interface IDictionary {
     | "art"
     | null;
   verified: boolean;
-  favorite: boolean;
-  popularity?: number;
+  favorite?: boolean;
   date?: string;
 }
 
-export const vacabularyTypes = [
+export const CATEGORIES: string[] = [
+  "family",
+  "education",
+  "clothes",
+  "food",
+  "colors",
+  "sports",
+  "numbers",
+  "health",
+  "animals",
+  "places",
+  "religion",
+  "time",
+  "emotions",
+  "environment",
+  "economy",
+  "professions",
+  "body",
+  "plants",
+  "art",
+];
+
+export const VOCABULARY_TYPES = [
   {
     value: "noun",
     label: "Nouns",

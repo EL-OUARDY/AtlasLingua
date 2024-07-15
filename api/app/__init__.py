@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 
 # Initialize the database, migration, marshmallow and JWT manager objects
@@ -26,6 +27,9 @@ def create_app():
 
     # Load environment variables from a .env file
     load_dotenv()
+
+    # Restrict CORS
+    CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}})
 
     # Configure the Flask application from environment variable
     app.config.from_object(

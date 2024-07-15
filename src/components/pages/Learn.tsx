@@ -1,8 +1,7 @@
-import { dummyCategories, dummyDictionaryData } from "@/shared/dummy-data";
 import WordCard from "../WordCard";
 import { Separator } from "../ui/separator";
 import ScrollableMenu from "../ScrollableMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import {
@@ -12,10 +11,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { CATEGORIES } from "@/models/Dictionary";
+import dictionaryService from "@/services/dictionaryService";
+import { IDictionary } from "@/models/Dictionary";
+import { CanceledError } from "axios";
 
 function Learn() {
+  const [dictionaryData, setDictionaryData] = useState<IDictionary[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("family");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const { request, cancel } = dictionaryService.getCategory(selectedCategory);
+    request
+      .then((res) => {
+        setDictionaryData(res.data);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        console.log("error", err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    return () => cancel(); // abort http request
+  }, [selectedCategory]);
+
   return (
     <div className="flex h-full flex-col p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
       <div className="flex flex-col gap-4 md:flex-row md:items-end">
@@ -41,7 +64,7 @@ function Learn() {
       <div className="flex flex-col gap-4">
         <ScrollableMenu
           onChange={(link) => setSelectedCategory(link)}
-          links={dummyCategories}
+          links={CATEGORIES}
           selected={selectedCategory}
           className="hidden h-fit flex-row gap-4 sm:flex"
         />
@@ -52,7 +75,7 @@ function Learn() {
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              {dummyCategories.map((cat, index) => (
+              {CATEGORIES.map((cat, index) => (
                 <SelectItem key={index} value={cat}>
                   {cat}
                 </SelectItem>
@@ -62,11 +85,11 @@ function Learn() {
         </div>
 
         <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-          {dummyDictionaryData
+          {dictionaryData
             .filter(
               (x) =>
-                x.category == selectedCategory &&
-                x.english.includes(searchQuery),
+                x.english.includes(searchQuery) ||
+                x.darija.includes(searchQuery),
             )
             .map((item, index) => (
               <WordCard key={index} word={item} className="" />
