@@ -31,7 +31,7 @@ import { Link } from "react-router-dom";
 
 interface Props {
   word: IDictionary;
-  className: string;
+  className?: string;
 }
 
 function WordCard({ word, className }: Props) {
@@ -47,7 +47,7 @@ function WordCard({ word, className }: Props) {
             <br />
             {word.arabic}
           </CardDescription>
-          <div className="absolute right-4 top-4 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
+          <div className="absolute right-4 top-4 !m-0 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
             <Link
               to="#"
               className={

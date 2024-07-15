@@ -16,12 +16,13 @@ import dictionaryService from "@/services/dictionaryService";
 import { IDictionary } from "@/models/Dictionary";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
+import WordCardSkeleton from "../skeletons/WordCardSkeleton";
 
 function Learn() {
   const [dictionaryData, setDictionaryData] = useState<IDictionary[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("family");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -92,15 +93,19 @@ function Learn() {
         </div>
 
         <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-          {dictionaryData
-            .filter(
-              (x) =>
-                x.english.includes(searchQuery) ||
-                x.darija.includes(searchQuery),
-            )
-            .map((item, index) => (
-              <WordCard key={index} word={item} className="" />
-            ))}
+          {isLoading &&
+            Array(12)
+              .fill(null)
+              .map((_, index) => <WordCardSkeleton key={index} />)}
+
+          {!isLoading &&
+            dictionaryData
+              .filter(
+                (x) =>
+                  x.english.includes(searchQuery) ||
+                  x.darija.includes(searchQuery),
+              )
+              .map((item, index) => <WordCard key={index} word={item} />)}
         </div>
       </div>
     </div>
