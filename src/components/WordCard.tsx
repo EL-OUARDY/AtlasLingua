@@ -28,6 +28,7 @@ import { IDictionary } from "@/models/Dictionary";
 import { formatDistanceToNow } from "date-fns";
 import WTooltip from "./ui/custom/WTooltip";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface Props {
   word: IDictionary;
@@ -82,7 +83,19 @@ function WordCard({ word, className }: Props) {
                   <ListCollapse className="mr-2 h-4 w-4" /> Details
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `${word.english} = ${word.darija}`,
+                    );
+                    toast("Copied to clipboard", {
+                      action: {
+                        label: "Hide",
+                        onClick: () => {},
+                      },
+                    });
+                  }}
+                >
                   <Copy className="mr-2 h-4 w-4" /> Copy
                 </DropdownMenuItem>
 

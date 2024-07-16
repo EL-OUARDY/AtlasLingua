@@ -2,15 +2,11 @@ import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -25,15 +21,21 @@ import {
 import { DataTablePagination } from "./dictionary/datatable/DataTablePagination";
 import { DataTableToolbar } from "./dictionary/datatable/DataTableToolbar";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { useEffect } from "react";
+import { IDictFetchDataOptions } from "@/services/dictionaryService";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pageCount: number;
+  fetchData: (options: IDictFetchDataOptions) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pageCount,
+  fetchData,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -41,10 +43,15 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "id", desc: false },
+  ]);
+  const [search, setSearch] = React.useState<string>("");
+
   const table = useReactTable({
     data,
     columns,
+    pageCount,
     state: {
       sorting,
       columnVisibility,
@@ -54,25 +61,45 @@ export function DataTable<TData, TValue>({
     initialState: {
       pagination: {
         pageIndex: 0,
-        pageSize: 5, //optionally customize the initial pagination state.
+        pageSize: 5,
       },
     },
-    enableRowSelection: true,
+    // enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
   });
+
+  const paginationState: PaginationState = table.getState().pagination;
+  useEffect(() => {
+    const { pageIndex, pageSize } = paginationState;
+    const options: IDictFetchDataOptions = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      search: search,
+    };
+    if (sorting && sorting[0]) {
+      options.sortBy = sorting[0].id;
+      options.sortOrder = sorting[0].desc ? "desc" : "asc";
+    }
+
+    fetchData(options);
+  }, [fetchData, sorting, table, columnFilters, paginationState, search]);
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        onSearch={(query) => {
+          setSearch(query);
+          table.setPageIndex(0);
+        }}
+      />
       <ScrollArea className="rounded-md border bg-background dark:bg-transparent">
         <Table>
           <TableHeader>

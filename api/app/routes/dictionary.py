@@ -6,14 +6,15 @@ from app.services.dictionary_service import AuthService
 bp = Blueprint("dictionary", __name__, url_prefix="/api/dictionary")
 
 
-@bp.route("/list")
+@bp.route("/list", methods=["POST"])
 def get_list():
-    page = int(request.args.get("pageIndex", 0)) + 1  # Convert to 1-indexed
-    per_page = int(request.args.get("pageSize", 10))
-    sort_by = request.args.get("sortBy", "id")
-    sort_order = request.args.get("sortOrder", "asc")
-    filters = request.args.get("filters", "{}")
-    search = request.args.get("search", None)
+    request_data = request.get_json()
+    page = int(request_data.get("pageIndex", 0)) + 1  # Convert to 1-indexed
+    per_page = int(request_data.get("pageSize", 5))
+    sort_by = request_data.get("sortBy", "id")
+    sort_order = request_data.get("sortOrder", "asc")
+    filters = request_data.get("filters", "{}")
+    search = request_data.get("search", None)
 
     # Parse the filters
     filters_dict = json.loads(filters)

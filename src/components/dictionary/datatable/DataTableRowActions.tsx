@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Copy, Ellipsis, Expand, Flag } from "lucide-react";
+import { toast } from "sonner";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -34,7 +35,17 @@ export function DataTableRowActions<TData>({
           <Expand className="mr-2 size-4" /> Details
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => navigator.clipboard.writeText(row.getValue("darija"))}
+          onClick={() => {
+            navigator.clipboard.writeText(
+              `${row.getValue("english")} = ${row.getValue("darija")}`,
+            );
+            toast("Copied to clipboard", {
+              action: {
+                label: "Hide",
+                onClick: () => {},
+              },
+            });
+          }}
         >
           <Copy className="mr-2 size-4" /> Copy
         </DropdownMenuItem>

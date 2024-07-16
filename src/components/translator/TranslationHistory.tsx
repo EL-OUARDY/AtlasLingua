@@ -36,6 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface ITranslationHistory {
   source: string;
@@ -147,7 +148,19 @@ function TranslationHistory() {
                               <Star className="mr-2 h-4 w-4" /> Save
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  `${item.source} = ${item.destination}`,
+                                );
+                                toast("Copied to clipboard", {
+                                  action: {
+                                    label: "Hide",
+                                    onClick: () => {},
+                                  },
+                                });
+                              }}
+                            >
                               <Copy className="mr-2 h-4 w-4" /> Copy
                             </DropdownMenuItem>
 

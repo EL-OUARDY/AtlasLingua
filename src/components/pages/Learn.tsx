@@ -30,6 +30,7 @@ function Learn() {
     request
       .then((res) => {
         setDictionaryData(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -41,9 +42,7 @@ function Learn() {
           },
         });
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => {});
     return () => cancel(); // abort http request
   }, [selectedCategory]);
 

@@ -1,3 +1,4 @@
+from operator import and_
 from flask import jsonify
 from sqlalchemy import or_
 from app.models.dictionary import Dictionary
@@ -18,7 +19,12 @@ class AuthService:
             )
             query = query.filter(_filter)
         else:
-            query = query.filter(Dictionary.group_id.is_(None))
+            query = query.filter(
+                and_(
+                    Dictionary.group_id.is_(None),
+                    Dictionary.word_type.isnot(None),
+                )
+            )
 
         # Apply filters
         for column, value in filters_dict.items():
@@ -45,9 +51,9 @@ class AuthService:
         return jsonify(
             {
                 "page": paginated_query.page,
-                "per_page": paginated_query.per_page,
+                "perPage": paginated_query.per_page,
                 "total": paginated_query.total,
-                "pages": paginated_query.pages,
+                "pageCount": paginated_query.pages,
                 "data": result,
             }
         )

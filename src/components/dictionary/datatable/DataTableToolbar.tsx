@@ -10,10 +10,12 @@ import { VOCABULARY_TYPES } from "@/models/Dictionary";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  onSearch: (query: string) => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  onSearch,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -23,16 +25,13 @@ export function DataTableToolbar<TData>({
         placeholder="Search .."
         autoComplete="off"
         id="search"
-        value={(table.getColumn("english")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("english")?.setFilterValue(event.target.value)
-        }
+        onChange={(event) => onSearch(event.target.value)}
         className="h-10 w-full md:w-[150px] lg:w-[250px]"
       />
       <div className="flex w-full flex-1 gap-1">
-        {table.getColumn("type") && (
+        {table.getColumn("word_type") && (
           <DataTableFacetedFilter
-            column={table.getColumn("type")}
+            column={table.getColumn("word_type")}
             title="Type"
             options={VOCABULARY_TYPES}
           />
