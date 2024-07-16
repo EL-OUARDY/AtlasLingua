@@ -23,12 +23,14 @@ import { DataTableToolbar } from "./dictionary/datatable/DataTableToolbar";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { useEffect } from "react";
 import { IDictFetchDataOptions } from "@/services/dictionaryService";
+import { Skeleton } from "./ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  pageCount: number;
+  columns: ColumnDef<TData, TValue>[];
   fetchData: (options: IDictFetchDataOptions) => void;
+  pageCount: number;
+  isLoading: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +38,7 @@ export function DataTable<TData, TValue>({
   data,
   pageCount,
   fetchData,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -120,8 +123,19 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              Array(paginationState.pageSize)
+                .fill(null)
+                .map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell colSpan={columns.length} className="py-6">
+                      <Skeleton className="h-4" />
+                    </TableCell>
+                  </TableRow>
+                ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

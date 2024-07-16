@@ -55,9 +55,10 @@ function Dictionary() {
       <Separator className="my-6" />
       <DataTable
         data={dictionaryData.data || {}}
-        pageCount={dictionaryData.pageCount}
         columns={columns}
         fetchData={setDataOptions}
+        pageCount={dictionaryData.pageCount}
+        isLoading={isLoading}
       />
     </div>
   );
