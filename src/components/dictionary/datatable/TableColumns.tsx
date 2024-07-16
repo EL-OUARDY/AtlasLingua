@@ -46,15 +46,16 @@ export const columns: ColumnDef<IDictionary>[] = [
     ),
   },
   {
-    accessorKey: "type",
+    accessorKey: "word_type",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => (
-      <Badge variant="outline" className="font-light capitalize">
-        {row.getValue("type")}
-      </Badge>
-    ),
+    cell: ({ row }) =>
+      row.getValue("word_type") && (
+        <Badge variant="outline" className="font-light capitalize">
+          {row.getValue("word_type")}
+        </Badge>
+      ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
