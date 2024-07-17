@@ -19,7 +19,10 @@ import { CanceledError } from "axios";
 function Login() {
   const { setUser } = useUser();
 
-  const credentials = {} as ILoginCredentials;
+  const credentials = {
+    email: "ouadia@el-ouardy.com",
+    password: "walker123",
+  } as ILoginCredentials;
 
   const navigate = useNavigate();
 

@@ -6,6 +6,7 @@ from flask_jwt_extended import (
     jwt_required,
     set_access_cookies,
     set_refresh_cookies,
+    unset_jwt_cookies,
 )
 
 from app.schemas.user_schema import user_schema
@@ -55,6 +56,14 @@ def login():
         return response, 200
 
     return jsonify(message="Invalid credentials"), 400
+
+
+@bp.route("/logout", methods=["POST"])
+@jwt_required()
+def logout():
+    response = jsonify(message="logout successful")
+    unset_jwt_cookies(response)
+    return response, 200
 
 
 @bp.route("/refresh", methods=["POST"])
