@@ -13,15 +13,13 @@ def get_list():
     per_page = int(request_data.get("pageSize", 5))
     sort_by = request_data.get("sortBy", "id")
     sort_order = request_data.get("sortOrder", "asc")
-    filters = request_data.get("filters", "{}")
     search = request_data.get("search", None)
-
-    # Parse the filters
-    filters_dict = json.loads(filters)
+    filters_dict = request_data.get("filters", {})
+    types_list = request_data.get("wordTypes", [])
 
     # Apply sorting and filtering
     data = AuthService.get_list(
-        page, per_page, sort_by, sort_order, filters_dict, search
+        page, per_page, sort_by, sort_order, filters_dict, search, types_list
     )
 
     return data, 200

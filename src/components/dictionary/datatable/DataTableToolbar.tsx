@@ -11,22 +11,27 @@ import { VOCABULARY_TYPES } from "@/models/Dictionary";
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   onSearch: (query: string) => void;
+  filterChange: () => void;
 }
 
 export function DataTableToolbar<TData>({
   table,
   onSearch,
+  filterChange,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center gap-2 md:flex-row">
+    <div className="flex w-full flex-col items-center gap-2 md:flex-row">
       <Input
         placeholder="Search .."
         autoComplete="off"
         id="search"
-        onChange={(event) => onSearch(event.target.value)}
-        className="h-10 w-full md:w-[150px] lg:w-[250px]"
+        onChange={(event) => {
+          onSearch(event.target.value);
+          filterChange();
+        }}
+        className="no-ring h-10 w-full md:w-[150px] lg:w-[250px]"
       />
       <div className="flex w-full flex-1 gap-1">
         {table.getColumn("word_type") && (
@@ -34,6 +39,7 @@ export function DataTableToolbar<TData>({
             column={table.getColumn("word_type")}
             title="Type"
             options={VOCABULARY_TYPES}
+            onChange={filterChange}
           />
         )}
 

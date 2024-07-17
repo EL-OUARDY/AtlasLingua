@@ -7,7 +7,9 @@ from app.schemas.dictionary_schema import dictionaries_schema
 
 class AuthService:
     @staticmethod
-    def get_list(page, per_page, sort_by, sort_order, filters_dict, search):
+    def get_list(
+        page, per_page, sort_by, sort_order, filters_dict, search, types_list
+    ):
         query = Dictionary.query
 
         # Apply search
@@ -32,6 +34,10 @@ class AuthService:
                 query = query.filter(
                     getattr(Dictionary, column).ilike(f"%{value}%")
                 )
+
+        # Filter by word types
+        if types_list:
+            query = query.filter(Dictionary.word_type.in_(types_list))
 
         # Apply sorting
         if hasattr(Dictionary, sort_by):

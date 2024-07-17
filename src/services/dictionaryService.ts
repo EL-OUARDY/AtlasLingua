@@ -7,6 +7,7 @@ export interface IDictFetchDataOptions {
   sortOrder?: "asc" | "desc";
   sortBy?: string;
   search?: string;
+  wordTypes?: string[];
   filters?: {
     [key: string]: string | number | boolean;
   };

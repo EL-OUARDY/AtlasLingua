@@ -90,22 +90,25 @@ export function DataTable<TData, TValue>({
       options.sortBy = sorting[0].id;
       options.sortOrder = sorting[0].desc ? "desc" : "asc";
     }
+    if (columnFilters.length > 0) {
+      options.wordTypes = columnFilters[0]?.value as string[];
+    }
 
     fetchData(options);
   }, [fetchData, sorting, table, columnFilters, paginationState, search]);
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="flex flex-1 flex-col gap-4">
       <DataTableToolbar
         table={table}
         onSearch={(query) => {
           setSearch(query);
-          table.setPageIndex(0);
         }}
+        filterChange={() => table.setPageIndex(0)}
       />
-      <ScrollArea className="rounded-md border bg-background dark:bg-transparent">
+      <ScrollArea className="flex-1 rounded-md border bg-background dark:bg-transparent">
         <Table>
-          <TableHeader>
+          <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -126,7 +129,11 @@ export function DataTable<TData, TValue>({
 
           <TableBody>
             {isLoading ? (
-              Array(paginationState.pageSize)
+              Array(
+                table.getRowModel().rows?.length == 0
+                  ? 5
+                  : paginationState.pageSize,
+              )
                 .fill(null)
                 .map((_, index) => (
                   <TableRow key={index}>
@@ -165,7 +172,9 @@ export function DataTable<TData, TValue>({
         </Table>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <DataTablePagination table={table} />
+      {table.getRowModel().rows?.length > 0 && (
+        <DataTablePagination table={table} />
+      )}
     </div>
   );
 }
