@@ -25,5 +25,5 @@ dist-ssr
 
 
 # environement
-.env.development
-.env.production
+/.env.development
+/.env.production
