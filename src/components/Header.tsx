@@ -16,9 +16,11 @@ import { APP_NAME } from "@/shared/constants";
 import ThemeSwitch from "./ThemeSwitch";
 import { useNotification } from "@/contexts/NotificationContext";
 import { ROUTES } from "@/routes/routes";
+import { useUser } from "@/contexts/UserContext";
 
 function Header() {
   const { toggleNotification } = useNotification();
+  const { user } = useUser();
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 py-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6 md:py-0">
       <MobileSideBar />
@@ -65,22 +67,31 @@ function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Link to={ROUTES.settings.profile}>
-              <DropdownMenuItem className="cursor-pointer">
-                Profile
-              </DropdownMenuItem>
-            </Link>
+            {user && (
+              <Link to={ROUTES.settings.profile}>
+                <DropdownMenuItem className="cursor-pointer">
+                  Profile
+                </DropdownMenuItem>
+              </Link>
+            )}
             <Link to={ROUTES.contact}>
               <DropdownMenuItem className="cursor-pointer">
                 Support
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            <Link to={ROUTES.login}>
+            {!user && (
+              <Link to={ROUTES.login}>
+                <DropdownMenuItem className="cursor-pointer">
+                  Login
+                </DropdownMenuItem>
+              </Link>
+            )}
+            {user && (
               <DropdownMenuItem className="cursor-pointer">
-                Login
+                Logout
               </DropdownMenuItem>
-            </Link>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -2,7 +2,7 @@ import { IUser } from "@/models/User";
 import React, { ReactNode, useContext, useState } from "react";
 
 interface IUserContext {
-  user: IUser;
+  user: IUser | undefined;
   setUser: (user: IUser) => void;
 }
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function UserProvider({ children }: Props) {
-  const [user, setUser] = useState<IUser>({} as IUser);
+  const [user, setUser] = useState<IUser | undefined>();
 
   return (
     <UserContext.Provider
