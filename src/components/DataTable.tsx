@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
   }, [fetchData, sorting, table, columnFilters, paginationState, search]);
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <div className="grid flex-1 grid-rows-[auto,1fr] gap-4">
       <DataTableToolbar
         table={table}
         onSearch={(query) => {
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
         }}
         filterChange={() => table.setPageIndex(0)}
       />
-      <ScrollArea className="flex-1 rounded-md border bg-background dark:bg-transparent">
+      <ScrollArea className="rounded-md border bg-background dark:bg-transparent">
         <Table>
           <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (

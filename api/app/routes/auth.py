@@ -1,8 +1,11 @@
+from datetime import timedelta
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
     jwt_required,
+    set_access_cookies,
+    set_refresh_cookies,
 )
 
 from app.schemas.user_schema import user_schema
@@ -42,11 +45,15 @@ def login():
         data["email"], data["password"]
     )
     if access_token and refresh_token:
-        return (
-            jsonify(access_token=access_token, refresh_token=refresh_token),
-            200,
-        )
-    return jsonify(message="Invalid credentials"), 401
+        response = jsonify(message="Login successful")
+
+        # Set JWT cookies
+        set_access_cookies(response, access_token, max_age=timedelta(hours=1))
+        set_refresh_cookies(response, refresh_token, max_age=timedelta(days=30))
+
+        return response, 200
+
+    return jsonify(message="Invalid credentials"), 400
 
 
 @bp.route("/refresh", methods=["POST"])
@@ -54,12 +61,18 @@ def login():
 def refresh():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
-    return jsonify(access_token=new_access_token), 200
+
+    response = jsonify(access_token=new_access_token)
+
+    # set JWT cookies
+    set_access_cookies(response, new_access_token, max_age=timedelta(hours=1))
+
+    return response, 200
 
 
-@bp.route("/protected", methods=["GET"])
+@bp.route("/profile", methods=["GET"])
 @jwt_required()
-def protected():
+def profile():
     current_user_id = get_jwt_identity()
     user = AuthService.get_user_by_id(current_user_id)
     return user_schema.dump(user), 200

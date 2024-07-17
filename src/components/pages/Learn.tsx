@@ -35,7 +35,6 @@ function Learn() {
       .catch((err) => {
         if (err instanceof CanceledError) return;
         toast("Failed to load data. Please refresh the page", {
-          description: err.message,
           action: {
             label: "OK",
             onClick: () => window.location.reload(),

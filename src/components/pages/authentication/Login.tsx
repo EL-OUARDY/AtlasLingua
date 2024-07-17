@@ -11,8 +11,16 @@ import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
+import { ILoginCredentials } from "@/services/authService";
+import { useUser } from "@/contexts/UserContext";
 
 function Login() {
+  const { login } = useUser();
+
+  function log_user() {
+    login({} as ILoginCredentials);
+  }
+
   return (
     <AuthLayout role="login">
       <Card className="mx-auto w-full border-none md:w-[450px]">
@@ -46,7 +54,7 @@ function Login() {
               </div>
               <Input id="password" name="password" type="password" />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={log_user}>
               Login
             </Button>
             <div className="relative">

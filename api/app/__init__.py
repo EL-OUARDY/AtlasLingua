@@ -31,12 +31,21 @@ def create_app():
     load_dotenv()
 
     # Restrict CORS
-    CORS(app, resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}})
+    CORS(
+        app,
+        supports_credentials=True,
+        resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}},
+    )
 
     # Configure the Flask application from environment variable
     app.config.from_object(
         os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
     )
+
+    # Configure JWT
+    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_ACCESS_COOKIE_PATH"] = "/api/auth/"
+    app.config["JWT_REFRESH_COOKIE_PATH"] = "/api/auth/"
 
     # Initialize the database, migration, marshmallow and JWT manager with the app
     db.init_app(app)

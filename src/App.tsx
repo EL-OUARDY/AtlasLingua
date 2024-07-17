@@ -25,62 +25,70 @@ import NotificationSettings from "./components/pages/settings/NotificationSettin
 import TranslateText from "./components/translator/TranslateTexts";
 import TranslateMedia from "./components/translator/TranslateMedia";
 import Summarization from "./components/translator/Summarization";
+import { UserProvider } from "./contexts/UserContext";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
     <>
-      <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
-        <Routes>
-          {/* main routes */}
-          <Route path={ROUTES.login} element={<Login />} />
-          <Route path={ROUTES.signup} element={<Signup />} />
-          <Route path={ROUTES.contact} element={<Contact />} />
-          <Route path="/" element={<Layout />}>
-            <Route path={"/"} element={<Translator />}>
-              <Route index element={<TranslateText />} />
+      <UserProvider>
+        <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
+          <Routes>
+            {/* main routes */}
+            <Route path={ROUTES.login} element={<Login />} />
+            <Route path={ROUTES.signup} element={<Signup />} />
+            <Route path={ROUTES.contact} element={<Contact />} />
+            <Route path="/" element={<Layout />}>
+              <Route path={"/"} element={<Translator />}>
+                <Route index element={<TranslateText />} />
+                <Route
+                  path={ROUTES.translate.index}
+                  element={<TranslateText />}
+                />
+                <Route
+                  path={ROUTES.translate.media}
+                  element={<TranslateMedia />}
+                />
+                <Route
+                  path={ROUTES.translate.summarization}
+                  element={<Summarization />}
+                />
+              </Route>
+              <Route path={ROUTES.translate.index} element={<Translator />} />
+              <Route path={ROUTES.dictionary} element={<Dictionary />} />
+              <Route path={ROUTES.favorites} element={<Favorites />} />
+              <Route path={ROUTES.learn} element={<Learn />} />
+              <Route path={ROUTES.community} element={<Community />} />
               <Route
-                path={ROUTES.translate.index}
-                element={<TranslateText />}
+                path={ROUTES.live_assistance}
+                element={<LiveAssistance />}
               />
-              <Route
-                path={ROUTES.translate.media}
-                element={<TranslateMedia />}
-              />
-              <Route
-                path={ROUTES.translate.summarization}
-                element={<Summarization />}
-              />
+              <Route path={ROUTES.contribution} element={<Contribution />} />
+              <Route path={ROUTES.feedback} element={<Feedback />} />
+              <Route path={ROUTES.about} element={<About />} />
+              <Route path={ROUTES.privacy} element={<Privacy />} />
+              <Route path={ROUTES.settings.general} element={<Settings />}>
+                <Route index element={<GeneralSettings />} />
+                <Route
+                  path={ROUTES.settings.profile}
+                  element={<ProfileSettings />}
+                />
+                <Route
+                  path={ROUTES.settings.appearance}
+                  element={<AppearanceSettings />}
+                />
+                <Route
+                  path={ROUTES.settings.notifications}
+                  element={<NotificationSettings />}
+                />
+              </Route>
+              <Route path={ROUTES.notFound} element={<NotFound />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
-            <Route path={ROUTES.translate.index} element={<Translator />} />
-            <Route path={ROUTES.dictionary} element={<Dictionary />} />
-            <Route path={ROUTES.favorites} element={<Favorites />} />
-            <Route path={ROUTES.learn} element={<Learn />} />
-            <Route path={ROUTES.community} element={<Community />} />
-            <Route path={ROUTES.live_assistance} element={<LiveAssistance />} />
-            <Route path={ROUTES.contribution} element={<Contribution />} />
-            <Route path={ROUTES.feedback} element={<Feedback />} />
-            <Route path={ROUTES.about} element={<About />} />
-            <Route path={ROUTES.privacy} element={<Privacy />} />
-            <Route path={ROUTES.settings.general} element={<Settings />}>
-              <Route index element={<GeneralSettings />} />
-              <Route
-                path={ROUTES.settings.profile}
-                element={<ProfileSettings />}
-              />
-              <Route
-                path={ROUTES.settings.appearance}
-                element={<AppearanceSettings />}
-              />
-              <Route
-                path={ROUTES.settings.notifications}
-                element={<NotificationSettings />}
-              />
-            </Route>
-            <Route path={ROUTES.notFound} element={<NotFound />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </ThemeProvider>
+          </Routes>
+        </ThemeProvider>
+        <Toaster />
+      </UserProvider>
     </>
   );
 }
