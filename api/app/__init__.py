@@ -6,12 +6,14 @@ from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 from flask_cors import CORS
 import os
+from flask_bcrypt import Bcrypt
 
 # Initialize the database, migration, marshmallow and JWT manager objects
 db = SQLAlchemy()
 migrate = Migrate()
 ma = Marshmallow()
 jwt = JWTManager()
+bcrypt = Bcrypt()
 
 
 def create_app():
@@ -44,8 +46,10 @@ def create_app():
 
     # Import and register Blueprints for the application routes
     from app.routes import dictionary
+    from app.routes import auth
 
     app.register_blueprint(dictionary.bp)
+    app.register_blueprint(auth.bp)
 
     # Return the configured app instance
     return app

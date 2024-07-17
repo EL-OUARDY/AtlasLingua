@@ -1,7 +1,6 @@
-import math
-from flask import Blueprint, json, jsonify, request
+from flask import Blueprint, request
 from app.schemas.dictionary_schema import dictionaries_schema
-from app.services.dictionary_service import AuthService
+from app.services.dictionary_service import DictionaryService
 
 bp = Blueprint("dictionary", __name__, url_prefix="/api/dictionary")
 
@@ -18,7 +17,7 @@ def get_list():
     types_list = request_data.get("wordTypes", [])
 
     # Apply sorting and filtering
-    data = AuthService.get_list(
+    data = DictionaryService.get_list(
         page, per_page, sort_by, sort_order, filters_dict, search, types_list
     )
 
@@ -28,5 +27,5 @@ def get_list():
 @bp.route("/category", methods=["POST"])
 def get_category():
     data = request.get_json()
-    _list = AuthService.get_category(data.get("category"))
+    _list = DictionaryService.get_category(data.get("category"))
     return dictionaries_schema.jsonify(_list), 200

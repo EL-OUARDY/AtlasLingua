@@ -1,11 +1,10 @@
-from operator import and_
 from flask import jsonify
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from app.models.dictionary import Dictionary
 from app.schemas.dictionary_schema import dictionaries_schema
 
 
-class AuthService:
+class DictionaryService:
     @staticmethod
     def get_list(
         page, per_page, sort_by, sort_order, filters_dict, search, types_list

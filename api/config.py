@@ -11,6 +11,7 @@ class Config:
         MYSQL_USER, MYSQL_PWD, MYSQL_HOST, MYSQL_DB
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
 
 class DevelopmentConfig(Config):
