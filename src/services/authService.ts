@@ -1,3 +1,4 @@
+import { IUser } from "@/models/User";
 import apiClient from "./api";
 
 export interface ILoginCredentials {
@@ -14,18 +15,16 @@ export interface IRegisterData {
 class authService {
   login(credentials: ILoginCredentials) {
     const controller = new AbortController();
-    const request = apiClient.post<ILoginCredentials>(
-      "/auth/login",
-      credentials,
-      { signal: controller.signal },
-    );
+    const request = apiClient.post<IUser>("/auth/login", credentials, {
+      signal: controller.signal,
+    });
 
     return { request, cancel: () => controller.abort() };
   }
 
-  protected() {
+  profile() {
     const controller = new AbortController();
-    const request = apiClient.get("/auth/protected", {
+    const request = apiClient.get<IUser>("/auth/profile", {
       signal: controller.signal,
     });
 

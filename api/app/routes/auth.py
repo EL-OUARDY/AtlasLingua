@@ -45,9 +45,10 @@ def login():
         data["email"], data["password"]
     )
     if access_token and refresh_token:
-        response = jsonify(message="Login successful")
+        user = AuthService.get_user_by_email(data["email"])
+        response = jsonify(user_schema.dump(user))
 
-        # Set JWT cookies
+        # set JWT cookies
         set_access_cookies(response, access_token, max_age=timedelta(hours=1))
         set_refresh_cookies(response, refresh_token, max_age=timedelta(days=30))
 
@@ -62,7 +63,7 @@ def refresh():
     current_user = get_jwt_identity()
     new_access_token = create_access_token(identity=current_user)
 
-    response = jsonify(access_token=new_access_token)
+    response = jsonify(message="Login successful")
 
     # set JWT cookies
     set_access_cookies(response, new_access_token, max_age=timedelta(hours=1))

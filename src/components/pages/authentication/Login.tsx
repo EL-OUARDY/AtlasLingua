@@ -9,16 +9,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/routes/routes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
-import { ILoginCredentials } from "@/services/authService";
+import authService, { ILoginCredentials } from "@/services/authService";
 import { useUser } from "@/contexts/UserContext";
+import { toast } from "sonner";
+import { CanceledError } from "axios";
 
 function Login() {
-  const { login } = useUser();
+  const { setUser } = useUser();
 
-  function log_user() {
-    login({} as ILoginCredentials);
+  const credentials = {} as ILoginCredentials;
+
+  const navigate = useNavigate();
+
+  function login() {
+    const { request } = authService.login(credentials);
+    request
+      .then(({ data }) => {
+        console.log(data);
+        setUser(data);
+        // redirect to returnUrl or homepage
+        navigate("/");
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        toast("Invalid email or password. Please try again.", {
+          action: {
+            label: "Ok",
+            onClick: () => {},
+          },
+        });
+      })
+      .finally(() => {});
   }
 
   return (
@@ -54,7 +78,7 @@ function Login() {
               </div>
               <Input id="password" name="password" type="password" />
             </div>
-            <Button type="submit" className="w-full" onClick={log_user}>
+            <Button type="submit" className="w-full" onClick={login}>
               Login
             </Button>
             <div className="relative">
