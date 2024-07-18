@@ -17,10 +17,33 @@ import ThemeSwitch from "./ThemeSwitch";
 import { useNotification } from "@/contexts/NotificationContext";
 import { ROUTES } from "@/routes/routes";
 import { useUser } from "@/contexts/UserContext";
+import authService from "@/services/authService";
+import { CanceledError } from "axios";
+import { toast } from "sonner";
 
 function Header() {
   const { toggleNotification } = useNotification();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+
+  function logout() {
+    const { request } = authService.logout();
+    request
+      .then(() => {
+        setUser(undefined);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        toast("Can't perform action!", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .finally(() => {});
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background px-4 py-4 md:static md:h-auto md:border-0 md:bg-transparent md:px-6 md:py-0">
       <MobileSideBar />
@@ -88,7 +111,7 @@ function Header() {
               </Link>
             )}
             {user && (
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem className="cursor-pointer" onClick={logout}>
                 Logout
               </DropdownMenuItem>
             )}

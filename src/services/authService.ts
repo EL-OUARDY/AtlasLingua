@@ -22,9 +22,18 @@ class authService {
     return { request, cancel: () => controller.abort() };
   }
 
-  profile() {
+  getProfile() {
     const controller = new AbortController();
     const request = apiClient.get<IUser>("/auth/profile", {
+      signal: controller.signal,
+    });
+
+    return { request, cancel: () => controller.abort() };
+  }
+
+  logout() {
+    const controller = new AbortController();
+    const request = apiClient.post<IUser>("/auth/logout", {
       signal: controller.signal,
     });
 

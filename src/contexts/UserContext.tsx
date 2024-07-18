@@ -1,9 +1,11 @@
 import { IUser } from "@/models/User";
-import React, { ReactNode, useContext, useState } from "react";
+import authService from "@/services/authService";
+import { CanceledError } from "axios";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 interface IUserContext {
   user: IUser | undefined;
-  setUser: (user: IUser) => void;
+  setUser: (user: IUser | undefined) => void;
 }
 
 const UserContext = React.createContext<IUserContext>({} as IUserContext);
@@ -19,6 +21,17 @@ interface Props {
 
 export function UserProvider({ children }: Props) {
   const [user, setUser] = useState<IUser | undefined>();
+
+  useEffect(() => {
+    const { request, cancel } = authService.getProfile();
+    request
+      .then(({ data }) => {
+        setUser(data);
+      })
+      .catch(() => {});
+
+    return () => cancel();
+  }, []);
 
   return (
     <UserContext.Provider

@@ -13,6 +13,17 @@ const axiosConfig = {
 };
 const apiClient = axios.create(axiosConfig);
 
+apiClient.interceptors.request.use(
+  (config) => {
+    // try to refresh the access token
+    config.headers["X-CSRF-TOKEN"] = getCookie("csrf_access_token") || "";
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
 apiClient.interceptors.response.use(
   (response) => {
     return response;
@@ -28,10 +39,12 @@ apiClient.interceptors.response.use(
       axiosConfig.headers["X-CSRF-TOKEN"] =
         getCookie("csrf_refresh_token") || "";
       const request = axios.create(axiosConfig).post("/auth/refresh");
-      request.then(() => {
-        // recall the original request with the new token
-        return axios(originalRequest);
-      });
+      request
+        .then(() => {
+          // recall the original request with the new token
+          return axios(originalRequest);
+        })
+        .catch(() => {});
     }
     return Promise.reject(error);
   },
