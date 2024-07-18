@@ -7,6 +7,7 @@ import {
   CornerDownLeft,
   Flag,
   History,
+  Loader2,
   MessageSquareTextIcon,
   Mic,
   Share2Icon,
@@ -23,43 +24,63 @@ import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import WTooltip from "../ui/custom/WTooltip";
 import { useHistory } from "@/contexts/HistoryContext";
+import { Skeleton } from "../ui/skeleton";
+import translationService, {
+  ITranslationFetchDataRequest,
+} from "@/services/translationService";
+import { CanceledError } from "axios";
+import { toast } from "sonner";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
   const [destinationLang, setDestinationLang] = useState<Language>("darija");
   const [translation, setTranslation] = useState<ITranslate>({
-    source: "Hello",
-    destination: "Salam",
-    verified: true,
-    alternatives: [
-      {
-        alternative: "Mrahba",
-        verified: true,
-      },
-      {
-        alternative: "Ahlan",
-        verified: false,
-      },
-    ],
+    source: "",
+    destination: "",
   });
+  const [isTranslating, setIsTranslating] = useState<boolean>(false);
 
   const { setIsHistoryOpen } = useHistory();
 
   // main translation function
   function translate(text: string) {
-    console.log("Translating");
+    if (!translation.source || translation.source == "") return;
+    setIsTranslating(true);
     setTranslation({ source: text, destination: "" });
-
     // call translation API service
-    if (translation.source && translation.source !== "") {
-      return; // call translation API service
-    }
+    const body: ITranslationFetchDataRequest = {
+      text: translation.source,
+      source: sourceLang,
+      destination: destinationLang,
+    };
+    const { request } = translationService.translate(body);
+    request
+      .then(({ data }) => {
+        setTranslation({
+          ...translation,
+          destination: data.translation,
+          verified: data.verified,
+        });
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        toast(err, {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .finally(() => {
+        setIsTranslating(false);
+      });
   }
 
   function switchTranslation() {
     setSourceLang(sourceLang === "english" ? "darija" : "english");
     setDestinationLang(destinationLang === "english" ? "darija" : "english");
-    translate(translation.destination);
+    setTranslation({ source: "", destination: "" });
   }
 
   return (
@@ -106,7 +127,9 @@ function TranslateText() {
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
             <Textarea
               value={translation.source}
-              onChange={(event) => translate(event.target.value)}
+              onChange={(event) =>
+                setTranslation({ ...translation, source: event.target.value })
+              }
               id="translate-source"
               placeholder="Type your text here..."
               className="no-ring h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none"
@@ -122,20 +145,38 @@ function TranslateText() {
                   <Mic className="size-5 text-muted-foreground" />
                   <span className="sr-only">Use Microphone</span>
                 </Button>
-                <WTooltip side="top" content="AI-Powered">
+                {isTranslating && (
+                  <WTooltip side="top" content="AI-Powered">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-background/60 dark:hover:bg-background/30"
+                    >
+                      <AiIcon className="size-5" />
+                      <span className="sr-only">AI-Powered</span>
+                    </Button>
+                  </WTooltip>
+                )}
+                {isTranslating ? (
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-background/60 dark:hover:bg-background/30"
+                    disabled={isTranslating}
+                    type="submit"
+                    size="sm"
+                    className="ml-auto"
                   >
-                    <AiIcon className="size-5" />
-                    <span className="sr-only">AI-Powered</span>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Translating
                   </Button>
-                </WTooltip>
-                <Button type="submit" size="sm" className="ml-auto gap-1.5">
-                  Translate
-                  <CornerDownLeft className="size-4" />
-                </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    size="sm"
+                    className="ml-auto gap-1.5"
+                    onClick={() => translate(translation.source)}
+                  >
+                    Translate <CornerDownLeft className="size-4" />
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -158,6 +199,16 @@ function TranslateText() {
               id="translate-source"
               className="h-full flex-1 overflow-auto border-0 p-4 text-base text-foreground shadow-none selection:bg-primary selection:text-primary-foreground"
             >
+              {isTranslating && (
+                <div className="flex w-full flex-col gap-4">
+                  <Skeleton className="h-4 w-[100%] bg-muted-foreground/20" />
+                  <Skeleton className="h-4 w-[95%] bg-muted-foreground/20" />
+                  <Skeleton className="h-4 w-[92%] bg-muted-foreground/20" />
+                  <Skeleton className="h-4 w-[98%] bg-muted-foreground/20" />
+                  <Skeleton className="h-4 w-[100%] bg-muted-foreground/20" />
+                  <Skeleton className="h-4 w-[92%] bg-muted-foreground/20" />
+                </div>
+              )}
               <div className="flex items-center gap-1">
                 {translation.destination}
                 {translation.verified && (

@@ -9,7 +9,6 @@ class DictionarySchema(ma.Schema):
     word_type = ma.String(required=False)
     category = ma.String(required=False)
     verified = ma.Boolean(required=True)
-    group_id = ma.String(required=False)
 
 
 dictionary_schema = DictionarySchema()

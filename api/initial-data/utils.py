@@ -72,7 +72,7 @@ if __name__ == "__main__":
                         arabic=row["darija_ar"],
                         word_type=None,
                         category=None,
-                        verified=True,
+                        verified=False,
                         popularity=0,
                         source="initial_utils",
                         group_id=f_id,

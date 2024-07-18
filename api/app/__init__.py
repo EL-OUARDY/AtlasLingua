@@ -56,9 +56,11 @@ def create_app():
     # Import and register Blueprints for the application routes
     from app.routes import dictionary
     from app.routes import auth
+    from app.routes import translation
 
     app.register_blueprint(dictionary.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(translation.bp)
 
     # Return the configured app instance
     return app
