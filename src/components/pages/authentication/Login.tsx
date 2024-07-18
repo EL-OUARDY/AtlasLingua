@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROUTES } from "@/routes/routes";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
 import authService, { ILoginCredentials } from "@/services/authService";
 import { useUser } from "@/contexts/UserContext";
@@ -29,11 +29,16 @@ const loginSchema = z.object({
 function Login() {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const { registerEmail } = location.state || {};
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginCredentials>({
+    defaultValues: { email: registerEmail, password: "" },
     resolver: zodResolver(loginSchema),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);

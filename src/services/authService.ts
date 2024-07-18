@@ -22,6 +22,15 @@ class authService {
     return { request, cancel: () => controller.abort() };
   }
 
+  register(credentials: IRegisterData) {
+    const controller = new AbortController();
+    const request = apiClient.post<IUser>("/auth/register", credentials, {
+      signal: controller.signal,
+    });
+
+    return { request, cancel: () => controller.abort() };
+  }
+
   getProfile() {
     const controller = new AbortController();
     const request = apiClient.get<IUser>("/auth/profile", {

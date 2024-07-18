@@ -19,14 +19,14 @@ bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 @bp.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
 
     # validate posted data
-    errors = user_schema.validate(data)
+    errors = user_schema.validate(request.json)
     if errors:
         return jsonify(errors), 400
 
     user_data = user_schema.load(request.json)
+
     user = AuthService.register_user(
         user_data["name"], user_data["email"], user_data["password"]
     )
@@ -61,7 +61,7 @@ def login():
 @bp.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
-    response = jsonify(message="logout successful")
+    response = jsonify(message="Logout successful")
     unset_jwt_cookies(response)
     return response, 200
 

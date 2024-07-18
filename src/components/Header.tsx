@@ -30,6 +30,12 @@ function Header() {
     request
       .then(() => {
         setUser(undefined);
+        toast.success("You have been successfully logged out.", {
+          action: {
+            label: "Ok",
+            onClick: () => {},
+          },
+        });
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
