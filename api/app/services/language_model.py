@@ -29,7 +29,7 @@ class LanguageModel:
             else "Moroccan Darija"
         )
 
-        self.system_prompt = f"You are a highly skilled translator fluent in both English and Moroccan Darija. Your task is to translate any text provided to you from {source_language} to {destination_language}. Always provide only the direct translation (latin letters) without any additional explanations or commentary."
+        self.system_prompt = f"You are a highly skilled translator fluent in both English and Moroccan Darija. Your task is to translate any text provided to you from {source_language} to {destination_language}. Always provide only the direct translation (Latin alphabet only) without any additional explanations or commentary."
 
         # feed useful transaltion to the llm
         # if feed:

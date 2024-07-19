@@ -106,6 +106,7 @@ function Login() {
                   <Link
                     to="#"
                     className="ml-auto inline-block text-sm underline"
+                    tabIndex={-1}
                   >
                     Forgot your password?
                   </Link>

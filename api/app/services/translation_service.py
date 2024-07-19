@@ -13,9 +13,19 @@ class TranslationService:
         # check if text is too long => process with summarization function
 
         # check verified entries from database
-        entry = TranslationService.get_entry(text, source, verified=True)
-        if entry:
-            return {"translation": entry[destination], "verified": True}
+        entries = TranslationService.get_entries(
+            text, source, verified=True, writing_variants=False
+        )
+        if entries:
+            return [
+                {
+                    "id": entry["id"],
+                    "translation": entry[destination],
+                    "verified": entry["verified"],
+                    "wordType": entry["word_type"],
+                }
+                for entry in entries
+            ]
 
         # use language model
         # prepare helpfull data to the language model
@@ -29,7 +39,7 @@ class TranslationService:
             feed=feed,
         )
 
-        return {"translation": translation, "verified": False}
+        return [{"translation": translation, "verified": False}]
 
     @staticmethod
     def get_entry(text, source, verified=False):
@@ -45,7 +55,23 @@ class TranslationService:
         return dictionary_schema.dump(result)
 
     @staticmethod
-    def get_entries(text, source):
+    def get_entries(text, source, verified=False, writing_variants=True):
+        filter_attribute = (
+            "english" if source == LanguagesEnum.ENGLISH.value else "darija"
+        )
+        filter = {filter_attribute: text}
+        if verified:
+            filter["verified"] = True
+
+        if not writing_variants:
+            filter["group_id"] = None
+
+        result = Dictionary.query.filter_by(**filter)
+
+        return dictionaries_schema.dump(result)
+
+    @staticmethod
+    def get_feed_entries(text, source):
         filter_attribute = (
             "english" if source == LanguagesEnum.ENGLISH.value else "darija"
         )
@@ -68,7 +94,7 @@ class TranslationService:
 
         for word in words:
             if word not in feed:  # avoid duplicates
-                entries = TranslationService.get_entries(word, source)
+                entries = TranslationService.get_feed_entries(word, source)
                 if entries:
                     feed[word] = []
                     for entry in entries:

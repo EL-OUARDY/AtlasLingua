@@ -1,8 +1,9 @@
-import { ITranslate, Language } from "@/models/Translator";
+import { Language } from "@/models/Translator";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
 import {
   ArrowRightLeftIcon,
+  Check,
   Copy,
   CornerDownLeft,
   Flag,
@@ -27,6 +28,7 @@ import { useHistory } from "@/contexts/HistoryContext";
 import { Skeleton } from "../ui/skeleton";
 import translationService, {
   ITranslationFetchDataRequest,
+  ITranslationFetchDataResult,
 } from "@/services/translationService";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
@@ -34,38 +36,37 @@ import { toast } from "sonner";
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
   const [destinationLang, setDestinationLang] = useState<Language>("darija");
-  const [translation, setTranslation] = useState<ITranslate>({
-    source: "",
-    destination: "",
-  });
+
+  const [textToTranslate, setTextToTranslate] = useState<string>("");
+  const [translation, setTranslation] = useState<ITranslationFetchDataResult[]>(
+    [{} as ITranslationFetchDataResult],
+  );
+
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const { setIsHistoryOpen } = useHistory();
 
   // main translation function
-  function translate(text: string) {
-    if (!translation.source || translation.source == "") return;
+  function translate() {
+    if (!textToTranslate || textToTranslate == "") return;
+    setTranslation([{} as ITranslationFetchDataResult]);
     setIsTranslating(true);
-    setTranslation({ source: text, destination: "" });
     // call translation API service
     const body: ITranslationFetchDataRequest = {
-      text: translation.source,
+      text: textToTranslate,
       source: sourceLang,
       destination: destinationLang,
     };
     const { request } = translationService.translate(body);
     request
       .then(({ data }) => {
-        setTranslation({
-          ...translation,
-          destination: data.translation,
-          verified: data.verified,
-        });
+        setTranslation(data);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
 
-        toast(err, {
+        toast("Can't proccess your request. Please try again!", {
           action: {
             label: "Hide",
             onClick: () => {},
@@ -80,7 +81,25 @@ function TranslateText() {
   function switchTranslation() {
     setSourceLang(sourceLang === "english" ? "darija" : "english");
     setDestinationLang(destinationLang === "english" ? "darija" : "english");
-    setTranslation({ source: "", destination: "" });
+    setTextToTranslate("");
+    setTranslation([{} as ITranslationFetchDataResult]);
+  }
+
+  function copyToClipboard() {
+    if (isCopied) return;
+    navigator.clipboard.writeText(translation[0].translation);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  }
+
+  function handleTextareaKeyDown(
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) {
+    // check if Control key (or Command key on macOS) is held down and Enter is pressed
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      // perform the translation
+      translate();
+    }
   }
 
   return (
@@ -126,12 +145,11 @@ function TranslateText() {
         >
           <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
             <Textarea
-              value={translation.source}
-              onChange={(event) =>
-                setTranslation({ ...translation, source: event.target.value })
-              }
+              value={textToTranslate}
+              onChange={(event) => setTextToTranslate(event.target.value)}
+              onKeyDown={handleTextareaKeyDown}
               id="translate-source"
-              placeholder="Type your text here..."
+              placeholder={`Type your ${sourceLang} text here...`}
               className="no-ring h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none"
             />
             <div className="sticky bottom-0 left-0 w-full">
@@ -172,7 +190,7 @@ function TranslateText() {
                     type="submit"
                     size="sm"
                     className="ml-auto gap-1.5"
-                    onClick={() => translate(translation.source)}
+                    onClick={() => translate()}
                   >
                     Translate <CornerDownLeft className="size-4" />
                   </Button>
@@ -210,8 +228,13 @@ function TranslateText() {
                 </div>
               )}
               <div className="flex items-center gap-1">
-                {translation.destination}
-                {translation.verified && (
+                <span>{translation[0].translation}</span>
+                {translation[0].wordType && (
+                  <span className="text-sm capitalize text-muted-foreground">
+                    {`(${translation[0].wordType})`}
+                  </span>
+                )}
+                {translation[0].verified && (
                   <WTooltip
                     side="top"
                     content="Verified by <br /> the community"
@@ -220,19 +243,21 @@ function TranslateText() {
                   </WTooltip>
                 )}
               </div>
-              {translation.alternatives && (
+              {translation.length > 1 && (
                 <div className="mt-4 flex flex-col gap-4">
                   <Separator className="dark:bg-secondary-foreground/10" />
                   <div className="flex flex-col gap-2">
-                    <h3 className="font-bold tracking-tight text-muted-foreground">
-                      Alternatives:
-                    </h3>
-                    {translation.alternatives.map((item, index) => (
+                    {translation.slice(1).map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center gap-1 text-sm text-muted-foreground"
+                        className="flex items-center gap-1 text-sm"
                       >
-                        {item.alternative}
+                        <span>{item.translation}</span>
+                        {item.wordType && (
+                          <span className="text-sm capitalize text-muted-foreground">
+                            {`(${item.wordType})`}
+                          </span>
+                        )}
                         {item.verified && (
                           <WTooltip
                             side="top"
@@ -279,8 +304,13 @@ function TranslateText() {
                 variant="ghost"
                 size="icon"
                 className="hover:bg-background/60 dark:hover:bg-background/30"
+                onClick={() => copyToClipboard()}
               >
-                <Copy className="size-5 text-muted-foreground" />
+                {!isCopied ? (
+                  <Copy className="size-5 text-muted-foreground" />
+                ) : (
+                  <Check className="size-5 text-muted-foreground" />
+                )}
                 <span className="sr-only">Copy</span>
               </Button>
 
