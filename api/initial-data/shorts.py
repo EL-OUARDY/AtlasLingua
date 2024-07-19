@@ -12,7 +12,7 @@ def insert_into_dictionary(
     category,
     verified,
     popularity=0,
-    source=None,
+    data_source=None,
     group_id=None,
 ):
     """Insert into dictionary table"""
@@ -20,8 +20,8 @@ def insert_into_dictionary(
     # Raw SQL insert query
     raw_query = text(
         """
-        INSERT INTO dictionary (darija, english, arabic, word_type, category, verified, popularity, source, group_id, created_at, updated_at)
-        VALUES (:darija, :english, :arabic, :word_type, :category, :verified, :popularity, :source, :group_id, :created_at, :updated_at)
+        INSERT INTO dictionary (darija, english, arabic, word_type, category, verified, popularity, data_source, group_id, created_at, updated_at)
+        VALUES (:darija, :english, :arabic, :word_type, :category, :verified, :popularity, :data_source, :group_id, :created_at, :updated_at)
         """
     )
 
@@ -39,7 +39,7 @@ def insert_into_dictionary(
                     "category": category,
                     "verified": verified,
                     "popularity": popularity,
-                    "source": source,
+                    "data_source": data_source,
                     "group_id": group_id,
                     "created_at": datetime.now(),
                     "updated_at": datetime.now(),
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 category=None,
                 verified=False,
                 popularity=0,
-                source="initial_shorts",
+                data_source="initial_shorts",
                 group_id=None,
             )
             rown_inserted += 1

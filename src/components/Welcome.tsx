@@ -40,7 +40,7 @@ function Welcome() {
         </DialogHeader>
         <Separator />
         <DialogFooter>
-          <div className="w-full text-sm tracking-tighter text-muted-foreground">
+          <div className="w-full text-center text-sm tracking-tighter text-muted-foreground sm:text-left">
             @{APP_NAME}
             <span className="text-xs text-muted-foreground/60"> — Beta</span>
           </div>

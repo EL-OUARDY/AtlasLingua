@@ -13,5 +13,5 @@ class Dictionary(db.Model, BaseModel):
     category = db.Column(db.String(255), nullable=True)
     verified = db.Column(db.Boolean, nullable=False)
     popularity = db.Column(db.Integer, nullable=False, default=0)
-    source = db.Column(db.String(255), nullable=True)
+    data_source = db.Column(db.String(255), nullable=True)
     group_id = db.Column(db.Integer, nullable=True)
