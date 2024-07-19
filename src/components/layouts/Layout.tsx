@@ -6,6 +6,7 @@ import MobileNavigationBar from "@/components/MobileNavigationBar";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { useEffect, useRef } from "react";
 import { HistoryProvider } from "@/contexts/HistoryContext";
+import Welcome from "../Welcome";
 
 function Layout() {
   const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
@@ -40,6 +41,7 @@ function Layout() {
           </ScrollArea>
         </NotificationProvider>
       </HistoryProvider>
+      <Welcome />
     </div>
   );
 }

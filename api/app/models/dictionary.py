@@ -3,6 +3,8 @@ from app.models.base_model import BaseModel
 
 
 class Dictionary(db.Model, BaseModel):
+    __tablename__ = "dictionary"
+
     id = db.Column(db.Integer, primary_key=True)
     darija = db.Column(db.String(255), nullable=False)
     english = db.Column(db.String(255), nullable=False)
