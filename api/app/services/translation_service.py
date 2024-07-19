@@ -1,6 +1,7 @@
 from app import db
 from app.models.dictionary import Dictionary
 from app.schemas.dictionary_schema import dictionaries_schema, dictionary_schema
+from app.services.history_service import HistoryService
 from app.services.language_model import LanguageModel
 from app.utils.helpers import split_to_words
 from app.utils.shared import LanguagesEnum
@@ -17,7 +18,7 @@ class TranslationService:
             text, source, verified=True, writing_variants=False
         )
         if entries:
-            return [
+            translation = [
                 {
                     "id": entry["id"],
                     "translation": entry[destination],
@@ -26,6 +27,22 @@ class TranslationService:
                 }
                 for entry in entries
             ]
+
+            # save in history
+            if source == LanguagesEnum.ENGLISH.value:
+                HistoryService.save(
+                    source_language=source,
+                    english=text,
+                    darija=translation[0]["translation"],
+                )
+            else:
+                HistoryService.save(
+                    source_language=source,
+                    english=translation[0]["translation"],
+                    darija=text,
+                )
+
+            return translation
 
         # use language model
         # prepare helpfull data to the language model

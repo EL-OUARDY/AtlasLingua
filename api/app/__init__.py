@@ -44,8 +44,6 @@ def create_app():
 
     # Configure JWT
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-    app.config["JWT_ACCESS_COOKIE_PATH"] = "/api/auth/"
-    app.config["JWT_REFRESH_COOKIE_PATH"] = "/api/auth/"
 
     # Initialize the database, migration, marshmallow and JWT manager with the app
     db.init_app(app)

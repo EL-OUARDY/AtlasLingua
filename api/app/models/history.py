@@ -9,4 +9,5 @@ class History(db.Model, BaseModel):
     english = db.Column(db.Text, nullable=False)
     darija = db.Column(db.Text, nullable=False)
     processed_by = db.Column(db.String(128), nullable=True)
+    source_language = db.Column(db.String(128), nullable=False)
     user_id = db.Column(db.Integer, nullable=True)

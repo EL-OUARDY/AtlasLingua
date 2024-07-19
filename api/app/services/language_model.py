@@ -1,7 +1,7 @@
-import anthropic
-
-from app.models.dictionary import Dictionary
+from app.services.history_service import HistoryService
 from app.utils.shared import LanguagesEnum
+
+import anthropic
 
 
 class LanguageModel:
@@ -18,6 +18,25 @@ class LanguageModel:
         self.system_prompt = ""
 
     def translate(self, text_to_translate, source, destination, feed):
+        # check history before sending a request to the LLM
+        result = HistoryService.get_from_history(
+            text_to_translate=text_to_translate,
+            source=source,
+            destination=destination,
+            processed_by=self.model,
+        )
+        if result:
+            # save to history again
+            if source == LanguagesEnum.ENGLISH.value:
+                HistoryService.save(
+                    source, text_to_translate, result, self.model
+                )
+            else:
+                HistoryService.save(
+                    source, result, text_to_translate, self.model
+                )
+            return result
+
         source_language = (
             "English"
             if source == LanguagesEnum.ENGLISH.value
@@ -54,6 +73,10 @@ class LanguageModel:
         )
         response = message.content[0].text
 
-        # Save in dictionary
+        # save in history
+        if source == LanguagesEnum.ENGLISH.value:
+            HistoryService.save(source, text_to_translate, response, self.model)
+        else:
+            HistoryService.save(source, response, text_to_translate, self.model)
 
         return response
