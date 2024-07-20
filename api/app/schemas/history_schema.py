@@ -1,5 +1,3 @@
-# user_id =
-
 from app import ma
 
 

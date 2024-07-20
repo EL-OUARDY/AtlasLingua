@@ -47,9 +47,16 @@ function TranslateText() {
 
   const { setIsHistoryOpen } = useHistory();
 
+  const [prevTranslation, setPrevTranslation] = useState<string>("");
+
   // main translation function
   function translate() {
-    if (!textToTranslate || textToTranslate == "") return;
+    if (
+      !textToTranslate ||
+      textToTranslate == "" ||
+      textToTranslate == prevTranslation
+    )
+      return;
     setTranslation([{} as ITranslationFetchDataResult]);
     setIsTranslating(true);
     // call translation API service
@@ -62,6 +69,7 @@ function TranslateText() {
     request
       .then(({ data }) => {
         setTranslation(data);
+        setPrevTranslation(textToTranslate);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
