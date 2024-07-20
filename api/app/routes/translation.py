@@ -3,10 +3,10 @@ from flask import Blueprint, jsonify, request
 from app.schemas.translate_request_schema import translate_request_schema
 from app.services.translation_service import TranslationService
 
-bp = Blueprint("translation", __name__, url_prefix="/api/translation")
+bp = Blueprint("translation", __name__, url_prefix="/api/translate")
 
 
-@bp.route("/translate", methods=["POST"])
+@bp.route("/", methods=["POST"])
 def translate():
     request_data = request.json
 

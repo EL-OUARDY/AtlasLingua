@@ -11,3 +11,4 @@ class History(db.Model, BaseModel):
     processed_by = db.Column(db.String(128), nullable=True)
     source_language = db.Column(db.String(128), nullable=False)
     user_id = db.Column(db.Integer, nullable=True)
+    deleted = db.Column(db.Boolean, nullable=False, default=False)

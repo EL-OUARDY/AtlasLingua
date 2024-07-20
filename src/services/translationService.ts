@@ -9,15 +9,15 @@ export interface ITranslationFetchDataRequest {
 
 export interface ITranslationFetchDataResult {
   translation: string;
-  wordType: string;
-  verified: boolean;
+  wordType?: string;
+  verified?: boolean;
 }
 
 class translationService {
   translate(data: ITranslationFetchDataRequest) {
     const controller = new AbortController();
     const request = apiClient.post<ITranslationFetchDataResult[]>(
-      "/translation/translate",
+      "/translate",
       data,
       { signal: controller.signal },
     );

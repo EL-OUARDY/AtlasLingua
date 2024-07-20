@@ -1,8 +1,18 @@
-import React, { ReactNode, useContext, useState } from "react";
+import historyService, {
+  ITranslationHistoryFetchDataResult,
+} from "@/services/historyService";
+import { CanceledError } from "axios";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface IHistoryContext {
+  historyList: ITranslationHistoryFetchDataResult[];
   isHistoryOpen: boolean;
   setIsHistoryOpen: (value: boolean) => void;
+  deleteHistory: (history_id: number) => void;
+  clearAllHistory: () => void;
+
+  isLoading: boolean;
 }
 
 const HistoryContext = React.createContext<IHistoryContext>(
@@ -19,13 +29,87 @@ interface Props {
 }
 
 export function HistoryProvider({ children }: Props) {
+  const [historyList, setHistoryList] = useState<
+    ITranslationHistoryFetchDataResult[]
+  >([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
+  const [isLoading, setIsloading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isHistoryOpen) return;
+
+    setIsloading(true);
+    const { request, cancel } = historyService.get_history();
+
+    request
+      .then(({ data }) => {
+        setHistoryList(data);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+      })
+      .finally(() => {
+        setIsloading(false);
+      });
+
+    return () => cancel();
+  }, [isHistoryOpen]);
+
+  function deleteHistory(history_id: number) {
+    const { request } = historyService.delete_history(history_id);
+
+    // delete from history list
+    const oldHistoryList = historyList;
+    setHistoryList(historyList.filter((h) => h.id != history_id));
+
+    request.catch((err) => {
+      if (err instanceof CanceledError) return;
+
+      // if faild to delete then return deleted to the list
+      setHistoryList(oldHistoryList);
+
+      toast("Can't perform the action, try again later.", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    });
+  }
+
+  function clearAllHistory() {
+    const { request } = historyService.clear_all_history();
+    request
+      .then(() => {
+        setHistoryList([]);
+        toast.success("History has been deleted.", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        toast("Can't perform the action, try again later.", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      });
+  }
 
   return (
     <HistoryContext.Provider
       value={{
-        isHistoryOpen: isHistoryOpen,
-        setIsHistoryOpen: setIsHistoryOpen,
+        historyList,
+        isHistoryOpen,
+        setIsHistoryOpen,
+        isLoading,
+        deleteHistory,
+        clearAllHistory,
       }}
     >
       {children}

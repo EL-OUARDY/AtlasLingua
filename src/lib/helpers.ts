@@ -10,3 +10,7 @@ export const setCookie = (name: string, value: string, days: number) => {
   const expires = "expires=" + date.toUTCString();
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 };
+
+export function cleanText(input: string): string {
+  return input.trim().replace(/\s+/g, " ").replace(/\n/g, "");
+}

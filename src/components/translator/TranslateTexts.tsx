@@ -1,5 +1,5 @@
 import { Language } from "@/models/Translator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
 import {
   ArrowRightLeftIcon,
@@ -21,7 +21,7 @@ import USAIcon from "../ui/icons/USA";
 import { Textarea } from "../ui/textarea";
 import AiIcon from "../ui/icons/Ai";
 import { ScrollArea } from "../ui/scroll-area";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import WTooltip from "../ui/custom/WTooltip";
 import { useHistory } from "@/contexts/HistoryContext";
@@ -32,6 +32,8 @@ import translationService, {
 } from "@/services/translationService";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
+import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
+import { cleanText } from "@/lib/helpers";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -49,19 +51,32 @@ function TranslateText() {
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
 
+  const location = useLocation();
+
+  useEffect(() => {
+    // show selected history
+    if (location.state && location.state.history) {
+      const history: ITranslationHistoryFetchDataResult =
+        location.state.history;
+
+      showHistory(history);
+
+      location.state.history = null; // clear the history state
+    }
+  }, [location]);
+
   // main translation function
   function translate() {
-    if (
-      !textToTranslate ||
-      textToTranslate == "" ||
-      textToTranslate == prevTranslation
-    )
-      return;
+    // clean the input text provided by the user
+    const input = cleanText(textToTranslate);
+    // return if text hasn't changed or is empty
+    if (!input || input == "" || input == prevTranslation) return;
+
     setTranslation([{} as ITranslationFetchDataResult]);
     setIsTranslating(true);
     // call translation API service
     const body: ITranslationFetchDataRequest = {
-      text: textToTranslate,
+      text: input,
       source: sourceLang,
       destination: destinationLang,
     };
@@ -69,7 +84,7 @@ function TranslateText() {
     request
       .then(({ data }) => {
         setTranslation(data);
-        setPrevTranslation(textToTranslate);
+        setPrevTranslation(input);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -91,6 +106,7 @@ function TranslateText() {
     setDestinationLang(destinationLang === "english" ? "darija" : "english");
     setTextToTranslate("");
     setTranslation([{} as ITranslationFetchDataResult]);
+    setPrevTranslation("");
   }
 
   function copyToClipboard() {
@@ -108,6 +124,29 @@ function TranslateText() {
       // perform the translation
       translate();
     }
+  }
+
+  function showHistory(history: ITranslationHistoryFetchDataResult) {
+    setSourceLang(history.source_language as Language);
+    setDestinationLang(
+      history.source_language == "english" ? "darija" : "english",
+    );
+    setTextToTranslate(
+      history.source_language == "english" ? history.english : history.darija,
+    );
+
+    setTranslation([
+      {
+        translation:
+          history.source_language == "english"
+            ? history.darija
+            : history.english,
+      },
+    ]);
+
+    setPrevTranslation(
+      history.source_language == "english" ? history.english : history.darija,
+    );
   }
 
   return (

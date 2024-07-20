@@ -26,6 +26,7 @@ def create_app():
 
     # Create an instance of the Flask class
     app = Flask(__name__)
+    app.url_map.strict_slashes = False
 
     # Load environment variables from a .env file
     load_dotenv()

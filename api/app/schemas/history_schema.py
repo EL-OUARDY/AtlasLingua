@@ -6,8 +6,7 @@ class HistorySchema(ma.Schema):
     darija = ma.String(required=True)
     english = ma.String(required=True)
     source_language = ma.String(required=True)
-    processed_by = ma.String(required=False)
-    user_id = ma.Integer(required=False)
+    created_at = ma.String(dump_only=True)
 
 
 history_schema = HistorySchema()
