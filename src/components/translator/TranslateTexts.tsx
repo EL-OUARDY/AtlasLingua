@@ -389,35 +389,34 @@ function TranslateText() {
         className="hidden items-center justify-center p-4 md:flex landscape:hidden lg:landscape:flex"
       >
         <div className="flex gap-8">
-          <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Link
-              to={ROUTES.favorites}
-              className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary"
-            >
+          <Link
+            to={ROUTES.favorites}
+            className="flex w-14 flex-col items-center justify-center gap-2 text-muted-foreground"
+          >
+            <div className="flex h-fit w-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">
               <Star className="size-4 text-muted-foreground md:size-5" />
-            </Link>
-
-            <h3>Saved</h3>
-          </div>
-          <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Link
-              to="#"
-              onClick={() => setIsHistoryOpen(true)}
-              className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary"
-            >
+            </div>
+            <h3 className="text-sm">Saved</h3>
+          </Link>
+          <Link
+            to="#"
+            onClick={() => setIsHistoryOpen(true)}
+            className="flex w-14 flex-col items-center justify-center gap-2 text-muted-foreground"
+          >
+            <div className="flex h-fit w-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">
               <History className="size-4 text-muted-foreground md:size-5" />
-            </Link>
-            <h3>History</h3>
-          </div>
-          <div className="flex cursor-pointer flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Link
-              to={ROUTES.feedback}
-              className="flex h-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary"
-            >
+            </div>
+            <h3 className="text-sm">History</h3>
+          </Link>
+          <Link
+            to={ROUTES.feedback}
+            className="flex w-14 flex-col items-center justify-center gap-2 text-muted-foreground"
+          >
+            <div className="flex h-fit w-fit transform flex-col items-center justify-center rounded-full border bg-background p-4 transition-transform duration-300 hover:scale-105 dark:bg-secondary">
               <MessageSquareTextIcon className="size-4 text-muted-foreground md:size-5" />
-            </Link>
-            <h3>Feedback</h3>
-          </div>
+            </div>
+            <h3 className="text-sm">Feedback</h3>
+          </Link>
         </div>
       </div>
     </div>

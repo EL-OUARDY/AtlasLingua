@@ -22,6 +22,7 @@ import {
 } from "../ui/select";
 import NewPost from "../community/NewPost";
 import WTooltip from "../ui/custom/WTooltip";
+import { toast } from "sonner";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -34,6 +35,22 @@ function Community() {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    toast("Community Feature Coming Soon", {
+      duration: 60000,
+      action: {
+        label: "Hide",
+        onClick: () => {},
+      },
+      description:
+        "This is just a demo of what the community platform will look like in the future. The ability to post and reply to others is not yet implemented. Stay tuned for updates!",
+    });
+
+    return () => {
+      toast.dismiss();
+    };
+  }, []);
 
   useEffect(() => {
     // get post id from the url

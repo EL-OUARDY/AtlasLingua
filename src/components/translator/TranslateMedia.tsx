@@ -2,15 +2,33 @@ import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Copy, Flag, Languages, Share2Icon, Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WTooltip from "../ui/custom/WTooltip";
 import { ScrollArea } from "../ui/scroll-area";
+import { toast } from "sonner";
 
 function TranslateMedia() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [selectedFileName, setSelectedFileName] = useState<
     string | undefined
   >();
+
+  useEffect(() => {
+    toast("Media Translation Coming Soon", {
+      duration: 60000,
+      action: {
+        label: "Hide",
+        onClick: () => {},
+      },
+      description:
+        "This feature is not yet implemented. Stay tuned for updates!",
+    });
+
+    return () => {
+      toast.dismiss();
+    };
+  }, []);
+
   return (
     <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
       <div className="flex h-full rounded-lg bg-background p-6">

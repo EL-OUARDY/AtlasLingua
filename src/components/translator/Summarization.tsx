@@ -8,16 +8,34 @@ import {
 } from "../ui/select";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import USAIcon from "../ui/icons/USA";
 import MoroccoIcon from "../ui/icons/Morocco";
 import { Button } from "../ui/button";
 import { Copy, CornerDownLeft, Flag, Share2Icon } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 import WTooltip from "../ui/custom/WTooltip";
+import { toast } from "sonner";
 
 function Summarization() {
   const [sourceLang, setSourceLang] = useState<Language>("darija");
+
+  useEffect(() => {
+    toast("Summarization Feature Coming Soon", {
+      duration: 60000,
+      action: {
+        label: "Hide",
+        onClick: () => {},
+      },
+      description:
+        "This feature is not yet implemented. Stay tuned for updates!",
+    });
+
+    return () => {
+      toast.dismiss();
+    };
+  }, []);
+
   return (
     <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
       <div className="flex h-full flex-col gap-4 rounded-lg bg-background p-4 md:p-6">
