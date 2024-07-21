@@ -54,6 +54,9 @@ class LanguageModel:
         # if feed:
         #     self.system_prompt += f" You can utilize these pre-defined translations if you find it useful: {feed}"
 
+        # errors
+        self.system_prompt += f" If there is an error in the text provided, don't do anything; just reply with 0"
+
         message = self.client.messages.create(
             model=self.model,
             max_tokens=self.max_tokens,
@@ -72,6 +75,10 @@ class LanguageModel:
             ],
         )
         response = message.content[0].text
+
+        # handle potentiel errors
+        if response == "0":
+            return None
 
         # save in history
         if source == LanguagesEnum.ENGLISH.value:

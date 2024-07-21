@@ -1,6 +1,5 @@
 import { IUser } from "@/models/User";
 import authService from "@/services/authService";
-import { CanceledError } from "axios";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 interface IUserContext {

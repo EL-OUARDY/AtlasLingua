@@ -55,8 +55,9 @@ class TranslationService:
             destination=destination,
             feed=feed,
         )
-
-        return [{"translation": translation, "verified": False}]
+        if translation:
+            return [{"translation": translation, "verified": False}]
+        return None
 
     @staticmethod
     def get_entry(text, source, verified=False):
