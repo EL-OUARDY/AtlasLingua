@@ -12,6 +12,7 @@ class User(db.Model, BaseModel):
     bio = db.Column(db.String(255), nullable=True)
     role = db.Column(db.String(64), nullable=True)
     feedback = db.relationship("Feedback", backref="user", lazy=True)
+    contributions = db.relationship("Contribution", backref="user", lazy=True)
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password).decode("utf-8")

@@ -7,7 +7,7 @@ from alembic import context
 
 
 # models
-from app.models import user, dictionary, history, feedback
+from app.models import user, dictionary, history, feedback, contribution
 
 
 # this is the Alembic Config object, which provides

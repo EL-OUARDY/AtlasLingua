@@ -1,5 +1,5 @@
 import { APP_NAME } from "@/shared/constants";
-import { Hash, Upload } from "lucide-react";
+import { Hash, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -13,13 +13,63 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { z } from "zod";
+import contributionService, {
+  IContributionRequest,
+} from "@/services/contributionService";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { CanceledError } from "axios";
+
+const contributionSchema = z.object({
+  contribution_type: z.string().min(1, { message: "Field is required!" }),
+  description: z
+    .string()
+    .min(1, { message: "Please enter a description for your contribution!" }),
+  links: z.string(),
+});
 
 function Contribution() {
-  const fileInput = useRef<HTMLInputElement>(null);
-  const [selectedFileName, setSelectedFileName] = useState<
-    string | undefined
-  >();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IContributionRequest>({
+    defaultValues: { contribution_type: "", description: "", links: "" },
+    resolver: zodResolver(contributionSchema),
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  function onSubmit(credentials: IContributionRequest) {
+    setIsSubmitting(true);
+
+    const { request } = contributionService.submitContribution(credentials);
+    request
+      .then(() => {
+        toast.success("Contribution has been made successfully! Thank you.");
+        reset(); // clear the form
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        toast.error(
+          "An error has been occured while trying to submit your feedback!",
+          {
+            action: {
+              label: "Hide",
+              onClick: () => {},
+            },
+          },
+        );
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  }
+
   return (
     <>
       <div className="flex h-full flex-1 flex-col items-center justify-start shadow-sm">
@@ -37,7 +87,7 @@ function Contribution() {
               <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
               <p className="leading-tight text-muted-foreground">
                 Contributions are crucial to the success and growth of our
-                Translator. Whether you're offering translations, datasets,
+                translator. Whether you're offering translations, datasets,
                 feature ideas, or other valuable input, your efforts help
                 enhance our tool for everyone. <br /> We welcome contributions
                 in various forms, including documents and spreadsheets. <br />
@@ -63,55 +113,81 @@ function Contribution() {
                 Join our mission to improve language learning. Contribute now!
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="type">Contribution Type</Label>
-                <Input
-                  id="type"
-                  placeholder="e.g., Translation, Dataset, Feature Idea"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="files" className="">
-                  Files
-                </Label>
-                <button
-                  onClick={() => fileInput.current?.click()}
-                  className="flex aspect-square h-24 w-full flex-col items-center justify-center rounded-md border border-dashed"
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <CardContent className="grid gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="type">Contribution Type</Label>
+                  <Input
+                    {...register("contribution_type")}
+                    id="contribution_type"
+                    placeholder="e.g., Translation, Dataset, Feature Idea"
+                    autoComplete="off"
+                  />
+                  {errors.contribution_type && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.contribution_type.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="body">Description</Label>
+                  <Textarea
+                    {...register("description")}
+                    id="description"
+                    placeholder="Briefly describe your contribution"
+                  />
+                  {errors.description && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="links">
+                    Links{" "}
+                    <small className="text-muted-foreground">(optional)</small>
+                  </Label>
+                  <Textarea
+                    {...register("links")}
+                    id="links"
+                    className="placeholder:text-xs placeholder:text-muted-foreground/50"
+                    placeholder="https://docs.google.com/spreadsheets/d/&#13;&#10;https://mega.nz/file/&#13;&#10;https://drive.google.com/file/d/"
+                  />
+                  {errors.links && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.links.message}
+                    </p>
+                  )}
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    You can include links from Google Drive, Google Sheets, or
+                    any other file hosting service.
+                  </p>
+                </div>
+              </CardContent>
+              <CardFooter className="justify-between space-x-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    reset();
+                  }}
                 >
-                  <span className="sr-only">Upload File</span>
-                  <Upload className="size-5 text-muted-foreground" />
-                  <span className="mt-2 text-xs italic text-muted-foreground">
-                    {selectedFileName}
-                  </span>
-                </button>
-                <Input
-                  ref={fileInput}
-                  onChange={(event) =>
-                    console.log(
-                      setSelectedFileName(event.target?.files?.[0].name),
-                    )
-                  }
-                  id="files"
-                  type="file"
-                  className="hidden"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="feedback">
-                  Description{" "}
-                  <small className="text-muted-foreground">(optional)</small>
-                </Label>
-                <Textarea
-                  id="feedback"
-                  placeholder="Briefly describe your contribution"
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="justify-between space-x-2">
-              <Button variant="outline">Clear</Button>
-              <Button>Contribute</Button>
-            </CardFooter>
+                  Clear
+                </Button>
+                <Button disabled={isSubmitting} type="submit">
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      wait
+                    </>
+                  ) : (
+                    "Contribute"
+                  )}
+                </Button>
+              </CardFooter>
+            </form>
           </Card>
         </div>
       </div>

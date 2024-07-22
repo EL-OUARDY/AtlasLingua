@@ -84,7 +84,7 @@ function Feedback() {
             <Hash className="h-6 w-6" />
             <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
             <p className="leading-tight text-muted-foreground">
-              Feedback is vital to the growth and improvement of our Translator.
+              Feedback is vital to the growth and improvement of our translator.
               Your insights help us refine our translations, enhance user
               experience, and add features that matter most to you. As language
               is dynamic and nuanced, your input ensures our app stays accurate
@@ -138,7 +138,16 @@ function Feedback() {
               </div>
             </CardContent>
             <CardFooter className="justify-between space-x-2">
-              <Button variant="outline">Clear</Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  reset();
+                }}
+              >
+                Clear
+              </Button>
               <Button disabled={isSubmitting} type="submit">
                 {isSubmitting ? (
                   <>
