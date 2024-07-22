@@ -29,7 +29,7 @@ function Welcome() {
           <DialogTitle className="text-2xl">
             Hey There, Beta Tester!
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-justify">
             This website is currently under development. You're viewing a beta
             version that doesn't reflect the final product. Some features may
             not be fully functional. We invite you to explore and provide

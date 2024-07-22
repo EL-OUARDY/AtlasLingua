@@ -1,5 +1,5 @@
-import { Language } from "@/models/Translator";
-import { useEffect, useState } from "react";
+import { Language, Tips } from "@/models/Translator";
+import { useEffect, useMemo, useState } from "react";
 import { Separator } from "../ui/separator";
 import {
   ArrowRightLeftIcon,
@@ -33,7 +33,7 @@ import translationService, {
 import { CanceledError } from "axios";
 import { toast } from "sonner";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
-import { cleanText } from "@/lib/helpers";
+import { cleanText, getRandomElement } from "@/lib/helpers";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -46,12 +46,15 @@ function TranslateText() {
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isSaved, setSaved] = useState<boolean>(false);
 
   const { setIsHistoryOpen } = useHistory();
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
 
   const location = useLocation();
+
+  const tip = useMemo(() => getRandomElement(Tips), []);
 
   useEffect(() => {
     // show selected history
@@ -98,6 +101,7 @@ function TranslateText() {
       })
       .finally(() => {
         setIsTranslating(false);
+        setSaved(false);
       });
   }
 
@@ -110,7 +114,7 @@ function TranslateText() {
   }
 
   function copyToClipboard() {
-    if (isCopied) return;
+    if (isCopied || translation[0].translation != "") return;
     navigator.clipboard.writeText(translation[0].translation);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
@@ -289,6 +293,32 @@ function TranslateText() {
                     <ShieldCheck className="size-4 text-green-600" />
                   </WTooltip>
                 )}
+
+                {!translation[0].translation && !isTranslating && (
+                  <div className="text-muted-foreground">
+                    <div className="flex items-center text-yellow-600">
+                      <svg
+                        className="inline size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z"
+                        />
+                      </svg>
+
+                      <span>Pro Tip: </span>
+                    </div>
+                    <span className="text-sm">{tip}</span>
+                  </div>
+                )}
               </div>
               {translation.length > 1 && (
                 <div className="mt-4 flex flex-col gap-4">
@@ -320,66 +350,78 @@ function TranslateText() {
               )}
             </ScrollArea>
 
-            <Separator className="dark:bg-secondary-foreground/10" />
-            <div className="flex items-center p-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mr-auto hover:bg-background/60 dark:hover:bg-background/30"
-              >
-                <svg
-                  className="size-6 text-muted-foreground"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15.5 8.43A4.985 4.985 0 0 1 17 12a4.984 4.984 0 0 1-1.43 3.5m2.794 2.864A8.972 8.972 0 0 0 21 12a8.972 8.972 0 0 0-2.636-6.364M12 6.135v11.73a1 1 0 0 1-1.64.768L6 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2l4.36-3.633a1 1 0 0 1 1.64.768Z"
-                  />
-                </svg>
-
-                <span className="sr-only">Speak</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hover:bg-background/60 dark:hover:bg-background/30"
-                onClick={() => copyToClipboard()}
-              >
-                {!isCopied ? (
-                  <Copy className="size-5 text-muted-foreground" />
-                ) : (
-                  <Check className="size-5 text-muted-foreground" />
-                )}
-                <span className="sr-only">Copy</span>
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hover:bg-background/60 dark:hover:bg-background/30"
-              >
-                <Share2Icon className="size-5 text-muted-foreground" />
-                <span className="sr-only">Share</span>
-              </Button>
-              <WTooltip side="top" content="Report Translation">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-background/60 dark:hover:bg-background/30"
-                >
-                  <Flag className="size-5 text-muted-foreground" />
-                  <span className="sr-only">Report Translation</span>
-                </Button>
-              </WTooltip>
-            </div>
+            {translation[0].translation && (
+              <>
+                <Separator className="dark:bg-secondary-foreground/10" />
+                <div className="flex items-center p-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="mr-auto hover:bg-background/60 dark:hover:bg-background/30"
+                  >
+                    <svg
+                      className="size-6 text-muted-foreground"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15.5 8.43A4.985 4.985 0 0 1 17 12a4.984 4.984 0 0 1-1.43 3.5m2.794 2.864A8.972 8.972 0 0 0 21 12a8.972 8.972 0 0 0-2.636-6.364M12 6.135v11.73a1 1 0 0 1-1.64.768L6 15H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h2l4.36-3.633a1 1 0 0 1 1.64.768Z"
+                      />
+                    </svg>
+                    <span className="sr-only">Speak</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-background/60 dark:hover:bg-background/30"
+                  >
+                    <Star
+                      className={`size-5 text-muted-foreground ${isSaved && "fill-orange-600 stroke-orange-500"}`}
+                    />
+                    <span className="sr-only">Save</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-background/60 dark:hover:bg-background/30"
+                    onClick={() => copyToClipboard()}
+                  >
+                    {!isCopied ? (
+                      <Copy className="size-5 text-muted-foreground" />
+                    ) : (
+                      <Check className="size-5 text-muted-foreground" />
+                    )}
+                    <span className="sr-only">Copy</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-background/60 dark:hover:bg-background/30"
+                  >
+                    <Share2Icon className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Share</span>
+                  </Button>
+                  <WTooltip side="top" content="Report Translation">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-background/60 dark:hover:bg-background/30"
+                    >
+                      <Flag className="size-5 text-muted-foreground" />
+                      <span className="sr-only">Report Translation</span>
+                    </Button>
+                  </WTooltip>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

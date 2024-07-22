@@ -36,10 +36,10 @@ function ThemeSwitch() {
           className="overflow-hidden md:rounded-full"
         >
           {currTheme === "light" && (
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Sun className="size-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           )}
           {currTheme === "dark" && (
-            <MoonStar className="h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <MoonStar className="size-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           )}
         </Button>
       </DropdownMenuTrigger>

@@ -14,3 +14,8 @@ export const setCookie = (name: string, value: string, days: number) => {
 export function cleanText(input: string): string {
   return input.trim().replace(/\s+/g, " ").replace(/\n/g, "");
 }
+
+export function getRandomElement<T>(arr: T[]): T {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
