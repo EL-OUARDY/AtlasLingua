@@ -18,8 +18,8 @@ function HistorySkeleton() {
               <Skeleton className="size-4" />
             </div>
           </CardTitle>
-          <CardDescription className="capitalize">
-            <span className="font-bold">
+          <CardDescription>
+            <span>
               <Skeleton className="h-4 w-[180px]" />
             </span>
           </CardDescription>
@@ -27,7 +27,7 @@ function HistorySkeleton() {
       </CardHeader>
       <CardContent className="p-4 sm:p-6">
         <div className="flex justify-between space-x-4">
-          <div className="flex items-center capitalize">
+          <div className="flex items-center">
             <Skeleton className="mr-1 size-4" />
             <Skeleton className="h-4 w-[110px]" />
           </div>

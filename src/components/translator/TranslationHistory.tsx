@@ -114,13 +114,19 @@ function TranslationHistory() {
                   <CardHeader className="relative flex flex-row gap-4 space-y-0 p-2 sm:p-4">
                     <div className="flex-1 space-y-1">
                       <CardTitle className="flex items-center gap-2 text-base leading-tight sm:text-lg">
-                        <span
-                          className={`mr-auto line-clamp-2 ${item.source_language === "english" ? "capitalize" : ""}`}
-                        >
-                          {item.source_language === "english"
-                            ? item.english
-                            : item.darija}
-                        </span>
+                        <div className="mr-auto line-clamp-2">
+                          <p
+                            className={
+                              item.source_language === "english"
+                                ? "first-word-cap"
+                                : ""
+                            }
+                          >
+                            {item.source_language === "english"
+                              ? item.english
+                              : item.darija}
+                          </p>
+                        </div>
                         <div className="">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -164,13 +170,21 @@ function TranslationHistory() {
                         </div>
                       </CardTitle>
                       <CardDescription className="">
-                        <span
-                          className={`line-clamp-2 font-bold text-orange-500 ${item.source_language === "english" ? "capitalize" : ""}`}
-                        >
-                          {item.source_language === "english"
-                            ? item.darija
-                            : item.english}
+                        <span className="line-clamp-2 font-bold text-orange-500">
+                          <p
+                            className={
+                              item.source_language === "darija"
+                                ? "first-word-cap"
+                                : ""
+                            }
+                          >
+                            {item.source_language === "english"
+                              ? item.darija
+                              : item.english}
+                          </p>
                         </span>
+
+                        {item.source_language}
                       </CardDescription>
                     </div>
                   </CardHeader>

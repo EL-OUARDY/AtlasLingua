@@ -295,28 +295,25 @@ function TranslateText() {
                 )}
 
                 {!translation[0].translation && !isTranslating && (
-                  <div className="text-muted-foreground">
-                    <div className="flex items-center text-yellow-600">
-                      <svg
-                        className="inline size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z"
-                        />
-                      </svg>
-
-                      <span>Pro Tip: </span>
-                    </div>
-                    <span className="text-sm">{tip}</span>
+                  <div className="text-sm text-muted-foreground">
+                    <svg
+                      className="inline size-4 text-yellow-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z"
+                      />
+                    </svg>
+                    <span className="text-yellow-600">Tip: </span>
+                    <span>{tip}</span>
                   </div>
                 )}
               </div>

@@ -92,5 +92,23 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),
+  // create a plugin that adds utilities!
+  function ({ addUtilities }) {
+    const newUtilities = {
+      // capitalize the first letter of the first word
+      '.first-word-cap:first-letter': {
+        textTransform: 'uppercase',
+      },
+      // remove tailwind ring
+      '.no-ring': {
+        '@apply !ring-0 !ring-offset-0': {}
+      }
+    }
+
+    addUtilities(newUtilities, {
+      variants: ['responsive', 'hover'],
+    });
+  }
+  ],
 };

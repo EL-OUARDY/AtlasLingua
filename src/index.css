@@ -85,11 +85,6 @@ body {
   font-style: normal;
 }
 
-/* remove tailwind ring */
-.no-ring {
-  @apply !ring-0 !ring-offset-0;
-}
-
 /* active links */
 div[data-radix-scroll-area-viewport] > div:first-child {
   height: 100%;

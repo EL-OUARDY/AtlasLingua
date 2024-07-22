@@ -15,8 +15,8 @@ function WordCardSkeleton() {
           <CardTitle className="flex items-center">
             <Skeleton className="h-4 w-[120px]" />
           </CardTitle>
-          <CardDescription className="capitalize">
-            <span className="font-bold">
+          <CardDescription>
+            <span>
               <Skeleton className="h-4 w-[90px]" />
             </span>
             <br />
@@ -29,7 +29,7 @@ function WordCardSkeleton() {
       </CardHeader>
       <CardContent className="p-4 sm:p-6">
         <div className="flex justify-between space-x-4">
-          <div className="flex items-center capitalize">
+          <div className="flex items-center">
             <Skeleton className="mr-1 size-3" />
             <Skeleton className="h-4 w-[110px]" />
           </div>

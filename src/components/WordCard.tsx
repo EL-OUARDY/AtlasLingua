@@ -43,7 +43,7 @@ function WordCard({ word, className }: Props) {
           <CardTitle className="flex items-center text-xl leading-tight">
             {word.darija} <Expand className="ml-2 h-4 w-4 cursor-pointer" />
           </CardTitle>
-          <CardDescription className="capitalize">
+          <CardDescription className="first-word-cap">
             <span className="font-bold text-orange-500">{word.english}</span>{" "}
             <br />
             {word.arabic}
