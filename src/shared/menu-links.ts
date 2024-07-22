@@ -47,15 +47,15 @@ export const MenuLinks: ISideBarLink[] = [
   //   onlyMobile: false,
   // },
   {
-    text: "Contribution",
-    href: ROUTES.contribution,
-    icon: Handshake,
-    onlyMobile: false,
-  },
-  {
     text: "Feedback",
     href: ROUTES.feedback,
     icon: MessageSquareText,
+    onlyMobile: false,
+  },
+  {
+    text: "Contribution",
+    href: ROUTES.contribution,
+    icon: Handshake,
     onlyMobile: false,
   },
   {

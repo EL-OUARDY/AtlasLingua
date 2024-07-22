@@ -1,4 +1,3 @@
-from app import db
 from app.models.dictionary import Dictionary
 from app.schemas.dictionary_schema import dictionaries_schema, dictionary_schema
 from app.services.history_service import HistoryService

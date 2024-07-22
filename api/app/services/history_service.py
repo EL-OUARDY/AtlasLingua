@@ -33,7 +33,6 @@ class HistoryService:
 
         db.session.add(history)
         db.session.commit()
-        pass
 
     @staticmethod
     def get_from_history(text_to_translate, source, destination, processed_by):
