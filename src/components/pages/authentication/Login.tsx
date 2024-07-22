@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { APP_NAME } from "@/shared/constants";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -44,8 +45,14 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // if user is logged in redirect to returnUrl or homepage
-    if (user) navigate("/");
+    // if user is logged in redirect to return url or homepage
+    const returnUrl = localStorage.getItem(APP_NAME + "-return-url");
+    if (user) {
+      if (returnUrl) {
+        localStorage.removeItem(APP_NAME + "-return-url");
+        navigate(returnUrl);
+      } else navigate("/");
+    }
   }, [navigate, user]);
 
   function onSubmit(credentials: ILoginCredentials) {

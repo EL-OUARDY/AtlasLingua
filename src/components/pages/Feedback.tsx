@@ -20,6 +20,9 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
+import { useUser } from "@/contexts/UserContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 const feedSchema = z.object({
   subject: z.string().min(1, { message: "Subject field is required!" }),
@@ -27,6 +30,10 @@ const feedSchema = z.object({
 });
 
 function Feedback() {
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -38,9 +45,13 @@ function Feedback() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function onSubmit(credentials: IFeedbackRequest) {
+  function onSubmit(data: IFeedbackRequest) {
+    if (!user) {
+      loginFirst();
+      return;
+    }
     setIsSubmitting(true);
-    const { request } = feedbackService.submitFeedback(credentials);
+    const { request } = feedbackService.submitFeedback(data);
     request
       .then(() => {
         toast.success("Feedback has been sent successfully!", {
@@ -67,6 +78,13 @@ function Feedback() {
       .finally(() => {
         setIsSubmitting(false);
       });
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(APP_NAME + "-return-url", location.pathname);
+    // navigate to login
+    navigate(ROUTES.login);
   }
 
   return (

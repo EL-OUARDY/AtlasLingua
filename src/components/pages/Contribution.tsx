@@ -12,7 +12,7 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { z } from "zod";
 import contributionService, {
@@ -22,6 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { CanceledError } from "axios";
+import { useUser } from "@/contexts/UserContext";
+import { ROUTES } from "@/routes/routes";
 
 const contributionSchema = z.object({
   contribution_type: z.string().min(1, { message: "Field is required!" }),
@@ -32,6 +34,10 @@ const contributionSchema = z.object({
 });
 
 function Contribution() {
+  const { user } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -43,10 +49,14 @@ function Contribution() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function onSubmit(credentials: IContributionRequest) {
+  function onSubmit(data: IContributionRequest) {
+    if (!user) {
+      loginFirst();
+      return;
+    }
     setIsSubmitting(true);
 
-    const { request } = contributionService.submitContribution(credentials);
+    const { request } = contributionService.submitContribution(data);
     request
       .then(() => {
         toast.success("Contribution has been made successfully! Thank you.");
@@ -68,6 +78,13 @@ function Contribution() {
       .finally(() => {
         setIsSubmitting(false);
       });
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(APP_NAME + "-return-url", location.pathname);
+    // navigate to login
+    navigate(ROUTES.login);
   }
 
   return (
