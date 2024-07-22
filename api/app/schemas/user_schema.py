@@ -6,7 +6,7 @@ from app.services.auth_service import AuthService
 class UserSchema(ma.Schema):
     id = ma.Integer(dump_only=True)
     email = ma.Email(required=True)
-    name = ma.String(required=True, validate=validate.Length(min=3, max=64))
+    name = ma.String(required=True, validate=validate.Length(min=2, max=64))
     password = ma.String(
         load_only=True, required=True, validate=validate.Length(min=8)
     )

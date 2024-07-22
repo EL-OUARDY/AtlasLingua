@@ -53,6 +53,7 @@ function Contact() {
         toast.success(
           "Your message has been sent successfully! We will reach out to you soon.",
           {
+            duration: 10000,
             action: {
               label: "OK",
               onClick: () => {},

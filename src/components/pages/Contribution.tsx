@@ -59,7 +59,9 @@ function Contribution() {
     const { request } = contributionService.submitContribution(data);
     request
       .then(() => {
-        toast.success("Contribution has been made successfully! Thank you.");
+        toast.success("Contribution has been made successfully! Thank you.", {
+          duration: 10000,
+        });
         reset(); // clear the form
       })
       .catch((err) => {

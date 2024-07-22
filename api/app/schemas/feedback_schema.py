@@ -1,6 +1,5 @@
 from marshmallow import validate
 from app import ma
-from app.utils.shared import LanguagesEnum
 
 
 class FeedbackSchema(ma.Schema):

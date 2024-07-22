@@ -55,6 +55,7 @@ function Feedback() {
     request
       .then(() => {
         toast.success("Feedback has been sent successfully!", {
+          duration: 10000,
           action: {
             label: "OK",
             onClick: () => {},
