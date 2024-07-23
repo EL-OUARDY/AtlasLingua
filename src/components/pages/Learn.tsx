@@ -17,12 +17,18 @@ import { IDictionary } from "@/models/Dictionary";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
 import WordCardSkeleton from "../skeletons/WordCardSkeleton";
+import favoriteService from "@/services/favoriteService";
+import { ROUTES } from "@/routes/routes";
+import { APP_NAME } from "@/shared/constants";
+import { useNavigate } from "react-router-dom";
 
 function Learn() {
   const [dictionaryData, setDictionaryData] = useState<IDictionary[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("family");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -34,7 +40,7 @@ function Learn() {
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
-        toast("Failed to load data. Please refresh the page", {
+        toast("Failed to load data. Please refresh the page.", {
           action: {
             label: "OK",
             onClick: () => window.location.reload(),
@@ -44,6 +50,73 @@ function Learn() {
       .finally(() => {});
     return () => cancel(); // abort http request
   }, [selectedCategory]);
+
+  function addFavorite(word: IDictionary) {
+    const oldData = dictionaryData;
+    const newData = dictionaryData.map((item) =>
+      item.id === word.id ? { ...item, favorite: true } : item,
+    );
+    setDictionaryData(newData);
+
+    const { request } = favoriteService.addFavoriteFromDictionary(word.id);
+
+    request.catch((err) => {
+      if (err instanceof CanceledError) return;
+
+      // user not logged in
+      if (err.response && err.response.status === 401) {
+        loginFirst();
+        return;
+      }
+
+      // if unable to add then restore the list
+      setDictionaryData(oldData);
+
+      toast("Failed process your request.", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    });
+  }
+
+  function removeFavorite(word: IDictionary) {
+    const oldData = dictionaryData;
+    const newData = dictionaryData.map((item) =>
+      item.id === word.id ? { ...item, favorite: false } : item,
+    );
+    setDictionaryData(newData);
+
+    const { request } = favoriteService.removeDictionaryFavorite(word.id);
+
+    request.catch((err) => {
+      if (err instanceof CanceledError) return;
+
+      // user not logged in
+      if (err.response && err.response.status === 401) {
+        loginFirst();
+        return;
+      }
+
+      // if unable to add then restore the list
+      setDictionaryData(oldData);
+
+      toast("Failed process your request.", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    });
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(APP_NAME + "-return-url", ROUTES.learn);
+    // navigate to login
+    navigate(ROUTES.login);
+  }
 
   return (
     <div className="flex h-full flex-col p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
@@ -101,9 +174,17 @@ function Learn() {
               .filter(
                 (x) =>
                   x.english.includes(searchQuery) ||
-                  x.darija.includes(searchQuery),
+                  x.darija.includes(searchQuery) ||
+                  x.arabic.includes(searchQuery),
               )
-              .map((item, index) => <WordCard key={index} word={item} />)}
+              .map((item, index) => (
+                <WordCard
+                  key={index}
+                  word={item}
+                  addFavorite={addFavorite}
+                  removeFavorite={removeFavorite}
+                />
+              ))}
         </div>
       </div>
     </div>

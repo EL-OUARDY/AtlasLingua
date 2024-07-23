@@ -82,6 +82,7 @@ export const columns: ColumnDef<IDictionary>[] = [
   {
     accessorKey: "favorite",
     invertSorting: true,
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Favorite" />
     ),

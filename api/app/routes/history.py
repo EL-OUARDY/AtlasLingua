@@ -19,7 +19,7 @@ def list():
 @jwt_required()
 def delete(history_id):
     HistoryService.delete_user_history(history_id)
-    return jsonify(f"Deleted"), 200
+    return jsonify("Deleted"), 200
 
 
 @bp.route("/delete_all", methods=["DELETE"])

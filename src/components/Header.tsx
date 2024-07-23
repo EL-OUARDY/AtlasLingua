@@ -30,7 +30,7 @@ function Header() {
     request
       .then(() => {
         setUser(undefined);
-        toast.success("You have been successfully logged out.", {
+        toast.success("You have successfully logged out.", {
           action: {
             label: "Ok",
             onClick: () => {},

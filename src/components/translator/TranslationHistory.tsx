@@ -183,8 +183,6 @@ function TranslationHistory() {
                               : item.english}
                           </p>
                         </span>
-
-                        {item.source_language}
                       </CardDescription>
                     </div>
                   </CardHeader>
@@ -197,18 +195,15 @@ function TranslationHistory() {
                         })}
                       </div>
                       <AlertDialog>
-                        <AlertDialogTrigger asChild className="">
+                        <AlertDialogTrigger asChild>
                           <Trash2 className="mr-2 h-4 w-4 cursor-pointer" />
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
                           <AlertDialogHeader>
-                            <AlertDialogTitle>
-                              Are you absolutely sure?
-                            </AlertDialogTitle>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                             <AlertDialogDescription>
                               This action cannot be undone. This will
-                              permanently delete your account and remove your
-                              data from our servers.
+                              permanently erase your selected history records.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>

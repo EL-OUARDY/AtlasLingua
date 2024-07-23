@@ -29,7 +29,7 @@ def contact():
     if not result:
         return (
             jsonify(
-                message="An error has been occured while trying process your request!"
+                message="An error has been occured while trying to process your request!"
             ),
             400,
         )

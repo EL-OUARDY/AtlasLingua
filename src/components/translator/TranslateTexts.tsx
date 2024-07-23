@@ -194,14 +194,14 @@ function TranslateText() {
           id="source-panel"
           className="flex h-full flex-1 overflow-auto bg-background p-4 dark:bg-transparent"
         >
-          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
+          <div className="relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary no-ring focus-within:ring-1 focus-within:ring-ring">
             <Textarea
               value={textToTranslate}
               onChange={(event) => setTextToTranslate(event.target.value)}
               onKeyDown={handleTextareaKeyDown}
               id="translate-source"
               placeholder={`Type your ${sourceLang} text here...`}
-              className="no-ring h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none"
+              className="h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none no-ring"
             />
             <div className="sticky bottom-0 left-0 w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
@@ -262,7 +262,7 @@ function TranslateText() {
           id="destination-panel"
           className="flex h-full flex-1 flex-col overflow-auto bg-background p-4 dark:bg-transparent"
         >
-          <div className="no-ring relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary focus-within:ring-1 focus-within:ring-ring">
+          <div className="relative flex flex-1 flex-col overflow-auto rounded-lg border bg-secondary no-ring focus-within:ring-1 focus-within:ring-ring">
             <ScrollArea
               thumbColor="dark:bg-secondary-foreground/10"
               id="translate-source"
@@ -422,7 +422,7 @@ function TranslateText() {
           </div>
         </div>
       </div>
-      <Separator className="hidden md:flex" />
+      <Separator className="hidden md:flex landscape:hidden lg:landscape:flex" />
       <div
         id="footer-controls"
         className="hidden items-center justify-center p-4 md:flex landscape:hidden lg:landscape:flex"

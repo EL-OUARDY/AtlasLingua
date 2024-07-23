@@ -33,7 +33,6 @@ export interface IDictionary {
     | null;
   verified: boolean;
   favorite?: boolean;
-  date?: string;
 }
 
 export const CATEGORIES: string[] = [

@@ -14,6 +14,7 @@ from app.models import (
     feedback,
     contribution,
     contact,
+    favorite,
 )
 
 

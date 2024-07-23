@@ -65,7 +65,7 @@ export function HistoryProvider({ children }: Props) {
     request.catch((err) => {
       if (err instanceof CanceledError) return;
 
-      // if faild to delete then return deleted to the list
+      // if unable to delete then return deleted to the list
       setHistoryList(oldHistoryList);
 
       toast("Can't perform the action, try again later.", {
