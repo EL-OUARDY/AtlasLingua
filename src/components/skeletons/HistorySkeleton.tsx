@@ -14,13 +14,13 @@ function HistorySkeleton() {
         <div className="flex-1 space-y-1">
           <CardTitle className="flex w-full items-center">
             <div className="flex w-full items-center justify-between">
-              <Skeleton className="h-4 w-[220px]" />
+              <Skeleton className="h-4 w-[140px]" />
               <Skeleton className="size-4" />
             </div>
           </CardTitle>
           <CardDescription>
             <span>
-              <Skeleton className="h-4 w-[180px]" />
+              <Skeleton className="h-4 w-[120px]" />
             </span>
           </CardDescription>
         </div>
@@ -29,9 +29,12 @@ function HistorySkeleton() {
         <div className="flex justify-between space-x-4">
           <div className="flex items-center">
             <Skeleton className="mr-1 size-4" />
-            <Skeleton className="h-4 w-[110px]" />
+            <Skeleton className="h-4 w-[90px]" />
           </div>
-          <Skeleton className="size-4" />
+          <div className="flex gap-1">
+            <Skeleton className="size-4" />
+            <Skeleton className="size-4" />
+          </div>
         </div>
       </CardContent>
     </Card>

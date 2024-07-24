@@ -77,13 +77,13 @@ function TranslationHistory() {
   return (
     <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
       <SheetContent className="flex flex-col">
-        <SheetHeader className="">
+        <SheetHeader className="px-4 pt-4 sm:px-6 sm:pt-6">
           <SheetTitle className="text-2xl font-bold tracking-tight">
             History
           </SheetTitle>
           <SheetDescription>Your Recent Translation History</SheetDescription>
         </SheetHeader>
-        <ScrollArea className="flex-1 overflow-auto">
+        <ScrollArea className="flex-1 overflow-auto px-4 sm:px-6">
           <div className="flex h-full w-full flex-col items-start gap-4 py-4">
             {!user ? (
               <div className="flex size-full items-center justify-center text-center">
@@ -111,7 +111,7 @@ function TranslationHistory() {
             ) : (
               historyList.map((item, index) => (
                 <Card key={index} className="w-full">
-                  <CardHeader className="relative flex flex-row gap-4 space-y-0 p-2 sm:p-4">
+                  <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-4">
                     <div className="flex-1 space-y-1">
                       <CardTitle className="flex items-center gap-2 text-base leading-tight sm:text-lg">
                         <div className="mr-auto line-clamp-2">
@@ -128,45 +128,10 @@ function TranslationHistory() {
                           </p>
                         </div>
                         <div className="">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <EllipsisVertical className="size-4 cursor-pointer text-secondary-foreground" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              align="end"
-                              alignOffset={-5}
-                              className=""
-                              forceMount
-                            >
-                              <DropdownMenuItem
-                                className="cursor-pointer"
-                                onSelect={() => showHistory(item)}
-                              >
-                                <Expand className="mr-2 h-4 w-4" /> Show
-                              </DropdownMenuItem>
-
-                              <DropdownMenuItem className="cursor-pointer">
-                                <Star className="mr-2 h-4 w-4" /> Save
-                              </DropdownMenuItem>
-
-                              <DropdownMenuItem
-                                className="cursor-pointer"
-                                onClick={() => {
-                                  navigator.clipboard.writeText(
-                                    `${item.english} = ${item.darija}`,
-                                  );
-                                  toast("Copied to clipboard", {
-                                    action: {
-                                      label: "Hide",
-                                      onClick: () => {},
-                                    },
-                                  });
-                                }}
-                              >
-                                <Copy className="mr-2 h-4 w-4" /> Copy
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          <Expand
+                            onClick={() => showHistory(item)}
+                            className="size-4 cursor-pointer text-secondary-foreground"
+                          />
                         </div>
                       </CardTitle>
                       <CardDescription className="">
@@ -186,36 +151,54 @@ function TranslationHistory() {
                       </CardDescription>
                     </div>
                   </CardHeader>
-                  <CardContent className="p-2 sm:p-4">
-                    <div className="flex justify-between space-x-4 text-sm text-muted-foreground">
+                  <CardContent className="p-4 sm:p-4">
+                    <div className="flex items-center justify-between space-x-4 text-sm text-muted-foreground">
                       <div className="flex items-center">
                         <Calendar className="mr-1 h-3 w-3 stroke-sky-400" />
                         {formatDistanceToNow(item.created_at, {
                           addSuffix: true,
                         })}
                       </div>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Trash2 className="mr-2 h-4 w-4 cursor-pointer" />
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              This action cannot be undone. This will
-                              permanently erase your selected history records.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => deleteHistory(item.id)}
-                            >
-                              Continue
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <div className="flex items-center gap-3">
+                        <div className="">
+                          <Copy
+                            onClick={() => {
+                              navigator.clipboard.writeText(
+                                `${item.english} = ${item.darija}`,
+                              );
+                              toast("Copied to clipboard", {
+                                action: {
+                                  label: "Hide",
+                                  onClick: () => {},
+                                },
+                              });
+                            }}
+                            className="size-4 cursor-pointer"
+                          />
+                        </div>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Trash2 className="size-4 cursor-pointer hover:text-primary" />
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This action cannot be undone. This will
+                                permanently erase your selected history records.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => deleteHistory(item.id)}
+                              >
+                                Continue
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -228,7 +211,7 @@ function TranslationHistory() {
             )}
           </div>
         </ScrollArea>
-        <SheetFooter>
+        <SheetFooter className="px-4 pb-4 sm:px-6 sm:pb-6">
           <SheetClose asChild>
             {user && historyList.length > 0 && !isLoading && (
               <AlertDialog>

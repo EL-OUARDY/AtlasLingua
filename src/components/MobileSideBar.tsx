@@ -35,7 +35,7 @@ function MobileSideBar() {
           </SheetDescription>
         </SheetHeader>
         <ScrollArea className="h-screen">
-          <nav className="grid gap-6 text-lg font-medium">
+          <nav className="grid gap-6 p-6 text-lg font-medium">
             <Link
               to="#"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
