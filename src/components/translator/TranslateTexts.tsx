@@ -528,6 +528,15 @@ function TranslateText() {
                       variant="ghost"
                       size="icon"
                       className="hover:bg-background/60 dark:hover:bg-background/30"
+                      onClick={() => {
+                        toast.warning("Feature Coming Soon.", {
+                          description: "Stay tuned! ",
+                          action: {
+                            label: "OK",
+                            onClick: () => {},
+                          },
+                        });
+                      }}
                     >
                       <Flag className="size-5 text-muted-foreground" />
                       <span className="sr-only">Report Translation</span>
