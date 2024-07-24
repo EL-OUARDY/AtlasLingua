@@ -44,15 +44,15 @@ class TranslationService:
             return translation
 
         # use language model
-        # prepare helpfull data to the language model
-        feed = TranslationService.get_llm_feed(text, source, destination)
+        # prepare helpful data to the language model
+        # feed = TranslationService.get_llm_feed(text, source, destination)
+
         # call language model
         llm = LanguageModel()
         translation = llm.translate(
             text_to_translate=text,
             source=source,
             destination=destination,
-            feed=feed,
         )
         if translation:
             return [{"translation": translation, "verified": False}]

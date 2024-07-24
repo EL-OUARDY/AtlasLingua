@@ -14,9 +14,9 @@ class DictionaryService:
         # Apply search
         if search:
             _filter = or_(
-                Dictionary.darija.ilike(f"%{search}%"),
-                Dictionary.english.ilike(f"%{search}%"),
-                Dictionary.arabic.ilike(f"%{search}%"),
+                # Dictionary.darija.ilike(f"{search}%"),
+                Dictionary.english.ilike(f"{search}%"),
+                # Dictionary.arabic.ilike(f"{search}%"),
             )
             query = query.filter(_filter)
         else:

@@ -17,7 +17,7 @@ class LanguageModel:
         self.temperature = temperature
         self.system_prompt = ""
 
-    def translate(self, text_to_translate, source, destination, feed):
+    def translate(self, text_to_translate, source, destination, feed=None):
         # check history before sending a request to the LLM
         result = HistoryService.get_from_history(
             text_to_translate=text_to_translate,

@@ -47,6 +47,9 @@ export const columns: ColumnDef<IDictionary>[] = [
   },
   {
     accessorKey: "word_type",
+    invertSorting: true,
+    enableSorting: false,
+
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
@@ -63,6 +66,8 @@ export const columns: ColumnDef<IDictionary>[] = [
   {
     accessorKey: "verified",
     invertSorting: true,
+    enableSorting: false,
+
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Verified" />
     ),
