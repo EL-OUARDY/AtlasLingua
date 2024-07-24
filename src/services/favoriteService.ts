@@ -1,7 +1,7 @@
 import apiClient from "./api";
 
 export interface IFavorite {
-  id: number;
+  id?: number;
   english: string;
   darija: string;
   arabic?: string;
@@ -26,7 +26,7 @@ class FavoriteService {
 
   addFavorite(data: IFavorite) {
     const controller = new AbortController();
-    const request = apiClient.post("/favorite/add", data, {
+    const request = apiClient.post<number>("/favorite/add", data, {
       signal: controller.signal,
     });
 

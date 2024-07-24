@@ -155,7 +155,7 @@ function Learn() {
             </SelectTrigger>
             <SelectContent>
               {CATEGORIES.map((cat, index) => (
-                <SelectItem key={index} value={cat}>
+                <SelectItem key={index} value={cat} className="capitalize">
                   {cat}
                 </SelectItem>
               ))}

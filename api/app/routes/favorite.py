@@ -35,16 +35,16 @@ def add():
 
     # add favorite
     user_id = get_jwt_identity()
-    result = FavoriteService.add_favorite(
+    favorite_id = FavoriteService.add_favorite(
         english=request_data["english"],
         darija=request_data["darija"],
-        arabic=request_data["arabic"],
-        verified=request_data["verified"],
-        word_type=request_data["word_type"],
+        arabic=request_data.get("arabic", None),
+        verified=request_data.get("verified", None),
+        word_type=request_data.get("word_type", None),
         user_id=user_id,
     )
 
-    if not result:
+    if not favorite_id:
         return (
             jsonify(
                 message="An error has been occured while trying to process your request!"
@@ -52,7 +52,7 @@ def add():
             400,
         )
 
-    return jsonify("Added"), 200
+    return jsonify(favorite_id), 200
 
 
 @bp.route("/add-from-dictionary", methods=["POST"])

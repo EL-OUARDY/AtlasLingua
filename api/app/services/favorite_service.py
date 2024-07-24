@@ -47,7 +47,7 @@ class FavoriteService:
             )
             db.session.add(favorite)
             db.session.commit()
-            return favorite
+            return favorite.id
         except:
             return abort(400, description="Bad Request")
 

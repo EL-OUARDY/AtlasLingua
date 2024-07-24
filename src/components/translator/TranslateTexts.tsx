@@ -21,7 +21,7 @@ import USAIcon from "../ui/icons/USA";
 import { Textarea } from "../ui/textarea";
 import AiIcon from "../ui/icons/Ai";
 import { ScrollArea } from "../ui/scroll-area";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import WTooltip from "../ui/custom/WTooltip";
 import { useHistory } from "@/contexts/HistoryContext";
@@ -34,6 +34,8 @@ import { CanceledError } from "axios";
 import { toast } from "sonner";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { cleanText, getRandomElement } from "@/lib/helpers";
+import { APP_NAME } from "@/shared/constants";
+import favoriteService, { IFavorite } from "@/services/favoriteService";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -46,13 +48,14 @@ function TranslateText() {
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [isSaved, setSaved] = useState<boolean>(false);
+  const [favoriteId, setFavoriteId] = useState<number | undefined>();
 
   const { setIsHistoryOpen } = useHistory();
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const tip = useMemo(() => getRandomElement(Tips), []);
 
@@ -101,7 +104,7 @@ function TranslateText() {
       })
       .finally(() => {
         setIsTranslating(false);
-        setSaved(false);
+        setFavoriteId(undefined);
       });
   }
 
@@ -151,6 +154,77 @@ function TranslateText() {
     setPrevTranslation(
       history.source_language == "english" ? history.english : history.darija,
     );
+  }
+
+  function addFavorite() {
+    const favorite: IFavorite = {
+      english:
+        sourceLang === "english" ? prevTranslation : translation[0].translation,
+      darija:
+        sourceLang === "darija" ? prevTranslation : translation[0].translation,
+      word_type: translation[0].wordType || undefined,
+      verified: translation[0].verified || undefined,
+    };
+    const { request } = favoriteService.addFavorite(favorite);
+
+    request
+      .then(({ data: id }) => {
+        setFavoriteId(id);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+
+        // user not logged in
+        if (err.response && err.response.status === 401) {
+          loginFirst();
+          return;
+        }
+
+        // if unable to add then restore the list
+        setFavoriteId(undefined);
+
+        toast("Failed process your request.", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      });
+  }
+
+  function removeFavorite() {
+    if (!favoriteId) return;
+    const old = favoriteId;
+    setFavoriteId(undefined);
+
+    const { request } = favoriteService.deleteFavorite(favoriteId);
+
+    request.catch((err) => {
+      if (err instanceof CanceledError) return;
+
+      // user not logged in
+      if (err.response && err.response.status === 401) {
+        loginFirst();
+        return;
+      }
+
+      // if unable to add then restore the list
+      setFavoriteId(old);
+
+      toast("Failed process your request.", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    });
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(APP_NAME + "-return-url", ROUTES.translate.index);
+    // navigate to login
+    navigate(ROUTES.login);
   }
 
   return (
@@ -375,16 +449,28 @@ function TranslateText() {
                     </svg>
                     <span className="sr-only">Speak</span>
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-background/60 dark:hover:bg-background/30"
-                  >
-                    <Star
-                      className={`size-5 text-muted-foreground ${isSaved && "fill-orange-600 stroke-orange-500"}`}
-                    />
-                    <span className="sr-only">Save</span>
-                  </Button>
+
+                  {favoriteId ? (
+                    <Button
+                      onClick={removeFavorite}
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-background/60 dark:hover:bg-background/30"
+                    >
+                      <Star className="size-5 fill-orange-600 stroke-orange-500 text-muted-foreground" />
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={addFavorite}
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-background/60 dark:hover:bg-background/30"
+                    >
+                      <Star className="size-5 text-muted-foreground" />
+                    </Button>
+                  )}
+
+                  <span className="sr-only">Save</span>
                   <Button
                     variant="ghost"
                     size="icon"
