@@ -114,7 +114,7 @@ function TranslateText() {
   }
 
   function copyToClipboard() {
-    if (isCopied || translation[0].translation != "") return;
+    if (isCopied || translation[0].translation == "") return;
     navigator.clipboard.writeText(translation[0].translation);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);

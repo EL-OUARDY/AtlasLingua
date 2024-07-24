@@ -31,10 +31,14 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[120px]">
-        <DropdownMenuItem onClick={() => console.log(row.getValue("id"))}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => console.log(row.getValue("id"))}
+        >
           <Expand className="mr-2 size-4" /> Details
         </DropdownMenuItem>
         <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             navigator.clipboard.writeText(
               `${row.getValue("english")} = ${row.getValue("darija")}`,
@@ -50,7 +54,7 @@ export function DataTableRowActions<TData>({
           <Copy className="mr-2 size-4" /> Copy
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
           <Flag className="mr-2 size-4" /> Report
         </DropdownMenuItem>
       </DropdownMenuContent>
