@@ -291,6 +291,7 @@ function TranslateText() {
               placeholder={`Type your ${sourceLang} text here...`}
               className="h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none no-ring"
             />
+
             <div className="sticky bottom-0 left-0 w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
               <div className="flex items-center p-2">
@@ -334,14 +335,31 @@ function TranslateText() {
                     Translating
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="ml-auto gap-1.5"
-                    onClick={() => translate()}
-                  >
-                    Translate <CornerDownLeft className="size-4" />
-                  </Button>
+                  <div className="ml-auto flex gap-2">
+                    {translation && prevTranslation && (
+                      <Button
+                        type="submit"
+                        variant={"link"}
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={() => {
+                          setTextToTranslate("");
+                          setTranslation([{} as ITranslationFetchDataResult]);
+                          setPrevTranslation("");
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    )}
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="gap-1.5"
+                      onClick={() => translate()}
+                    >
+                      Translate <CornerDownLeft className="size-4" />
+                    </Button>
+                  </div>
                 )}
               </div>
             </div>
