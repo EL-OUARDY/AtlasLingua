@@ -58,17 +58,16 @@ function AuthLayout({ children, role, description }: Props) {
         <Hash />
         {APP_NAME}
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 dark:border-r lg:flex">
-        <img
-          src="img/placeholder.svg"
-          className="absolute inset-0 size-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          <Hash className="size-6" />
+      <div className="hidden h-screen flex-col bg-background p-10 dark:border-r dark:bg-muted lg:flex">
+        <div className="flex items-center text-lg font-medium">
+          <Hash className="mr-2 size-6" />
           <Link to={ROUTES.home}>{APP_NAME}</Link>
         </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
+        <div className="flex flex-1 items-center justify-center p-4">
+          <img src="img/art.svg" className="size-[300px] object-cover" />
+        </div>
+        <div className="z-20 mt-auto rounded-lg shadow-md">
+          <blockquote className="space-y-2 rounded-lg p-4">
             <p className="text-lg">{description ? description : APP_INFO}</p>
             <footer className="text-sm">@{APP_NAME}</footer>
           </blockquote>
