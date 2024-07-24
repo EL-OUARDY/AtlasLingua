@@ -10,7 +10,7 @@ import { Skeleton } from "../ui/skeleton";
 function HistorySkeleton() {
   return (
     <Card className="w-full">
-      <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-6">
+      <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-4">
         <div className="flex-1 space-y-1">
           <CardTitle className="flex w-full items-center">
             <div className="flex w-full items-center justify-between">
@@ -25,7 +25,7 @@ function HistorySkeleton() {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="p-4 sm:p-6">
+      <CardContent className="p-4 sm:p-4">
         <div className="flex justify-between space-x-4">
           <div className="flex items-center">
             <Skeleton className="mr-1 size-4" />

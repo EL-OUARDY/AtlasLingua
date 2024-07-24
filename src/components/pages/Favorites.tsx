@@ -40,7 +40,9 @@ function Favorites() {
         });
       })
       .finally(() => {
+        // setTimeout(() => {
         setIsLoading(false);
+        // }, 2000);
       });
     return () => cancel(); // abort http request
   }, [searchQuery, user]);
@@ -95,15 +97,19 @@ function Favorites() {
       </div>
       <Separator className="my-6" />
 
-      {isLoading ? (
+      {favorites && favorites.length > 0 && (
         <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-          {Array(12)
-            .fill(null)
-            .map((_, index) => (
-              <WordCardSkeleton key={index} />
-            ))}
+          {favorites.map((item, index) => (
+            <FavoriteCard
+              key={index}
+              favorite={item}
+              removeFavorite={removeFavorite}
+            />
+          ))}
         </div>
-      ) : !user ? (
+      )}
+
+      {!user ? (
         <div className="flex size-full items-center justify-center text-center">
           <div className="flex flex-col gap-4">
             <p className="">Please login to see your favorites list.</p>
@@ -113,15 +119,13 @@ function Favorites() {
           </div>
         </div>
       ) : (
-        favorites && (
+        !favorites && (
           <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-            {favorites.map((item, index) => (
-              <FavoriteCard
-                key={index}
-                favorite={item}
-                removeFavorite={removeFavorite}
-              />
-            ))}
+            {Array(12)
+              .fill(null)
+              .map((_, index) => (
+                <WordCardSkeleton key={index} />
+              ))}
           </div>
         )
       )}

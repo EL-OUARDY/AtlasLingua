@@ -19,20 +19,8 @@ import {
 } from "../ui/card";
 
 import { formatDistanceToNow } from "date-fns";
-import {
-  Expand,
-  Copy,
-  Calendar,
-  EllipsisVertical,
-  Trash2,
-  Star,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { Expand, Copy, Calendar, Trash2 } from "lucide-react";
+
 import { toast } from "sonner";
 import HistorySkeleton from "../skeletons/HistorySkeleton";
 import { useUser } from "@/contexts/UserContext";

@@ -39,6 +39,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { IFavorite } from "@/services/favoriteService";
+import { cn } from "@/lib/utils";
 
 interface Props {
   favorite: IFavorite;
@@ -48,7 +49,7 @@ interface Props {
 
 function FavoriteCard({ favorite, className, removeFavorite }: Props) {
   return (
-    <Card className={className}>
+    <Card className={cn(className, "flex flex-col justify-between")}>
       <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-6">
         <div className="flex-1 space-y-1">
           <CardTitle className="flex items-center text-xl leading-tight">
@@ -93,7 +94,7 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={() => removeFavorite(favorite.id)}
+                    onClick={() => removeFavorite(favorite.id as number)}
                   >
                     Continue
                   </AlertDialogAction>
