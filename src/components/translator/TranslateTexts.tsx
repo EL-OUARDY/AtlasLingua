@@ -106,8 +106,10 @@ function TranslateText() {
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
-
-        toast("Can't proccess your request. Please try again!", {
+        const msg =
+          err.response.data.message ||
+          "Can't proccess your request. Please try again!";
+        toast(msg, {
           action: {
             label: "Hide",
             onClick: () => {},

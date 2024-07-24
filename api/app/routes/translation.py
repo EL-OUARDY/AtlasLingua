@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, abort, jsonify, request
 
 from app.schemas.translate_request_schema import translate_request_schema
 from app.services.translation_service import TranslationService
@@ -16,6 +16,16 @@ def translate():
             jsonify(message="Invalid translation request"),
             400,
         )
+
+    # limit translation for longer texts
+    if len(request_data["text"]) > 500:
+        return (
+            jsonify(
+                message="Currently, we are unable to process lengthy texts (Limit = 500 characters)."
+            ),
+            400,
+        )
+
     translation = TranslationService.translate(
         request_data["text"],
         request_data["source"],

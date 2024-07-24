@@ -16,7 +16,6 @@ import { APP_NAME } from "@/shared/constants";
 function Favorites() {
   const [favorites, setFavorites] = useState<IFavorite[]>();
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { user } = useUser();
 
@@ -24,7 +23,6 @@ function Favorites() {
 
   useEffect(() => {
     if (!user) return;
-    setIsLoading(true);
     const { request, cancel } = favoriteService.getFavorites(searchQuery);
     request
       .then(({ data }) => {
@@ -38,11 +36,6 @@ function Favorites() {
             onClick: () => window.location.reload(),
           },
         });
-      })
-      .finally(() => {
-        // setTimeout(() => {
-        setIsLoading(false);
-        // }, 2000);
       });
     return () => cancel(); // abort http request
   }, [searchQuery, user]);
