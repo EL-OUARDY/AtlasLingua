@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import WTooltip from "./ui/custom/WTooltip";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -71,8 +70,7 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
           <div className="absolute right-4 top-4 !m-0 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Link
-                  to="#"
+                <div
                   className={
                     buttonVariants({ variant: "secondary" }) +
                     " !p-0 shadow-none"
@@ -81,7 +79,7 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
                   <WTooltip side="top" content="Remove from list">
                     <StarIcon className="size-4 cursor-pointer fill-orange-600 stroke-orange-500" />
                   </WTooltip>
-                </Link>
+                </div>
               </AlertDialogTrigger>
               <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
                 <AlertDialogHeader>

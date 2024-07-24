@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { IDictionary } from "@/models/Dictionary";
 import WTooltip from "./ui/custom/WTooltip";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 interface Props {
@@ -49,8 +48,7 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
             {word.arabic}
           </CardDescription>
           <div className="absolute right-4 top-4 !m-0 flex h-fit items-center justify-between gap-2 rounded-md bg-secondary px-4 text-secondary-foreground">
-            <Link
-              to="#"
+            <div
               className={
                 buttonVariants({ variant: "secondary" }) + " !p-0 shadow-none"
               }
@@ -75,7 +73,7 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
                   </WTooltip>
                 </>
               )}
-            </Link>
+            </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

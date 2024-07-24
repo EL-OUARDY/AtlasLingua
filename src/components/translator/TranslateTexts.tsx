@@ -296,6 +296,15 @@ function TranslateText() {
                   variant="ghost"
                   size="icon"
                   className="hover:bg-background/60 dark:hover:bg-background/30"
+                  onClick={() => {
+                    toast.warning("Feature Coming Soon.", {
+                      description: "Stay tuned! ",
+                      action: {
+                        label: "OK",
+                        onClick: () => {},
+                      },
+                    });
+                  }}
                 >
                   <Mic className="size-5 text-muted-foreground" />
                   <span className="sr-only">Use Microphone</span>
@@ -441,6 +450,15 @@ function TranslateText() {
                     variant="ghost"
                     size="icon"
                     className="mr-auto hover:bg-background/60 dark:hover:bg-background/30"
+                    onClick={() => {
+                      toast.warning("Feature Coming Soon.", {
+                        description: "Stay tuned! ",
+                        action: {
+                          label: "OK",
+                          onClick: () => {},
+                        },
+                      });
+                    }}
                   >
                     <svg
                       className="size-6 text-muted-foreground"
