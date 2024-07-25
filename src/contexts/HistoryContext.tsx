@@ -11,7 +11,11 @@ interface IHistoryContext {
   setIsHistoryOpen: (value: boolean) => void;
   deleteHistory: (history_id: number) => void;
   clearAllHistory: () => void;
-
+  addToHistory: (
+    english: string,
+    darija: string,
+    source_language: string,
+  ) => void;
   isLoading: boolean;
 }
 
@@ -36,8 +40,6 @@ export function HistoryProvider({ children }: Props) {
   const [isLoading, setIsloading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isHistoryOpen) return;
-
     setIsloading(true);
     const { request, cancel } = historyService.get_history();
 
@@ -53,7 +55,7 @@ export function HistoryProvider({ children }: Props) {
       });
 
     return () => cancel();
-  }, [isHistoryOpen]);
+  }, []);
 
   function deleteHistory(history_id: number) {
     const { request } = historyService.delete_history(history_id);
@@ -101,6 +103,23 @@ export function HistoryProvider({ children }: Props) {
       });
   }
 
+  function addToHistory(
+    english: string,
+    darija: string,
+    source_language: string,
+  ) {
+    const newHistory: ITranslationHistoryFetchDataResult = {
+      id: -1,
+      english: english,
+      darija: darija,
+      source_language: source_language,
+      created_at: new Date().toISOString(),
+    };
+
+    setHistoryList([newHistory, ...historyList]);
+    return;
+  }
+
   return (
     <HistoryContext.Provider
       value={{
@@ -110,6 +129,7 @@ export function HistoryProvider({ children }: Props) {
         isLoading,
         deleteHistory,
         clearAllHistory,
+        addToHistory,
       }}
     >
       {children}

@@ -60,7 +60,7 @@ function TranslateText() {
   const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false);
   const [favoriteId, setFavoriteId] = useState<number | undefined>();
 
-  const { setIsHistoryOpen } = useHistory();
+  const { setIsHistoryOpen, addToHistory } = useHistory();
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
 
@@ -103,6 +103,11 @@ function TranslateText() {
       .then(({ data }) => {
         setTranslation(data);
         setPrevTranslation(input);
+        addToHistory(
+          sourceLang === "english" ? textToTranslate : data[0].translation,
+          sourceLang === "darija" ? textToTranslate : data[0].translation,
+          sourceLang,
+        );
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
