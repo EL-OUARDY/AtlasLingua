@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useUser } from "@/contexts/UserContext";
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -30,13 +31,14 @@ const FormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof FormSchema>;
 
-// from database
-const defaultValues: Partial<ProfileFormValues> = {
-  username: "AtlasLingua",
-  email: "user@atlasLingua.com",
-};
-
 function ProfileSettings() {
+  const { user } = useUser();
+  // from database
+  const defaultValues: Partial<ProfileFormValues> = {
+    username: user?.name,
+    email: user?.email,
+    bio: user?.bio,
+  };
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: defaultValues,
