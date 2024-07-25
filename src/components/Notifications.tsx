@@ -53,7 +53,10 @@ function Notifications() {
         </DialogHeader>
         <Card className="w-full border-0">
           <CardHeader className="pt-0">
-            <CardTitle>Notifications</CardTitle>
+            <CardTitle>
+              Notifications{" "}
+              <small className="text-sm text-blue-600">— Demo</small>
+            </CardTitle>
           </CardHeader>
           <Separator />
           <ScrollArea className="h-[400px]">

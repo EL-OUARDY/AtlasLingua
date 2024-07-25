@@ -52,25 +52,7 @@ function TranslateText() {
 
   const [textToTranslate, setTextToTranslate] = useState<string>("");
   const [translation, setTranslation] = useState<ITranslationFetchDataResult[]>(
-    // [{} as ITranslationFetchDataResult],
-    [
-      {
-        translation: "عن أيام الماضي",
-        verified: true,
-      },
-      {
-        translation: "hello world",
-        verified: false,
-      },
-      {
-        translation: "hello world",
-        verified: true,
-      },
-      {
-        translation: "عن الماضي",
-        verified: false,
-      },
-    ],
+    [{} as ITranslationFetchDataResult],
   );
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
