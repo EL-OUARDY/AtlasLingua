@@ -1,4 +1,5 @@
 from app.services.history_service import HistoryService
+from app.utils.helpers import is_rtl
 from app.utils.shared import LanguagesEnum
 
 import anthropic
@@ -25,7 +26,10 @@ class LanguageModel:
             destination=destination,
             processed_by=self.model,
         )
-        if result:
+
+        # check if result is valid latin letters
+        if result and not is_rtl(result):
+
             # save to history again
             if source == LanguagesEnum.ENGLISH.value:
                 HistoryService.save(
@@ -37,6 +41,7 @@ class LanguageModel:
                 )
             return result
 
+        # use the language model
         source_language = (
             "English"
             if source == LanguagesEnum.ENGLISH.value

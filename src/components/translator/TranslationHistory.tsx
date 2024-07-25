@@ -10,18 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "../ui/scroll-area";
 import { useHistory } from "@/contexts/HistoryContext";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 
-import { formatDistanceToNow } from "date-fns";
-import { Expand, Copy, Calendar, Trash2 } from "lucide-react";
-
-import { toast } from "sonner";
 import HistorySkeleton from "../skeletons/HistorySkeleton";
 import { useUser } from "@/contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -39,6 +28,7 @@ import {
 } from "../ui/alert-dialog";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { cn } from "@/lib/utils";
+import HistoryCard from "../HistoryCard";
 
 function TranslationHistory() {
   const {
@@ -98,98 +88,12 @@ function TranslationHistory() {
                 .map((_, index) => <HistorySkeleton key={index} />)
             ) : (
               historyList.map((item, index) => (
-                <Card key={index} className="w-full">
-                  <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-4">
-                    <div className="flex-1 space-y-1">
-                      <CardTitle className="flex items-center gap-2 text-base leading-tight sm:text-lg">
-                        <div className="mr-auto line-clamp-2">
-                          <p
-                            className={
-                              item.source_language === "english"
-                                ? "first-word-cap"
-                                : ""
-                            }
-                          >
-                            {item.source_language === "english"
-                              ? item.english
-                              : item.darija}
-                          </p>
-                        </div>
-                        <div className="">
-                          <Expand
-                            onClick={() => showHistory(item)}
-                            className="size-4 cursor-pointer text-secondary-foreground"
-                          />
-                        </div>
-                      </CardTitle>
-                      <CardDescription className="">
-                        <span className="line-clamp-2 font-bold text-orange-500">
-                          <p
-                            className={
-                              item.source_language === "darija"
-                                ? "first-word-cap"
-                                : ""
-                            }
-                          >
-                            {item.source_language === "english"
-                              ? item.darija
-                              : item.english}
-                          </p>
-                        </span>
-                      </CardDescription>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-4 sm:p-4">
-                    <div className="flex items-center justify-between space-x-4 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <Calendar className="mr-1 h-3 w-3 stroke-sky-400" />
-                        {formatDistanceToNow(item.created_at, {
-                          addSuffix: true,
-                        })}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="">
-                          <Copy
-                            onClick={() => {
-                              navigator.clipboard.writeText(
-                                `${item.english} = ${item.darija}`,
-                              );
-                              toast("Copied to clipboard", {
-                                action: {
-                                  label: "Hide",
-                                  onClick: () => {},
-                                },
-                              });
-                            }}
-                            className="size-4 cursor-pointer"
-                          />
-                        </div>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Trash2 className="size-4 cursor-pointer hover:text-primary" />
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently erase your selected history records.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => deleteHistory(item.id)}
-                              >
-                                Continue
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <HistoryCard
+                  key={index}
+                  item={item}
+                  showHistory={showHistory}
+                  deleteHistory={deleteHistory}
+                />
               ))
             )}
             {user && historyList.length == 0 && !isLoading && (
