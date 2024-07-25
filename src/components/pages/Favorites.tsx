@@ -2,7 +2,6 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import WordCardSkeleton from "../skeletons/WordCardSkeleton";
 import { toast } from "sonner";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
 import { CanceledError } from "axios";
@@ -12,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
+import FavoriteCardSkeleton from "../skeletons/FavoriteCardSkeleton";
 
 function Favorites() {
   const [favorites, setFavorites] = useState<IFavorite[]>();
@@ -117,7 +117,7 @@ function Favorites() {
             {Array(12)
               .fill(null)
               .map((_, index) => (
-                <WordCardSkeleton key={index} />
+                <FavoriteCardSkeleton key={index} />
               ))}
           </div>
         )

@@ -63,6 +63,7 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
         <div className="flex w-full items-center gap-2 text-sm text-muted-foreground">
           <Button
             variant="ghost"
+            size={"icon"}
             className="border border-muted"
             onClick={() => {
               navigator.clipboard.writeText(favorite.darija);
@@ -82,7 +83,11 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
             <AlertDialogTrigger asChild>
               <div>
                 <WTooltip side="top" content="Remove from list">
-                  <Button variant="ghost" className="border border-muted">
+                  <Button
+                    variant="ghost"
+                    size={"icon"}
+                    className="border border-muted"
+                  >
                     <StarOffIcon className="size-4 cursor-pointer text-muted-foreground" />
                   </Button>
                 </WTooltip>
@@ -111,6 +116,7 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
               <WTooltip side="top" content="Verified by <br /> the community">
                 <Button
                   variant="ghost"
+                  size={"icon"}
                   className="cursor-default border border-muted"
                 >
                   <ShieldCheck className="size-4 text-green-600" />
