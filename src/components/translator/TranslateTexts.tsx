@@ -33,7 +33,7 @@ import translationService, {
 import { CanceledError } from "axios";
 import { toast } from "sonner";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
-import { cleanText, getRandomElement } from "@/lib/helpers";
+import { cleanText, getRandomElement, isRTL } from "@/lib/helpers";
 import { APP_NAME } from "@/shared/constants";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
 import {
@@ -52,7 +52,25 @@ function TranslateText() {
 
   const [textToTranslate, setTextToTranslate] = useState<string>("");
   const [translation, setTranslation] = useState<ITranslationFetchDataResult[]>(
-    [{} as ITranslationFetchDataResult],
+    // [{} as ITranslationFetchDataResult],
+    [
+      {
+        translation: "عن أيام الماضي",
+        verified: true,
+      },
+      {
+        translation: "hello world",
+        verified: false,
+      },
+      {
+        translation: "hello world",
+        verified: true,
+      },
+      {
+        translation: "عن الماضي",
+        verified: false,
+      },
+    ],
   );
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
@@ -290,6 +308,8 @@ function TranslateText() {
               id="translate-source"
               placeholder={`Type your ${sourceLang} text here...`}
               className="h-full flex-1 resize-none border-0 bg-transparent p-4 text-base text-foreground shadow-none no-ring"
+              spellCheck={sourceLang == "english" ? "true" : "false"}
+              dir={isRTL(textToTranslate) ? "rtl" : "ltr"}
             />
 
             <div className="sticky bottom-0 left-0 w-full">
@@ -394,7 +414,9 @@ function TranslateText() {
                 </div>
               )}
               <div className="flex items-center gap-1">
-                <span>{translation[0].translation}</span>
+                <span dir={isRTL(translation[0].translation) ? "rtl" : "ltr"}>
+                  {translation[0].translation}
+                </span>
                 {translation[0].wordType && (
                   <span className="text-sm capitalize text-muted-foreground">
                     {`(${translation[0].wordType})`}
