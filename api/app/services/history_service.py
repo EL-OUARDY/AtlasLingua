@@ -14,7 +14,7 @@ class HistoryService:
         result = (
             History.query.filter_by(user_id=user_id, deleted=False)
             .order_by(desc(History.created_at))
-            .limit(30)  # pagination will be implimented later
+            .limit(100)  # pagination will be implimented later
             .all()
         )
         return histories_schema.dump(result)
