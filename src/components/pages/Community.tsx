@@ -225,7 +225,7 @@ function Community() {
             <ResizablePanel defaultSize={100}>
               <div className="relative flex h-full flex-col">
                 <ScrollArea className="h-full w-full">
-                  <div className="grid h-full gap-4 pt-0 sm:grid-cols-auto-fill-270">
+                  <div className="grid gap-4 pt-0 sm:grid-cols-auto-fill-270">
                     {postsLoaded && (
                       <PostsList
                         onSelect={showPostPanel}
