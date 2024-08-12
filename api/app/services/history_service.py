@@ -34,6 +34,8 @@ class HistoryService:
         db.session.add(history)
         db.session.commit()
 
+        return history.id
+
     @staticmethod
     def get_from_history(text_to_translate, source, destination, processed_by):
         filter_attribute = (

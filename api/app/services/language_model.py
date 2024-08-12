@@ -32,14 +32,14 @@ class LanguageModel:
 
             # save to history again
             if source == LanguagesEnum.ENGLISH.value:
-                HistoryService.save(
+                translation_id = HistoryService.save(
                     source, text_to_translate, result, self.model
                 )
             else:
-                HistoryService.save(
+                translation_id = HistoryService.save(
                     source, result, text_to_translate, self.model
                 )
-            return result
+            return {"id": translation_id, "translation": result}
 
         # use the language model
         source_language = (
@@ -87,8 +87,12 @@ class LanguageModel:
 
         # save in history
         if source == LanguagesEnum.ENGLISH.value:
-            HistoryService.save(source, text_to_translate, response, self.model)
+            translation_id = HistoryService.save(
+                source, text_to_translate, response, self.model
+            )
         else:
-            HistoryService.save(source, response, text_to_translate, self.model)
+            translation_id = HistoryService.save(
+                source, response, text_to_translate, self.model
+            )
 
-        return response
+        return {"id": translation_id, "translation": response}

@@ -7,19 +7,26 @@ export interface ITranslationFetchDataRequest {
   destination: Language;
 }
 
-export interface ITranslationFetchDataResult {
+export interface ITranslationData {
   translation: string;
   wordType?: string;
   verified?: boolean;
 }
 
+export interface ITranslationFetchDataResult {
+  id: number;
+  translation: ITranslationData[];
+}
+
 class translationService {
   translate(data: ITranslationFetchDataRequest) {
     const controller = new AbortController();
-    const request = apiClient.post<ITranslationFetchDataResult[]>(
+    const request = apiClient.post<ITranslationFetchDataResult>(
       "/translate",
       data,
-      { signal: controller.signal },
+      {
+        signal: controller.signal,
+      },
     );
 
     return { request, cancel: () => controller.abort() };

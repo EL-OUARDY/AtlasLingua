@@ -19,7 +19,6 @@ class TranslationService:
         if entries:
             translation = [
                 {
-                    "id": entry["id"],
                     "translation": entry[destination],
                     "verified": entry["verified"],
                     "wordType": entry["word_type"],
@@ -29,19 +28,23 @@ class TranslationService:
 
             # save in history
             if source == LanguagesEnum.ENGLISH.value:
-                HistoryService.save(
+                translation_id = HistoryService.save(
                     source_language=source,
                     english=text,
-                    darija=translation[0]["translation"],
+                    darija=" | ".join(
+                        entry["translation"] for entry in translation
+                    ),
                 )
             else:
-                HistoryService.save(
+                translation_id = HistoryService.save(
                     source_language=source,
-                    english=translation[0]["translation"],
+                    english=" | ".join(
+                        entry["translation"] for entry in translation
+                    ),
                     darija=text,
                 )
 
-            return translation
+            return {"id": translation_id, "translation": translation}
 
         # use language model
         # prepare helpful data to the language model
@@ -49,13 +52,18 @@ class TranslationService:
 
         # call language model
         llm = LanguageModel()
-        translation = llm.translate(
+        result = llm.translate(
             text_to_translate=text,
             source=source,
             destination=destination,
         )
-        if translation:
-            return [{"translation": translation, "verified": False}]
+        if result:
+            return {
+                "id": result["id"],
+                "translation": [
+                    {"translation": result["translation"], "verified": False}
+                ],
+            }
         return None
 
     @staticmethod

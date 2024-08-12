@@ -28,7 +28,7 @@ import { useHistory } from "@/contexts/HistoryContext";
 import { Skeleton } from "../ui/skeleton";
 import translationService, {
   ITranslationFetchDataRequest,
-  ITranslationFetchDataResult,
+  ITranslationData,
 } from "@/services/translationService";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
@@ -51,9 +51,10 @@ function TranslateText() {
   const [destinationLang, setDestinationLang] = useState<Language>("darija");
 
   const [textToTranslate, setTextToTranslate] = useState<string>("");
-  const [translation, setTranslation] = useState<ITranslationFetchDataResult[]>(
-    [{} as ITranslationFetchDataResult],
-  );
+  const [translation, setTranslation] = useState<ITranslationData[]>([
+    {} as ITranslationData,
+  ]);
+  const [translationID, setTranslationID] = useState<number>();
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -90,7 +91,7 @@ function TranslateText() {
     // return if text hasn't changed or is empty
     if (!input || input == "" || input == prevTranslation) return;
 
-    setTranslation([{} as ITranslationFetchDataResult]);
+    setTranslation([{} as ITranslationData]);
     setIsTranslating(true);
     // call translation API service
     const body: ITranslationFetchDataRequest = {
@@ -101,11 +102,17 @@ function TranslateText() {
     const { request } = translationService.translate(body);
     request
       .then(({ data }) => {
-        setTranslation(data);
+        const translation = data.translation;
+        setTranslationID(data.id);
+        setTranslation(translation);
         setPrevTranslation(input);
         addToHistory(
-          sourceLang === "english" ? textToTranslate : data[0].translation,
-          sourceLang === "darija" ? textToTranslate : data[0].translation,
+          sourceLang === "english"
+            ? textToTranslate
+            : translation.map((x) => x.translation).join(" | "),
+          sourceLang === "darija"
+            ? textToTranslate
+            : translation.map((x) => x.translation).join(" | "),
           sourceLang,
         );
       })
@@ -131,7 +138,7 @@ function TranslateText() {
     setSourceLang(sourceLang === "english" ? "darija" : "english");
     setDestinationLang(destinationLang === "english" ? "darija" : "english");
     setTextToTranslate("");
-    setTranslation([{} as ITranslationFetchDataResult]);
+    setTranslation([{} as ITranslationData]);
     setPrevTranslation("");
   }
 
@@ -351,7 +358,7 @@ function TranslateText() {
                         className="gap-1.5"
                         onClick={() => {
                           setTextToTranslate("");
-                          setTranslation([{} as ITranslationFetchDataResult]);
+                          setTranslation([{} as ITranslationData]);
                           setPrevTranslation("");
                         }}
                       >
