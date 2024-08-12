@@ -61,6 +61,7 @@ def create_app():
     from app.routes import contribution
     from app.routes import contact
     from app.routes import favorite
+    from app.routes import report
 
     app.register_blueprint(dictionary.bp)
     app.register_blueprint(auth.bp)
@@ -70,6 +71,7 @@ def create_app():
     app.register_blueprint(contribution.bp)
     app.register_blueprint(contact.bp)
     app.register_blueprint(favorite.bp)
+    app.register_blueprint(report.bp)
 
     # Return the configured app instance
     return app

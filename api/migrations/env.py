@@ -15,6 +15,7 @@ from app.models import (
     contribution,
     contact,
     favorite,
+    report,
 )
 
 

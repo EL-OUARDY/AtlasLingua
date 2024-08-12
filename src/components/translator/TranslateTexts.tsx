@@ -45,6 +45,7 @@ import {
   DrawerTitle,
 } from "../ui/drawer";
 import { Input } from "../ui/input";
+import ReportDialog from "../ReportDialog";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -66,6 +67,8 @@ function TranslateText() {
   const [prevTranslation, setPrevTranslation] = useState<string>("");
 
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
+
+  const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -565,13 +568,7 @@ function TranslateText() {
                       size="icon"
                       className="hover:bg-background/60 dark:hover:bg-background/30"
                       onClick={() => {
-                        toast.warning("Feature Coming Soon.", {
-                          description: "Stay tuned! ",
-                          action: {
-                            label: "OK",
-                            onClick: () => {},
-                          },
-                        });
+                        setReportOpen(true);
                       }}
                     >
                       <Flag className="size-5 text-muted-foreground" />
@@ -621,46 +618,59 @@ function TranslateText() {
         </div>
       </div>
 
-      <Drawer open={isShareOpen} onOpenChange={setIsShareOpen}>
-        <DrawerContent>
-          <div className="mx-auto w-full max-w-sm py-4">
-            <DrawerHeader className="text-left">
-              <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
-              <DrawerDescription className="text-muted-foreground">
-                Share this link with your friends.
-              </DrawerDescription>
-            </DrawerHeader>
+      {/* report dialog */}
+      {isReportOpen && (
+        <ReportDialog
+          isOpen={isReportOpen}
+          translation={translation.map((x) => x.translation).join("\n")}
+          translationId={translationID}
+          setIsOpen={setReportOpen}
+        />
+      )}
 
-            <DrawerFooter className="pt-0">
-              <div className="flex gap-2">
-                <Input
-                  className="text-muted-foreground no-ring"
-                  value="https://atlaslingua.com/share/Bx25kjSx"
-                  readOnly
-                />
-                <Button
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      `https://atlaslingua.com/share/Bx25kjSx`,
-                    );
-                    setIsLinkCopied(true);
-                    setTimeout(() => setIsLinkCopied(false), 2000);
-                  }}
-                  variant="secondary"
-                  className="shrink-0"
-                >
-                  {!isLinkCopied ? (
-                    <Copy className="size-5 text-muted-foreground" />
-                  ) : (
-                    <Check className="size-5 text-muted-foreground" />
-                  )}
-                  <span className="sr-only">Copy</span>
-                </Button>
-              </div>
-            </DrawerFooter>
-          </div>
-        </DrawerContent>
-      </Drawer>
+      {/* share drawer */}
+      {isShareOpen && (
+        <Drawer open={isShareOpen} onOpenChange={setIsShareOpen}>
+          <DrawerContent>
+            <div className="mx-auto w-full max-w-sm py-4">
+              <DrawerHeader className="text-left">
+                <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
+                <DrawerDescription className="text-muted-foreground">
+                  Share this link with your friends.
+                </DrawerDescription>
+              </DrawerHeader>
+
+              <DrawerFooter className="pt-0">
+                <div className="flex gap-2">
+                  <Input
+                    className="text-muted-foreground no-ring"
+                    value="https://atlaslingua.com/share/Bx25kjSx"
+                    readOnly
+                  />
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `https://atlaslingua.com/share/Bx25kjSx`,
+                      );
+                      setIsLinkCopied(true);
+                      setTimeout(() => setIsLinkCopied(false), 2000);
+                    }}
+                    variant="secondary"
+                    className="shrink-0"
+                  >
+                    {!isLinkCopied ? (
+                      <Copy className="size-5 text-muted-foreground" />
+                    ) : (
+                      <Check className="size-5 text-muted-foreground" />
+                    )}
+                    <span className="sr-only">Copy</span>
+                  </Button>
+                </div>
+              </DrawerFooter>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      )}
     </div>
   );
 }

@@ -24,7 +24,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
-const feedSchema = z.object({
+const feedbackSchema = z.object({
   subject: z.string().min(1, { message: "Subject field is required!" }),
   body: z.string().min(1, { message: "Please enter your feedback!" }),
 });
@@ -41,7 +41,7 @@ function Feedback() {
     formState: { errors },
   } = useForm<IFeedbackRequest>({
     defaultValues: { subject: "", body: "" },
-    resolver: zodResolver(feedSchema),
+    resolver: zodResolver(feedbackSchema),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
