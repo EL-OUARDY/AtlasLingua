@@ -12,6 +12,7 @@ interface IHistoryContext {
   deleteHistory: (history_id: number) => void;
   clearAllHistory: () => void;
   addToHistory: (
+    id: number,
     english: string,
     darija: string,
     source_language: string,
@@ -104,12 +105,13 @@ export function HistoryProvider({ children }: Props) {
   }
 
   function addToHistory(
+    id: number,
     english: string,
     darija: string,
     source_language: string,
   ) {
     const newHistory: ITranslationHistoryFetchDataResult = {
-      id: -1,
+      id: id,
       english: english,
       darija: darija,
       source_language: source_language,
@@ -117,6 +119,7 @@ export function HistoryProvider({ children }: Props) {
     };
 
     setHistoryList([newHistory, ...historyList]);
+
     return;
   }
 

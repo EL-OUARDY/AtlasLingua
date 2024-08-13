@@ -110,6 +110,7 @@ function TranslateText() {
         setTranslation(translation);
         setPrevTranslation(input);
         addToHistory(
+          data.id,
           sourceLang === "english"
             ? textToTranslate
             : translation.map((x) => x.translation).join(" | "),
@@ -163,6 +164,7 @@ function TranslateText() {
   }
 
   function showHistory(history: ITranslationHistoryFetchDataResult) {
+    setTranslationID(history.id);
     setSourceLang(history.source_language as Language);
     setDestinationLang(
       history.source_language == "english" ? "darija" : "english",
