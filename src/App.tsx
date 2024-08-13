@@ -53,6 +53,7 @@ function App() {
                   path={ROUTES.translate.summarization}
                   element={<Summarization />}
                 />
+                <Route path={ROUTES.share} element={<TranslateText />} />
               </Route>
               <Route path={ROUTES.translate.index} element={<Translator />} />
               <Route path={ROUTES.dictionary} element={<Dictionary />} />

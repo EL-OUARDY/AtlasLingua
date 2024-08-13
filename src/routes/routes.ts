@@ -5,6 +5,7 @@ export const ROUTES = {
     media: "/translate/media",
     summarization: "/translate/summarization",
   },
+  share: "/share/:shareableLinkParam",
   login: "/login",
   signup: "/signup",
   dictionary: "/dictionary",

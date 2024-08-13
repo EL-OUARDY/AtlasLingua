@@ -21,7 +21,7 @@ import USAIcon from "../ui/icons/USA";
 import { Textarea } from "../ui/textarea";
 import AiIcon from "../ui/icons/Ai";
 import { ScrollArea } from "../ui/scroll-area";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import WTooltip from "../ui/custom/WTooltip";
 import { useHistory } from "@/contexts/HistoryContext";
@@ -76,13 +76,28 @@ function TranslateText() {
 
   const tip = useMemo(() => getRandomElement(Tips), []);
 
+  const { shareableLinkParam } = useParams();
+
+  useEffect(() => {
+    // show shared translation
+    if (shareableLinkParam) {
+      const { request } =
+        translationService.get_shared_translation(shareableLinkParam);
+      request
+        .then(({ data }) => {
+          showTranslation(data);
+        })
+        .catch(() => navigate(ROUTES.translate.index));
+    }
+  }, [shareableLinkParam, navigate]);
+
   useEffect(() => {
     // show selected history
     if (location.state && location.state.history) {
       const history: ITranslationHistoryFetchDataResult =
         location.state.history;
 
-      showHistory(history);
+      showTranslation(history);
 
       location.state.history = null; // clear the history state
     }
@@ -166,30 +181,34 @@ function TranslateText() {
     }
   }
 
-  function showHistory(history: ITranslationHistoryFetchDataResult) {
-    setTranslationID(history.id);
+  function showTranslation(translation: ITranslationHistoryFetchDataResult) {
+    setTranslationID(translation.id);
     setShareableLink(
-      `${window.location.origin}/share/${history.shareable_link}`,
+      `${window.location.origin}/share/${translation.shareable_link}`,
     );
-    setSourceLang(history.source_language as Language);
+    setSourceLang(translation.source_language as Language);
     setDestinationLang(
-      history.source_language == "english" ? "darija" : "english",
+      translation.source_language == "english" ? "darija" : "english",
     );
     setTextToTranslate(
-      history.source_language == "english" ? history.english : history.darija,
+      translation.source_language == "english"
+        ? translation.english
+        : translation.darija,
     );
 
     setTranslation([
       {
         translation:
-          history.source_language == "english"
-            ? history.darija
-            : history.english,
+          translation.source_language == "english"
+            ? translation.darija
+            : translation.english,
       },
     ]);
 
     setPrevTranslation(
-      history.source_language == "english" ? history.english : history.darija,
+      translation.source_language == "english"
+        ? translation.english
+        : translation.darija,
     );
   }
 

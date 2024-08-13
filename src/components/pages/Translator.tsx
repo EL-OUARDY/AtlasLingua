@@ -31,9 +31,9 @@ const translationTypes = [
 function Translator() {
   const location = useLocation();
   const currentPath =
-    location.pathname !== ROUTES.home
-      ? location.pathname
-      : ROUTES.translate.index;
+    location.pathname === ROUTES.home
+      ? ROUTES.translate.index
+      : location.pathname;
 
   const { setIsHistoryOpen } = useHistory();
 
