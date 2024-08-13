@@ -16,6 +16,7 @@ interface IHistoryContext {
     english: string,
     darija: string,
     source_language: string,
+    shareable_link: string,
   ) => void;
   isLoading: boolean;
 }
@@ -109,6 +110,7 @@ export function HistoryProvider({ children }: Props) {
     english: string,
     darija: string,
     source_language: string,
+    shareable_link: string,
   ) {
     const newHistory: ITranslationHistoryFetchDataResult = {
       id: id,
@@ -116,6 +118,7 @@ export function HistoryProvider({ children }: Props) {
       darija: darija,
       source_language: source_language,
       created_at: new Date().toISOString(),
+      shareable_link: shareable_link,
     };
 
     setHistoryList([newHistory, ...historyList]);

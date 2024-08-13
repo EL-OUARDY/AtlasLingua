@@ -38,3 +38,16 @@ def translate():
         jsonify(message="Can't proccess your request. Please try again!"),
         400,
     )
+
+
+@bp.route("/get/<string:shareable_link>")
+def get_translation(shareable_link: str):
+    if not isinstance(shareable_link, str) or len(shareable_link) == 0:
+        return jsonify({"error": "Invalid link"}), 400
+
+    translation = TranslationService.get_shared_translation(shareable_link)
+
+    if not translation:
+        return jsonify({"error": "Translation not found"}), 404
+
+    return jsonify(translation), 200

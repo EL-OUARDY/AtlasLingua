@@ -15,6 +15,7 @@ export interface ITranslationData {
 
 export interface ITranslationFetchDataResult {
   id: number;
+  link: string;
   translation: ITranslationData[];
 }
 

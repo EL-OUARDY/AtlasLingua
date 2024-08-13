@@ -17,7 +17,7 @@ function WTooltip({
   children,
   content,
   className,
-  mobile = true,
+  mobile = false,
   side = "top",
 }: Props) {
   return (

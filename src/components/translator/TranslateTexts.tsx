@@ -61,6 +61,7 @@ function TranslateText() {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false);
   const [favoriteId, setFavoriteId] = useState<number | undefined>();
+  const [shareableLink, setShareableLink] = useState<string>();
 
   const { setIsHistoryOpen, addToHistory } = useHistory();
 
@@ -109,6 +110,7 @@ function TranslateText() {
         setTranslationID(data.id);
         setTranslation(translation);
         setPrevTranslation(input);
+        setShareableLink(`${window.location.origin}/share/${data.link}`);
         addToHistory(
           data.id,
           sourceLang === "english"
@@ -118,6 +120,7 @@ function TranslateText() {
             ? textToTranslate
             : translation.map((x) => x.translation).join(" | "),
           sourceLang,
+          data.link,
         );
       })
       .catch((err) => {
@@ -165,6 +168,9 @@ function TranslateText() {
 
   function showHistory(history: ITranslationHistoryFetchDataResult) {
     setTranslationID(history.id);
+    setShareableLink(
+      `${window.location.origin}/share/${history.shareable_link}`,
+    );
     setSourceLang(history.source_language as Language);
     setDestinationLang(
       history.source_language == "english" ? "darija" : "english",
@@ -646,14 +652,12 @@ function TranslateText() {
                 <div className="flex gap-2">
                   <Input
                     className="text-muted-foreground no-ring"
-                    value="https://atlaslingua.com/share/Bx25kjSx"
+                    value={shareableLink}
                     readOnly
                   />
                   <Button
                     onClick={() => {
-                      navigator.clipboard.writeText(
-                        `https://atlaslingua.com/share/Bx25kjSx`,
-                      );
+                      navigator.clipboard.writeText(shareableLink as string);
                       setIsLinkCopied(true);
                       setTimeout(() => setIsLinkCopied(false), 2000);
                     }}

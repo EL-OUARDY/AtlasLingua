@@ -1,4 +1,6 @@
 from app.models.dictionary import Dictionary
+from app.models.history import History
+from app.schemas.history_schema import history_schema
 from app.schemas.dictionary_schema import dictionaries_schema, dictionary_schema
 from app.services.history_service import HistoryService
 from app.services.language_model import LanguageModel
@@ -28,7 +30,7 @@ class TranslationService:
 
             # save in history
             if source == LanguagesEnum.ENGLISH.value:
-                translation_id = HistoryService.save(
+                translation_id, shareable_link = HistoryService.save(
                     source_language=source,
                     english=text,
                     darija=" | ".join(
@@ -36,7 +38,7 @@ class TranslationService:
                     ),
                 )
             else:
-                translation_id = HistoryService.save(
+                translation_id, shareable_link = HistoryService.save(
                     source_language=source,
                     english=" | ".join(
                         entry["translation"] for entry in translation
@@ -44,7 +46,11 @@ class TranslationService:
                     darija=text,
                 )
 
-            return {"id": translation_id, "translation": translation}
+            return {
+                "id": translation_id,
+                "link": shareable_link,
+                "translation": translation,
+            }
 
         # use language model
         # prepare helpful data to the language model
@@ -60,6 +66,7 @@ class TranslationService:
         if result:
             return {
                 "id": result["id"],
+                "link": result["link"],
                 "translation": [
                     {"translation": result["translation"], "verified": False}
                 ],
@@ -127,3 +134,11 @@ class TranslationService:
                             feed[word].append(entry.get(destination))
 
         return feed
+
+    @staticmethod
+    def get_shared_translation(shareable_link):
+        result = history_schema.dump(
+            History.query.filter_by(shareable_link=shareable_link).first()
+        )
+
+        return result

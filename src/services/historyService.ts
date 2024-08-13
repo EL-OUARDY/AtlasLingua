@@ -6,6 +6,7 @@ export interface ITranslationHistoryFetchDataResult {
   darija: string;
   source_language: string;
   created_at: string;
+  shareable_link: string;
 }
 
 class historyService {

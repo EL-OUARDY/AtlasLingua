@@ -7,6 +7,7 @@ class HistorySchema(ma.Schema):
     english = ma.String(required=True)
     source_language = ma.String(required=True)
     created_at = ma.String(dump_only=True)
+    shareable_link = ma.String(dump_only=True)
 
 
 history_schema = HistorySchema()

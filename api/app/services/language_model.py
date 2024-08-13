@@ -32,14 +32,18 @@ class LanguageModel:
 
             # save to history again
             if source == LanguagesEnum.ENGLISH.value:
-                translation_id = HistoryService.save(
+                translation_id, shareable_link = HistoryService.save(
                     source, text_to_translate, result, self.model
                 )
             else:
-                translation_id = HistoryService.save(
+                translation_id, shareable_link = HistoryService.save(
                     source, result, text_to_translate, self.model
                 )
-            return {"id": translation_id, "translation": result}
+            return {
+                "id": translation_id,
+                "link": shareable_link,
+                "translation": result,
+            }
 
         # use the language model
         source_language = (
@@ -59,7 +63,7 @@ class LanguageModel:
         # if feed:
         #     self.system_prompt += f" You can utilize these pre-defined translations if you find it useful: {feed}"
 
-        # errors
+        # catch errors
         self.system_prompt += f" If there is an error in the text provided, don't do anything; just reply with 0"
 
         message = self.client.messages.create(
@@ -87,12 +91,16 @@ class LanguageModel:
 
         # save in history
         if source == LanguagesEnum.ENGLISH.value:
-            translation_id = HistoryService.save(
+            translation_id, shareable_link = HistoryService.save(
                 source, text_to_translate, response, self.model
             )
         else:
-            translation_id = HistoryService.save(
+            translation_id, shareable_link = HistoryService.save(
                 source, response, text_to_translate, self.model
             )
 
-        return {"id": translation_id, "translation": response}
+        return {
+            "id": translation_id,
+            "link": shareable_link,
+            "translation": response,
+        }

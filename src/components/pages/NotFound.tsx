@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { ROUTES } from "@/routes/routes";
+import { Link } from "react-router-dom";
 
 function NotFound() {
   return (
@@ -12,7 +14,12 @@ function NotFound() {
           <p className="mb-2 text-sm text-muted-foreground">
             Don't worry you can always back to home page
           </p>
-          <Button variant={"default"}>Go HomePage</Button>
+          <Link
+            to={ROUTES.home}
+            className={buttonVariants({ variant: "default" })}
+          >
+            Go HomePage
+          </Link>
         </div>
       </div>
     </div>
