@@ -5,11 +5,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Copy, Ellipsis, Expand, Flag } from "lucide-react";
+import { Copy, Ellipsis } from "lucide-react";
 import { toast } from "sonner";
 
 interface DataTableRowActionsProps<TData> {
@@ -33,12 +32,6 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end" className="w-[120px]">
         <DropdownMenuItem
           className="cursor-pointer"
-          onClick={() => console.log(row.getValue("id"))}
-        >
-          <Expand className="mr-2 size-4" /> Details
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="cursor-pointer"
           onClick={() => {
             navigator.clipboard.writeText(
               `${row.getValue("english")} = ${row.getValue("darija")}`,
@@ -52,10 +45,6 @@ export function DataTableRowActions<TData>({
           }}
         >
           <Copy className="mr-2 size-4" /> Copy
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <Flag className="mr-2 size-4" /> Report
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
