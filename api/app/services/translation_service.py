@@ -33,16 +33,12 @@ class TranslationService:
                 translation_id, shareable_link = HistoryService.save(
                     source_language=source,
                     english=text,
-                    darija=" | ".join(
-                        entry["translation"] for entry in translation
-                    ),
+                    darija=TranslationService.stringify(translation),
                 )
             else:
                 translation_id, shareable_link = HistoryService.save(
                     source_language=source,
-                    english=" | ".join(
-                        entry["translation"] for entry in translation
-                    ),
+                    english=TranslationService.stringify(translation),
                     darija=text,
                 )
 
@@ -142,3 +138,13 @@ class TranslationService:
         )
 
         return result
+
+    @staticmethod
+    def stringify(translation):
+        result = []
+        for curr in translation:
+            item = curr["translation"]
+            if curr.get("wordType"):
+                item += f" ({curr['wordType']})"
+            result.append(item)
+        return " | ".join(result)

@@ -130,10 +130,10 @@ function TranslateText() {
           data.id,
           sourceLang === "english"
             ? textToTranslate
-            : translation.map((x) => x.translation).join(" | "),
+            : translationService.stringify(translation),
           sourceLang === "darija"
             ? textToTranslate
-            : translation.map((x) => x.translation).join(" | "),
+            : translationService.stringify(translation),
           sourceLang,
           data.link,
         );
@@ -649,7 +649,7 @@ function TranslateText() {
       {isReportOpen && (
         <ReportDialog
           isOpen={isReportOpen}
-          translation={translation.map((x) => x.translation).join("\n")}
+          translation={translationService.stringify(translation)}
           translationId={translationID}
           setIsOpen={setReportOpen}
         />

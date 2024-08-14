@@ -45,6 +45,19 @@ class translationService {
 
     return { request, cancel: () => controller.abort() };
   }
+
+  stringify(translation: ITranslationData[]) {
+    const result = translation.reduce((acc: string[], curr) => {
+      let item = curr.translation;
+      if (curr.wordType) {
+        item += ` (${curr.wordType})`;
+      }
+      acc.push(item);
+      return acc;
+    }, []);
+
+    return result.join(" | ");
+  }
 }
 
 export default new translationService();
