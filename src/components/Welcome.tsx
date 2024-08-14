@@ -9,7 +9,7 @@ import {
 } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "@/lib/helpers";
+import { getCookie, setCookie } from "@/lib/utils";
 
 function Welcome() {
   const [open, setOpen] = useState(false);

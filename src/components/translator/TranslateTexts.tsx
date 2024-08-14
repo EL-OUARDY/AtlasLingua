@@ -33,7 +33,7 @@ import translationService, {
 import { CanceledError } from "axios";
 import { toast } from "sonner";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
-import { cleanText, getRandomElement, isRTL } from "@/lib/helpers";
+import { cleanText, getRandomElement, isRTL } from "@/lib/utils";
 import { APP_NAME } from "@/shared/constants";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
 import {

@@ -45,7 +45,7 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { Textarea } from "./ui/textarea";
-import { isRTL } from "@/lib/helpers";
+import { isRTL } from "@/lib/utils";
 
 interface Props {
   favorite: IFavorite;

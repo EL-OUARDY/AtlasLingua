@@ -1,4 +1,4 @@
-import { getCookie } from "@/lib/helpers";
+import { getCookie } from "@/lib/utils";
 import axios, { CanceledError } from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
