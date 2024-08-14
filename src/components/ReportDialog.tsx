@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import { CanceledError } from "axios";
 import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { useUser } from "@/contexts/UserContext";
+import { APP_NAME } from "@/shared/constants";
 
 interface Props {
   isOpen: boolean;
@@ -49,7 +50,13 @@ function ReportDialog({
   const { user } = useUser();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+    const submitted = localStorage.getItem(APP_NAME + "-report-submitted");
+    if (submitted && submitted == translationId?.toString())
+      setHasSubmitted(true);
+  }, [translationId]);
 
   function onSubmit(data: IReportRequest) {
     data.translation_id = translationId;
@@ -57,7 +64,11 @@ function ReportDialog({
     const { request } = reportService.submitReport(data);
     request
       .then(() => {
-        setIsSubmitted(true);
+        setHasSubmitted(true);
+        localStorage.setItem(
+          APP_NAME + "-report-submitted",
+          (translationId as number).toString(),
+        );
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -81,13 +92,17 @@ function ReportDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="w-11/12 rounded-lg sm:w-[450px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Report</DialogTitle>
-          <DialogDescription>
-            Contribute to better translations: Report issues here
-          </DialogDescription>
+          {!hasSubmitted && (
+            <>
+              <DialogTitle className="text-2xl">Report</DialogTitle>
+              <DialogDescription>
+                Contribute to better translations: Report issues here
+              </DialogDescription>
+            </>
+          )}
         </DialogHeader>
         <div className="grid gap-4">
-          {!isSubmitted ? (
+          {!hasSubmitted ? (
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2">
                 <Label>Translation</Label>
