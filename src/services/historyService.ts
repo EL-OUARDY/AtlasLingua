@@ -10,7 +10,7 @@ export interface ITranslationHistoryFetchDataResult {
 }
 
 class historyService {
-  get_history() {
+  getHistory() {
     const controller = new AbortController();
     const request = apiClient.get<ITranslationHistoryFetchDataResult[]>(
       "/history",
@@ -22,7 +22,7 @@ class historyService {
     return { request, cancel: () => controller.abort() };
   }
 
-  delete_history(history_id: number) {
+  deleteHistory(history_id: number) {
     const controller = new AbortController();
     const request = apiClient.delete(`/history/delete/${history_id}`, {
       signal: controller.signal,
@@ -31,7 +31,7 @@ class historyService {
     return { request, cancel: () => controller.abort() };
   }
 
-  clear_all_history() {
+  clearAllHistory() {
     const controller = new AbortController();
     const request = apiClient.delete<ITranslationHistoryFetchDataResult[]>(
       "/history/delete_all",

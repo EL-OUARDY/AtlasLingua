@@ -2,11 +2,12 @@ import historyService, {
   ITranslationHistoryFetchDataResult,
 } from "@/services/historyService";
 import { CanceledError } from "axios";
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import { toast } from "sonner";
 
 interface IHistoryContext {
   historyList: ITranslationHistoryFetchDataResult[];
+  loadHistory: () => void;
   isHistoryOpen: boolean;
   setIsHistoryOpen: (value: boolean) => void;
   deleteHistory: (history_id: number) => void;
@@ -41,12 +42,15 @@ export function HistoryProvider({ children }: Props) {
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
 
-  useEffect(() => {
+  const [historyLoaded, setHistoryLoaded] = useState<boolean>(false);
+
+  function loadHistory() {
     setIsloading(true);
-    const { request, cancel } = historyService.get_history();
+    const { request } = historyService.getHistory();
 
     request
       .then(({ data }) => {
+        setHistoryLoaded(true);
         setHistoryList(data);
       })
       .catch((err) => {
@@ -55,12 +59,10 @@ export function HistoryProvider({ children }: Props) {
       .finally(() => {
         setIsloading(false);
       });
-
-    return () => cancel();
-  }, []);
+  }
 
   function deleteHistory(history_id: number) {
-    const { request } = historyService.delete_history(history_id);
+    const { request } = historyService.deleteHistory(history_id);
 
     // delete from history list
     const oldHistoryList = historyList;
@@ -82,7 +84,7 @@ export function HistoryProvider({ children }: Props) {
   }
 
   function clearAllHistory() {
-    const { request } = historyService.clear_all_history();
+    const { request } = historyService.clearAllHistory();
     request
       .then(() => {
         setHistoryList([]);
@@ -112,24 +114,25 @@ export function HistoryProvider({ children }: Props) {
     source_language: string,
     shareable_link: string,
   ) {
-    const newHistory: ITranslationHistoryFetchDataResult = {
-      id: id,
-      english: english,
-      darija: darija,
-      source_language: source_language,
-      created_at: new Date().toISOString(),
-      shareable_link: shareable_link,
-    };
+    if (historyLoaded) {
+      const newHistory: ITranslationHistoryFetchDataResult = {
+        id: id,
+        english: english,
+        darija: darija,
+        source_language: source_language,
+        created_at: new Date().toISOString(),
+        shareable_link: shareable_link,
+      };
 
-    setHistoryList([newHistory, ...historyList]);
-
-    return;
+      setHistoryList([newHistory, ...historyList]);
+    }
   }
 
   return (
     <HistoryContext.Provider
       value={{
         historyList,
+        loadHistory,
         isHistoryOpen,
         setIsHistoryOpen,
         isLoading,

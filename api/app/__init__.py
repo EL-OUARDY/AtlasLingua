@@ -45,6 +45,11 @@ def create_app():
 
     # Configure JWT
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+    app.config["JWT_COOKIE_SECURE"] = (
+        True  # Only allow cookies to be sent over HTTPS
+    )
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # Enable CSRF protection
+    app.config["JWT_COOKIE_SAMESITE"] = "Lax"  # Set SameSite policy
 
     # Initialize the database, migration, marshmallow and JWT manager with the app
     db.init_app(app)

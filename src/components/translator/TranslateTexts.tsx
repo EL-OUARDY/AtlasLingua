@@ -46,6 +46,7 @@ import {
 } from "../ui/drawer";
 import { Input } from "../ui/input";
 import ReportDialog from "../ReportDialog";
+import { useUser } from "@/contexts/UserContext";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -77,6 +78,8 @@ function TranslateText() {
   const tip = useMemo(() => getRandomElement(Tips), []);
 
   const { shareableLinkParam } = useParams();
+
+  const { user } = useUser();
 
   useEffect(() => {
     // show shared translation
@@ -126,17 +129,19 @@ function TranslateText() {
         setTranslation(translation);
         setPrevTranslation(input);
         setShareableLink(`${window.location.origin}/share/${data.link}`);
-        addToHistory(
-          data.id,
-          sourceLang === "english"
-            ? textToTranslate
-            : translationService.stringify(translation),
-          sourceLang === "darija"
-            ? textToTranslate
-            : translationService.stringify(translation),
-          sourceLang,
-          data.link,
-        );
+
+        if (user)
+          addToHistory(
+            data.id,
+            sourceLang === "english"
+              ? textToTranslate
+              : translationService.stringify(translation),
+            sourceLang === "darija"
+              ? textToTranslate
+              : translationService.stringify(translation),
+            sourceLang,
+            data.link,
+          );
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;

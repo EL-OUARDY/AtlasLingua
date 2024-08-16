@@ -29,12 +29,14 @@ import {
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { cn } from "@/lib/utils";
 import HistoryCard from "../HistoryCard";
+import { useEffect } from "react";
 
 function TranslationHistory() {
   const {
     isHistoryOpen,
     setIsHistoryOpen,
     historyList,
+    loadHistory,
     isLoading,
     deleteHistory,
     clearAllHistory,
@@ -42,6 +44,13 @@ function TranslationHistory() {
 
   const { user } = useUser();
   const navigate = useNavigate();
+
+  // load user history
+  useEffect(() => {
+    if (user && historyList.length === 0 && isHistoryOpen) {
+      loadHistory();
+    }
+  }, [user, isHistoryOpen, historyList, loadHistory]);
 
   function showHistory(history: ITranslationHistoryFetchDataResult) {
     setIsHistoryOpen(false);
