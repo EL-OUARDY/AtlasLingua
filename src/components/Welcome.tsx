@@ -18,7 +18,7 @@ function Welcome() {
     const hasSeenWelcome = getCookie("hasSeenWelcomeMessage");
     if (!hasSeenWelcome) {
       setOpen(true);
-      setCookie("hasSeenWelcomeMessage", "true", 7); // expire after 7 day
+      setCookie("hasSeenWelcomeMessage", "true", 7); // expires after 7 day
     }
   }, []);
 
@@ -26,9 +26,7 @@ function Welcome() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-11/12 rounded-lg sm:w-[450px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">
-            Hey There, Beta Tester!
-          </DialogTitle>
+          <DialogTitle className="text-2xl">Hey There!</DialogTitle>
           <DialogDescription className="text-justify">
             This website is currently under development. You're viewing a beta
             version that doesn't reflect the final product. Some features may

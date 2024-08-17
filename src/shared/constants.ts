@@ -22,7 +22,7 @@ export const GET_STARTED: {
   },
   {
     title: "Contributions",
-    href: "#",
+    href: ROUTES.contribution,
     description:
       "We aim to compile a comprehensive dataset and develop sophisticated NLP models.",
   },

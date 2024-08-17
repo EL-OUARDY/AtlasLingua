@@ -1,6 +1,7 @@
 import { Hash } from "lucide-react";
 import { APP_NAME, FEATURES, GET_STARTED, APP_INFO } from "@/shared/constants";
 import { Separator } from "../ui/separator";
+import { Link } from "react-router-dom";
 
 function About() {
   return (
@@ -15,9 +16,9 @@ function About() {
           <ul className="grid w-full gap-4 rounded-lg bg-background p-4 sm:p-6 lg:grid-cols-[.75fr_1fr]">
             <li className="row-span-3">
               <div className="h-full">
-                <a
+                <Link
                   className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                  href="/"
+                  to="/"
                 >
                   <Hash className="h-6 w-6" />
                   <div className="mb-2 mt-4 text-lg font-medium">
@@ -26,18 +27,20 @@ function About() {
                   <p className="text-sm leading-tight text-muted-foreground">
                     {APP_INFO}
                   </p>
-                </a>
+                </Link>
               </div>
             </li>
             {GET_STARTED.map((item, index) => (
               <li key={index} className="rounded-lg p-4 hover:bg-secondary">
-                <h4 className="mb-1 text-sm font-bold">{item.title}</h4>
-                <a
-                  href="#"
+                <Link
+                  to={item.href}
                   className="text-sm leading-tight text-muted-foreground"
                 >
+                  <h4 className="mb-1 text-sm font-bold text-primary">
+                    {item.title}
+                  </h4>
                   {item.description}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -50,13 +53,15 @@ function About() {
           <ul className="grid w-full gap-4 rounded-lg bg-background p-4 sm:p-6 lg:grid-cols-[1fr_1fr_1fr]">
             {FEATURES.map((item, index) => (
               <li key={index} className="rounded-lg p-4 hover:bg-secondary">
-                <h4 className="mb-1 text-sm font-bold">{item.title}</h4>
-                <a
-                  href="#"
+                <Link
+                  to={item.href}
                   className="text-sm leading-tight text-muted-foreground"
                 >
+                  <h4 className="mb-1 text-sm font-bold text-primary">
+                    {item.title}
+                  </h4>
                   {item.description}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -30,9 +30,9 @@ function MainMenu(props: Props) {
             <ul className="grid gap-4 p-6 md:w-[400px] lg:w-[600px] lg:grid-cols-[.65fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
-                  <a
+                  <Link
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="#"
+                    to="#"
                   >
                     <Hash className="h-6 w-6" />
                     <div className="mb-2 mt-4 text-lg font-medium">
@@ -41,7 +41,7 @@ function MainMenu(props: Props) {
                     <p className="text-sm leading-tight text-muted-foreground">
                       {APP_INFO}
                     </p>
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
               {GET_STARTED.map((item, index) => (
