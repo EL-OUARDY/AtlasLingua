@@ -25,7 +25,7 @@ function WTooltip({
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
-          className={cn(!mobile ? "hidden" : "", className)}
+          className={cn(mobile ? "hidden" : "", className)}
           side={side}
         >
           <p
