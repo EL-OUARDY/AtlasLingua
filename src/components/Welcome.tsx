@@ -15,10 +15,10 @@ function Welcome() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const hasSeenWelcome = getCookie("hasSeenWelcomeMessage");
+    const hasSeenWelcome = getCookie("isWelcomeMessageShown");
     if (!hasSeenWelcome) {
       setOpen(true);
-      setCookie("hasSeenWelcomeMessage", "true", 7); // expires after 7 day
+      setCookie("isWelcomeMessageShown", "true", 2); // expires after 2 day
     }
   }, []);
 
