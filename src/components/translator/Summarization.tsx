@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import translationService, {
   ISummarizationFetchDataRequest,
 } from "@/services/translationService";
+import { TextGenerateEffect } from "../ui/text-generate-effect";
 
 function Summarization() {
   const [textToSummarize, setTextToSummarize] = useState<string>("");
@@ -146,7 +147,13 @@ function Summarization() {
             className="flex-1 rounded-lg bg-secondary p-4"
             thumbColor="dark:bg-secondary-foreground/10"
           >
-            {summarization}
+            {summarization && (
+              <TextGenerateEffect
+                duration={2}
+                filter={false}
+                words={summarization}
+              />
+            )}
           </ScrollArea>
           {summarization && (
             <div className="flex justify-end rounded-lg bg-secondary p-2">

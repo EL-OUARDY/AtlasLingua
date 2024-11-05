@@ -47,6 +47,7 @@ import {
 import { Input } from "../ui/input";
 import ReportDialog from "../ReportDialog";
 import { useUser } from "@/contexts/UserContext";
+import { TextGenerateEffect } from "../ui/text-generate-effect";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -444,7 +445,13 @@ function TranslateText() {
               )}
               <div className="flex items-center gap-1">
                 <span dir={isRTL(translation[0].translation) ? "rtl" : "ltr"}>
-                  {translation[0].translation}
+                  {translation[0].translation && (
+                    <TextGenerateEffect
+                      duration={2}
+                      filter={false}
+                      words={translation[0].translation}
+                    />
+                  )}
                 </span>
                 {translation[0].wordType && (
                   <span className="text-sm capitalize text-muted-foreground">
