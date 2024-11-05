@@ -21,7 +21,7 @@ def translate():
     if len(request_data["text"]) > 500:
         return (
             jsonify(
-                message="Currently, we are unable to process lengthy texts (Limit = 500 characters)."
+                message="Currently, we are unable to process lengthy texts (Limit = 500 letters). Try the summarization feature!"
             ),
             400,
         )

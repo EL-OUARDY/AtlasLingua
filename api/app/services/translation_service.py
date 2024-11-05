@@ -12,8 +12,6 @@ class TranslationService:
     @staticmethod
     def translate(text, source, destination):
 
-        # check if text is too long => process with summarization function
-
         # check verified entries from database
         entries = TranslationService.get_entries(
             text, source, verified=True, writing_variants=False

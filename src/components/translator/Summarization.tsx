@@ -1,40 +1,76 @@
-import { Language } from "@/models/Translator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
-import { useEffect, useState } from "react";
-import USAIcon from "../ui/icons/USA";
-import MoroccoIcon from "../ui/icons/Morocco";
+import { useState } from "react";
 import { Button } from "../ui/button";
-import { Copy, CornerDownLeft, Flag, Share2Icon } from "lucide-react";
+import { Check, Copy, CornerDownLeft, Loader2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
-import WTooltip from "../ui/custom/WTooltip";
+import { cleanText, isRTL } from "@/lib/utils";
+import { CanceledError } from "axios";
 import { toast } from "sonner";
+import translationService, {
+  ISummarizationFetchDataRequest,
+} from "@/services/translationService";
 
 function Summarization() {
-  const [sourceLang, setSourceLang] = useState<Language>("darija");
+  const [textToSummarize, setTextToSummarize] = useState<string>("");
+  const [summarization, setSummarization] = useState<string>(
+    "ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf",
+  );
+  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
+  const [prevSummarization, setPrevSummarization] = useState<string>("");
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
-  useEffect(() => {
-    toast("Summarization Feature Coming Soon", {
-      duration: 60000,
-      action: {
-        label: "Hide",
-        onClick: () => {},
-      },
-      description:
-        "This feature is not yet implemented. Stay tuned for updates!",
-    });
+  function summarize() {
+    // clean the input text provided by the user
+    const input = cleanText(textToSummarize);
+    // return if text hasn't changed or is empty
+    if (!input || input == "" || input == prevSummarization) return;
 
-    return () => {
-      toast.dismiss();
+    setSummarization("");
+    setIsSummarizing(true);
+    // call translation API service
+    const body: ISummarizationFetchDataRequest = {
+      text: input,
     };
-  }, []);
+    const { request } = translationService.summarize(body);
+    request
+      .then(({ data }) => {
+        setSummarization(data);
+        setPrevSummarization(input);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        const msg =
+          err.response.data.message ||
+          "Can't proccess your request. Please try again!";
+        toast(msg, {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .finally(() => {
+        setIsSummarizing(false);
+      });
+  }
+
+  function handleTextareaKeyDown(
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) {
+    // check if Control key (or Command key on macOS) is held down and Enter is pressed
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      // perform the translation
+      summarize();
+    }
+  }
+
+  function copyToClipboard() {
+    if (isCopied || summarization == "") return;
+    navigator.clipboard.writeText(summarization);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
@@ -51,37 +87,55 @@ function Summarization() {
           </p>
         </div>
         <Separator />
-        <Select
-          value={sourceLang}
-          onValueChange={(link) => setSourceLang(link as Language)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Language" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="english">
-              <div className="flex w-full items-center gap-2 text-base font-bold">
-                <USAIcon className="size-4" />
-                <span>English</span>
-              </div>
-            </SelectItem>
-            <SelectItem value="darija">
-              <div className="flex w-full items-center gap-2 text-base font-bold">
-                <MoroccoIcon className="size-4" />
-                <span>Darija</span>
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+
         <Textarea
-          className="no-ring min-h-[150px] flex-1 bg-secondary px-4 py-2"
           id="summary"
-          placeholder={`Please include the ${sourceLang} text you want to summarize.`}
+          value={textToSummarize}
+          onChange={(event) => setTextToSummarize(event.target.value)}
+          onKeyDown={handleTextareaKeyDown}
+          placeholder={`Please include the Darija text you want to summarize.`}
+          className="min-h-[150px] flex-1 bg-secondary px-4 py-2 no-ring"
+          spellCheck={"false"}
+          dir={isRTL(textToSummarize) ? "rtl" : "ltr"}
+          disabled={isSummarizing}
         />
-        <Button type="submit" size="sm" className="ml-auto gap-1.5">
-          Summarize
-          <CornerDownLeft className="size-4" />
-        </Button>
+
+        {isSummarizing ? (
+          <Button
+            disabled={isSummarizing}
+            type="submit"
+            size="sm"
+            className="ml-auto"
+          >
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Summarizing
+          </Button>
+        ) : (
+          <div className="ml-auto flex gap-2">
+            {summarization && prevSummarization && (
+              <Button
+                type="submit"
+                variant={"link"}
+                size="sm"
+                className="gap-1.5"
+                onClick={() => {
+                  setTextToSummarize("");
+                  setSummarization("");
+                  setPrevSummarization("");
+                }}
+              >
+                Clear
+              </Button>
+            )}
+            <Button
+              type="submit"
+              size="sm"
+              className="gap-1.5"
+              onClick={() => summarize()}
+            >
+              Summarize <CornerDownLeft className="size-4" />
+            </Button>
+          </div>
+        )}
       </div>
       <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
         <div className="flex h-full flex-col gap-4">
@@ -92,61 +146,25 @@ function Summarization() {
             className="flex-1 rounded-lg bg-secondary p-4"
             thumbColor="dark:bg-secondary-foreground/10"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos illo
-            nesciunt iste. Sed, consequatur eaque corporis, error odio soluta
-            explicabo, placeat ipsum sequi quia voluptatibus tempora laboriosam
-            aspernatur quis officia. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Eos illo nesciunt iste. Sed, consequatur eaque
-            corporis, error odio soluta explicabo, placeat ipsum sequi quia
-            voluptatibus tempora laboriosam aspernatur quis officia. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Eos illo nesciunt iste.
-            Sed, consequatur eaque corporis, error odio soluta explicabo,
-            placeat ipsum sequi quia voluptatibus tempora laboriosam aspernatur
-            quis officia. Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Eos illo nesciunt iste. Sed, consequatur eaque corporis, error
-            odio soluta explicabo, placeat ipsum sequi quia voluptatibus tempora
-            laboriosam aspernatur quis officia. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
-            consequatur eaque corporis, error odio soluta explicabo, placeat
-            ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
-            officia. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Eos illo nesciunt iste. Sed, consequatur eaque corporis, error odio
-            soluta explicabo, placeat ipsum sequi quia voluptatibus tempora
-            laboriosam aspernatur quis officia. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
-            consequatur eaque corporis, error odio soluta explicabo, placeat
-            ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
-            officia.
+            {summarization}
           </ScrollArea>
-          <div className="flex justify-end rounded-lg bg-secondary p-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="dark:hover:bg-background/30"
-            >
-              <Copy className="size-5 text-muted-foreground" />
-              <span className="sr-only">Copy</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="dark:hover:bg-background/30"
-            >
-              <Share2Icon className="size-5 text-muted-foreground" />
-              <span className="sr-only">Share</span>
-            </Button>
-            <WTooltip side="top" content="Report Translation">
+          {summarization && (
+            <div className="flex justify-end rounded-lg bg-secondary p-2">
               <Button
                 variant="ghost"
                 size="icon"
                 className="dark:hover:bg-background/30"
+                onClick={() => copyToClipboard()}
               >
-                <Flag className="size-5 text-muted-foreground" />
-                <span className="sr-only">Report Translation</span>
+                {!isCopied ? (
+                  <Copy className="size-5 text-muted-foreground" />
+                ) : (
+                  <Check className="size-5 text-muted-foreground" />
+                )}
+                <span className="sr-only">Copy</span>
               </Button>
-            </WTooltip>
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

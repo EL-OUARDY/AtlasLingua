@@ -20,6 +20,10 @@ export interface ITranslationFetchDataResult {
   translation: ITranslationData[];
 }
 
+export interface ISummarizationFetchDataRequest {
+  text: string;
+}
+
 class translationService {
   translate(data: ITranslationFetchDataRequest) {
     const controller = new AbortController();
@@ -30,6 +34,15 @@ class translationService {
         signal: controller.signal,
       },
     );
+
+    return { request, cancel: () => controller.abort() };
+  }
+
+  summarize(data: ISummarizationFetchDataRequest) {
+    const controller = new AbortController();
+    const request = apiClient.post<string>("/summarize", data, {
+      signal: controller.signal,
+    });
 
     return { request, cancel: () => controller.abort() };
   }
