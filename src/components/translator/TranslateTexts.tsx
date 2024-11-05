@@ -445,12 +445,16 @@ function TranslateText() {
               )}
               <div className="flex items-center gap-1">
                 <span dir={isRTL(translation[0].translation) ? "rtl" : "ltr"}>
-                  {translation[0].translation && (
+                  {translation[0].translation &&
+                  translation.length == 1 &&
+                  !translation[0].wordType ? (
                     <TextGenerateEffect
                       duration={2}
                       filter={false}
                       words={translation[0].translation}
                     />
+                  ) : (
+                    translation[0].translation
                   )}
                 </span>
                 {translation[0].wordType && (

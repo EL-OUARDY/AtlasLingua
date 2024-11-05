@@ -2,7 +2,6 @@ import {
   ChevronDownIcon,
   CircleIcon,
   Copy,
-  Expand,
   Flag,
   ListCollapse,
   ShieldCheck,
@@ -40,7 +39,7 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
       <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-6">
         <div className="flex-1 space-y-1">
           <CardTitle className="flex items-center text-xl leading-tight">
-            {word.darija} <Expand className="ml-2 h-4 w-4 cursor-pointer" />
+            {word.darija}
           </CardTitle>
           <CardDescription className="first-word-cap">
             <span className="font-bold text-orange-500">{word.english}</span>{" "}

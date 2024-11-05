@@ -14,14 +14,18 @@ import { TextGenerateEffect } from "../ui/text-generate-effect";
 
 function Summarization() {
   const [textToSummarize, setTextToSummarize] = useState<string>("");
-  const [summarization, setSummarization] = useState<string>(
-    "ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf ana knt 3arf maghadich n9dro nrj3o bkri 7it tri9 b3ida bzaf",
-  );
+  const [summarization, setSummarization] = useState<string>("");
   const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
   const [prevSummarization, setPrevSummarization] = useState<string>("");
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [showOutput, setShowOutput] = useState<boolean>(false);
 
   function summarize() {
+    // already summarized
+    if (textToSummarize && textToSummarize == prevSummarization) {
+      setShowOutput(true);
+      return;
+    }
     // clean the input text provided by the user
     const input = cleanText(textToSummarize);
     // return if text hasn't changed or is empty
@@ -38,6 +42,7 @@ function Summarization() {
       .then(({ data }) => {
         setSummarization(data);
         setPrevSummarization(input);
+        setShowOutput(true);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -74,17 +79,19 @@ function Summarization() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
-      <div className="flex h-full flex-col gap-4 rounded-lg bg-background p-4 md:p-6">
+    <div className="h-full gap-4 overflow-auto rounded-lg lg:w-[600px]">
+      <div
+        className={`${showOutput && "hidden"} flex h-full flex-col gap-4 rounded-lg bg-background p-4 md:p-6`}
+      >
         <div className="">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">
             Summarization
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Get quick and accurate summaries of Darija content in English with
-            our smart summarization tool. Save time by skipping full text
-            translation. Our advanced technology picks out the most important
-            information, giving you short and relevant summaries.
+            Get quick and accurate summaries/explanations of Darija content in
+            English with our smart summarization tool. Save time by skipping
+            full text translation. Our advanced technology picks out the most
+            important information, giving you short and relevant summaries.
           </p>
         </div>
         <Separator />
@@ -138,7 +145,9 @@ function Summarization() {
           </div>
         )}
       </div>
-      <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
+      <div
+        className={`${!showOutput && "hidden"} h-full overflow-auto rounded-lg bg-background p-4 md:p-6`}
+      >
         <div className="flex h-full flex-col gap-4">
           <h2 className="text-xl font-bold tracking-tight text-foreground">
             Output:
@@ -148,30 +157,35 @@ function Summarization() {
             thumbColor="dark:bg-secondary-foreground/10"
           >
             {summarization && (
-              <TextGenerateEffect
-                duration={2}
-                filter={false}
-                words={summarization}
-              />
+              <TextGenerateEffect duration={2} words={summarization} />
             )}
           </ScrollArea>
-          {summarization && (
-            <div className="flex justify-end rounded-lg bg-secondary p-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="dark:hover:bg-background/30"
-                onClick={() => copyToClipboard()}
-              >
-                {!isCopied ? (
-                  <Copy className="size-5 text-muted-foreground" />
-                ) : (
-                  <Check className="size-5 text-muted-foreground" />
-                )}
-                <span className="sr-only">Copy</span>
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-between rounded-lg bg-secondary p-2">
+            <Button
+              type="submit"
+              variant={"link"}
+              size="sm"
+              className="gap-1.5"
+              onClick={() => {
+                setShowOutput(false);
+              }}
+            >
+              Go back
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="dark:hover:bg-background/30"
+              onClick={() => copyToClipboard()}
+            >
+              {!isCopied ? (
+                <Copy className="size-5 text-muted-foreground" />
+              ) : (
+                <Check className="size-5 text-muted-foreground" />
+              )}
+              <span className="sr-only">Copy</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>
