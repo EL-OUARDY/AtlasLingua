@@ -47,6 +47,19 @@ class translationService {
     return { request, cancel: () => controller.abort() };
   }
 
+  transliterate(text: string) {
+    const controller = new AbortController();
+    const request = apiClient.post<string>(
+      "/translate/transliterate",
+      { text },
+      {
+        signal: controller.signal,
+      },
+    );
+
+    return { request, cancel: () => controller.abort() };
+  }
+
   get_shared_translation(link: string) {
     const controller = new AbortController();
     const request = apiClient.get<ITranslationHistoryFetchDataResult>(

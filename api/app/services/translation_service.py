@@ -146,3 +146,9 @@ class TranslationService:
                 item += f" ({curr['wordType']})"
             result.append(item)
         return " | ".join(result)
+
+    @staticmethod
+    def transliterate(text):
+        # call language model
+        llm = LanguageModel()
+        return llm.transliterate(text)

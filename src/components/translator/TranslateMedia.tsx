@@ -8,6 +8,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { toast } from "sonner";
 
 function TranslateMedia() {
+  const [output, setOutput] = useState<string>("");
   const fileInput = useRef<HTMLInputElement>(null);
   const [selectedFileName, setSelectedFileName] = useState<
     string | undefined
@@ -30,7 +31,7 @@ function TranslateMedia() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 gap-4 overflow-auto rounded-lg xl:h-full xl:grid-cols-2">
+    <div className="gap-4 overflow-auto rounded-lg md:h-full lg:w-[600px]">
       <div className="flex h-full rounded-lg bg-background p-6">
         <div className="flex flex-1 flex-col gap-4">
           <div className="text-center sm:text-left">
@@ -172,80 +173,82 @@ function TranslateMedia() {
           </div>
         </div>
       </div>
-      <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
-        <div className="flex h-full flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold tracking-tight text-foreground">
-              Output:
-            </h2>
-            <Button
-              variant={"link"}
-              className="font-bold tracking-tighter underline"
+      {output && (
+        <div className="h-full overflow-auto rounded-lg bg-background p-4 md:p-6">
+          <div className="flex h-full flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold tracking-tight text-foreground">
+                Output:
+              </h2>
+              <Button
+                variant={"link"}
+                className="font-bold tracking-tighter underline"
+              >
+                Show Darija Transcript
+              </Button>
+            </div>
+            <ScrollArea
+              className="flex-1 rounded-lg bg-secondary p-4"
+              thumbColor="dark:bg-secondary-foreground/10"
             >
-              Show Darija Transcript
-            </Button>
-          </div>
-          <ScrollArea
-            className="flex-1 rounded-lg bg-secondary p-4"
-            thumbColor="dark:bg-secondary-foreground/10"
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos illo
-            nesciunt iste. Sed, consequatur eaque corporis, error odio soluta
-            explicabo, placeat ipsum sequi quia voluptatibus tempora laboriosam
-            aspernatur quis officia. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Eos illo nesciunt iste. Sed, consequatur eaque
-            corporis, error odio soluta explicabo, placeat ipsum sequi quia
-            voluptatibus tempora laboriosam aspernatur quis officia. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Eos illo nesciunt iste.
-            Sed, consequatur eaque corporis, error odio soluta explicabo,
-            placeat ipsum sequi quia voluptatibus tempora laboriosam aspernatur
-            quis officia. Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Eos illo nesciunt iste. Sed, consequatur eaque corporis, error
-            odio soluta explicabo, placeat ipsum sequi quia voluptatibus tempora
-            laboriosam aspernatur quis officia. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
-            consequatur eaque corporis, error odio soluta explicabo, placeat
-            ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
-            officia. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Eos illo nesciunt iste. Sed, consequatur eaque corporis, error odio
-            soluta explicabo, placeat ipsum sequi quia voluptatibus tempora
-            laboriosam aspernatur quis officia. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
-            consequatur eaque corporis, error odio soluta explicabo, placeat
-            ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
-            officia.
-          </ScrollArea>
-          <div className="flex justify-end rounded-lg bg-secondary p-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="dark:hover:bg-background/30"
-            >
-              <Copy className="size-5 text-muted-foreground" />
-              <span className="sr-only">Copy</span>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="dark:hover:bg-background/30"
-            >
-              <Share2Icon className="size-5 text-muted-foreground" />
-              <span className="sr-only">Share</span>
-            </Button>
-            <WTooltip side="top" content="Report Translation">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos illo
+              nesciunt iste. Sed, consequatur eaque corporis, error odio soluta
+              explicabo, placeat ipsum sequi quia voluptatibus tempora
+              laboriosam aspernatur quis officia. Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
+              consequatur eaque corporis, error odio soluta explicabo, placeat
+              ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
+              officia. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Eos illo nesciunt iste. Sed, consequatur eaque corporis, error
+              odio soluta explicabo, placeat ipsum sequi quia voluptatibus
+              tempora laboriosam aspernatur quis officia. Lorem ipsum dolor sit
+              amet consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
+              consequatur eaque corporis, error odio soluta explicabo, placeat
+              ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
+              officia. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Eos illo nesciunt iste. Sed, consequatur eaque corporis, error
+              odio soluta explicabo, placeat ipsum sequi quia voluptatibus
+              tempora laboriosam aspernatur quis officia. Lorem ipsum dolor sit
+              amet consectetur adipisicing elit. Eos illo nesciunt iste. Sed,
+              consequatur eaque corporis, error odio soluta explicabo, placeat
+              ipsum sequi quia voluptatibus tempora laboriosam aspernatur quis
+              officia. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Eos illo nesciunt iste. Sed, consequatur eaque corporis, error
+              odio soluta explicabo, placeat ipsum sequi quia voluptatibus
+              tempora laboriosam aspernatur quis officia.
+            </ScrollArea>
+            <div className="flex justify-end rounded-lg bg-secondary p-2">
               <Button
                 variant="ghost"
                 size="icon"
                 className="dark:hover:bg-background/30"
               >
-                <Flag className="size-5 text-muted-foreground" />
-                <span className="sr-only">Report Translation</span>
+                <Copy className="size-5 text-muted-foreground" />
+                <span className="sr-only">Copy</span>
               </Button>
-            </WTooltip>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="dark:hover:bg-background/30"
+              >
+                <Share2Icon className="size-5 text-muted-foreground" />
+                <span className="sr-only">Share</span>
+              </Button>
+              <WTooltip side="top" content="Report Translation">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="dark:hover:bg-background/30"
+                >
+                  <Flag className="size-5 text-muted-foreground" />
+                  <span className="sr-only">Report Translation</span>
+                </Button>
+              </WTooltip>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

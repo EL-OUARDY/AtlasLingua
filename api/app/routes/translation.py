@@ -51,3 +51,23 @@ def get_translation(shareable_link: str):
         return jsonify({"error": "Translation not found"}), 404
 
     return jsonify(translation), 200
+
+
+@bp.route("/transliterate", methods=["POST"])
+def transliterate():
+    request_data = request.json
+
+    if not request_data["text"]:
+        return (
+            jsonify(message="Invalid request"),
+            400,
+        )
+
+    result = TranslationService.transliterate(request_data["text"])
+    if result:
+        return result, 200
+
+    return (
+        jsonify(message="Can't proccess your request. Please try again!"),
+        400,
+    )

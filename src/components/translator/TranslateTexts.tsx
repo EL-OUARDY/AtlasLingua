@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Separator } from "../ui/separator";
 import {
   ArrowRightLeftIcon,
+  CaseUpperIcon,
   Check,
   Copy,
   CornerDownLeft,
@@ -81,6 +82,8 @@ function TranslateText() {
   const { shareableLinkParam } = useParams();
 
   const { user } = useUser();
+
+  const [isTransliterating, setIsTransliterating] = useState<boolean>(false);
 
   useEffect(() => {
     // show shared translation
@@ -289,6 +292,32 @@ function TranslateText() {
     navigate(ROUTES.login);
   }
 
+  function transliterate() {
+    setIsTransliterating(true);
+
+    // call transliterate API service
+    const { request } = translationService.transliterate(textToTranslate);
+    request
+      .then(({ data }) => {
+        setTextToTranslate(data);
+      })
+      .catch((err) => {
+        if (err instanceof CanceledError) return;
+        const msg =
+          err.response.data.message ||
+          "Can't proccess your request. Please try again!";
+        toast(msg, {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .finally(() => {
+        setIsTransliterating(false);
+      });
+  }
+
   return (
     <div className="flex h-full flex-col overflow-auto rounded-lg border bg-background dark:bg-transparent">
       <div id="language-switch" className="flex items-center gap-2 px-4 py-2">
@@ -362,6 +391,30 @@ function TranslateText() {
                   <Mic className="size-5 text-muted-foreground" />
                   <span className="sr-only">Use Microphone</span>
                 </Button>
+                {isRTL(textToTranslate) && sourceLang === "darija" && (
+                  <WTooltip
+                    side="top"
+                    content="Convert to<br />English Letters"
+                  >
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-background/60 dark:hover:bg-background/30"
+                      onClick={() => transliterate()}
+                    >
+                      {isTransliterating ? (
+                        <Loader2 className="size-5 animate-spin text-orange-500" />
+                      ) : (
+                        <CaseUpperIcon className="size-5 text-orange-500" />
+                      )}
+
+                      <span className="sr-only">
+                        Convert to English Letters
+                      </span>
+                    </Button>
+                  </WTooltip>
+                )}
+
                 {isTranslating && (
                   <WTooltip side="top" content="AI-Powered">
                     <Button
