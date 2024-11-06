@@ -27,6 +27,7 @@ import TranslateMedia from "./components/translator/TranslateMedia";
 import Summarization from "./components/translator/Summarization";
 import { UserProvider } from "./contexts/UserContext";
 import { Toaster } from "./components/ui/sonner";
+import ContributionGuidelines from "./components/pages/ContributionGuidelines";
 
 function App() {
   return (
@@ -68,6 +69,10 @@ function App() {
               <Route path={ROUTES.feedback} element={<Feedback />} />
               <Route path={ROUTES.about} element={<About />} />
               <Route path={ROUTES.privacy} element={<Privacy />} />
+              <Route
+                path={ROUTES.contribution_guidelines}
+                element={<ContributionGuidelines />}
+              />
               <Route path={ROUTES.settings.general} element={<Settings />}>
                 <Route index element={<GeneralSettings />} />
                 <Route

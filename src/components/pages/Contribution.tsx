@@ -118,7 +118,7 @@ function Contribution() {
                 To ensure quality and consistency, please read our{" "}
                 <Link
                   className="text-secondary-foreground hover:underline"
-                  to={"#"}
+                  to={ROUTES.contribution_guidelines}
                 >
                   Contribution Guide
                 </Link>{" "}

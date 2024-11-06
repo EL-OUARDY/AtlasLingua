@@ -25,5 +25,6 @@ export const ROUTES = {
   },
   live_assistance: "/live-assistance",
   privacy: "/privacy-policy",
+  contribution_guidelines: "/contribution-guidelines",
   notFound: "/404",
 };

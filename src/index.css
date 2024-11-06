@@ -53,6 +53,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -63,6 +64,7 @@ body {
   background-image: url("/img/beams.jpg");
   @apply bg-cover bg-center;
 }
+
 .dark body {
   background-image: none;
 }
@@ -86,12 +88,14 @@ body {
 }
 
 /* active links */
-div[data-radix-scroll-area-viewport] > div:first-child {
+div[data-radix-scroll-area-viewport]>div:first-child {
   height: 100%;
 }
+
 a.active {
   color: var(--primary);
 }
+
 /* selection */
 *::selection {
   background-color: hsl(var(--secondary));
@@ -102,6 +106,7 @@ textarea::selection {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
 }
+
 /* settings nav */
 #settings-nav a.active {
   background: hsl(var(--primary));
@@ -128,4 +133,13 @@ textarea::selection {
 *::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: hsl(var(--background));
+}
+
+/* Contribution Guidelines Table */
+#contribution-guidelines table {
+  @apply text-base text-left border-collapse w-fit
+}
+
+#contribution-guidelines td, #contribution-guidelines th {
+  @apply border px-3 py-1 !font-normal
 }
