@@ -1,5 +1,17 @@
-import { APP_NAME } from "@/shared/constants";
-import { Hash, Loader2 } from "lucide-react";
+import {
+  APP_EMAIL,
+  APP_GITHUB,
+  APP_NAME,
+  APP_TWITTER,
+} from "@/shared/constants";
+import {
+  GithubIcon,
+  Hash,
+  Loader2,
+  MailIcon,
+  TerminalIcon,
+  TwitterIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -92,13 +104,6 @@ function Contribution() {
   return (
     <>
       <div className="flex h-full flex-1 flex-col items-center justify-start shadow-sm">
-        {/* <div className="w-full">
-          <h2 className="text-2xl font-bold tracking-tight">Contribution</h2>
-          <p className="mt-1 text-muted-foreground">
-            Help us bridge languages. Your input is invaluable.
-          </p>
-        </div>
-        <Separator className="my-6" /> */}
         <div className="grid h-full w-full flex-1 gap-8 rounded-lg p-4 sm:p-6 md:gap-4 md:bg-background xl:grid-cols-[1fr_1fr]">
           <div className="h-full">
             <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-background/50 to-background p-6 no-underline outline-none focus:shadow-md dark:from-muted/50 dark:to-muted md:from-muted/50 md:to-muted">
@@ -121,6 +126,52 @@ function Contribution() {
                 guidelines to be considered. Together, we can create a more
                 comprehensive and accurate translation resource.
               </p>
+              <Card className="mt-4">
+                <CardHeader>
+                  <div className="space-y-1">
+                    <CardTitle>
+                      <div className="flex items-center gap-1">
+                        <TerminalIcon className="size-5" />
+                        <p className="text-base">Developers</p>
+                      </div>
+                    </CardTitle>
+                    <CardDescription>
+                      This project is open source, and we welcome your
+                      contributions! Feel free to reach out for more information
+                      on how to get started.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex space-x-4 text-sm text-muted-foreground">
+                    <a
+                      href={APP_GITHUB}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center hover:text-sky-400"
+                    >
+                      <GithubIcon className="mr-1 size-4 text-sky-400" />
+                      Github
+                    </a>
+                    <a
+                      href={APP_TWITTER}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center hover:text-sky-400"
+                    >
+                      <TwitterIcon className="mr-1 size-4 text-sky-400" />
+                      Twitter
+                    </a>
+                    <a
+                      href={`mailto:${APP_EMAIL}`}
+                      className="flex items-center hover:text-sky-400"
+                    >
+                      <MailIcon className="mr-1 size-4 text-sky-400" />
+                      Contact
+                    </a>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
           <Card className="flex flex-col justify-center">

@@ -3,6 +3,11 @@ import { ROUTES } from "@/routes/routes";
 export const APP_NAME = "AtlasLingua";
 export const APP_INFO =
   "Our app offers a comprehensive dictionary, AI-powered translations, and audio/video summaries to make learning effortless.";
+
+export const APP_EMAIL = "ouadia@elouardy.com";
+export const APP_GITHUB = "https://github.com/EL-OUARDY";
+export const APP_TWITTER = "https://x.com/_ELOUARDY";
+
 export const GET_STARTED: {
   title: string;
   href: string;
