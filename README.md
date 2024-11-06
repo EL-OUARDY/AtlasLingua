@@ -17,7 +17,7 @@
 - [The Problem](#the-problem)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
-- [About me](#about-me)
+- [About me](#about)
 - [Contact](#contact-me)
 
 # Overview
@@ -50,7 +50,93 @@ The project aims to address the lack of online services that provide translation
 
 ## Installation
 
-..
+### 1. Prerequisites
+
+Ensure you have the following tools installed on your machine:
+
+- `Python 3.12` and `pip` (Python package manager)
+- `Node.js` (preferably v20 or later) and `npm` (Node package manager)
+- `MySQL` for structured data storage
+- `Git` for version control
+
+If you don’t have these installed, please install them first.
+
+### 2. Setting Up the Frontend (React with TypeScript)
+
+#### 1. Clone the repository:
+
+```bash
+git clone https://github.com/EL-OUARDY/AtlasLingua.git
+cd AtlasLingua
+```
+
+#### 2. Install frontend dependencies:
+
+```bash
+npm install
+```
+
+#### 3. Environment Variables:
+
+Copy `.env.example` to `.env` and replace placeholder values with actual values.
+
+### 3. Setting Up the Backend API (Flask)
+
+#### 1. Navigate to the backend folder
+
+```bash
+cd api
+```
+
+#### 2. Set up a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+#### 3. Install backend dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Environment Variables:
+
+Copy `.env.example` to `.env` and replace placeholder values with actual values.
+
+#### 5. Setup database:
+
+Create a MySQL database, configure the connection in the `.env` file, and then run the migration.
+
+```bash
+flask db init
+flask db migrate
+flask db upgrade
+```
+
+### 4. Running the Application
+
+#### 1. Start the backend API (Flask):
+
+```bash
+python run.py
+```
+
+This will start the Flask server at http://localhost:5000.
+
+#### 2. Start the frontend (React):
+
+```bash
+cd ..
+npm run dev
+```
+
+This will start the frontend development server at http://localhost:3000.
+
+#### 3. Access the Application:
+
+Visit http://localhost:3000 in your browser to see the frontend.
 
 ## About
 
