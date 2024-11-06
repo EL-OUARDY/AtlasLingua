@@ -293,6 +293,7 @@ function TranslateText() {
   }
 
   function transliterate() {
+    if (isTransliterating) return;
     setIsTransliterating(true);
 
     // call transliterate API service
