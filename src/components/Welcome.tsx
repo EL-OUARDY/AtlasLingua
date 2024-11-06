@@ -28,9 +28,9 @@ function Welcome() {
         <DialogHeader>
           <DialogTitle className="text-2xl">Hey There!</DialogTitle>
           <DialogDescription className="text-justify">
-            This website is currently under development. You're viewing a beta
-            version that doesn't reflect the final product. Some features may
-            not be fully functional. We invite you to explore and provide
+            You're viewing a beta version that doesn't reflect the final
+            product. The website is currently under development, Some features
+            may not be fully functional. We invite you to explore and provide
             feedback as we continue to improve. Your input is valuable in
             shaping the final version of our app. Thank you for your
             understanding and participation in this early stage.
