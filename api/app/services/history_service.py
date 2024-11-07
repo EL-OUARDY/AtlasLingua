@@ -44,7 +44,11 @@ class HistoryService:
         filter = {filter_attribute: text_to_translate}
         filter["processed_by"] = processed_by
 
-        result = history_schema.dump(History.query.filter_by(**filter).first())
+        result = history_schema.dump(
+            History.query.filter_by(**filter)
+            .order_by(History.id.desc())
+            .first()
+        )
         if result:
             # save to history again
             return result.get(destination)
