@@ -3,8 +3,8 @@ import {
   Languages,
   BookOpenText,
   Star,
-  Settings,
   MessagesSquare,
+  Library,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -42,11 +42,11 @@ function MobileNavigationBar() {
         <span className="sr-only">Favorites</span>
       </NavLink>
       <NavLink
-        to={ROUTES.settings.general}
+        to={ROUTES.learn}
         className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <Settings className="size-6" />
-        <span className="sr-only">Settings</span>
+        <Library className="size-6" />
+        <span className="sr-only">Learn</span>
       </NavLink>
     </div>
   );

@@ -2,10 +2,9 @@ import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Copy, Flag, Languages, Share2Icon, Upload } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import WTooltip from "../ui/custom/WTooltip";
 import { ScrollArea } from "../ui/scroll-area";
-import { toast } from "sonner";
 
 function TranslateMedia() {
   const [output, setOutput] = useState<string>("");
@@ -14,30 +13,22 @@ function TranslateMedia() {
     string | undefined
   >();
 
-  useEffect(() => {
-    toast("Media Translation Coming Soon", {
-      duration: 60000,
-      action: {
-        label: "Hide",
-        onClick: () => {},
-      },
-      description:
-        "This feature is not yet implemented. Stay tuned for updates!",
-    });
-
-    return () => {
-      toast.dismiss();
-    };
-  }, []);
-
   return (
     <div className="gap-4 overflow-auto rounded-lg md:h-full lg:w-[600px]">
       <div className="flex h-full rounded-lg bg-background p-6">
         <div className="flex flex-1 flex-col gap-4">
           <div className="text-center sm:text-left">
-            <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
-              Darija Social Media <br /> Audio & Video Translator
-            </h2>
+            <div className="flex flex-col gap-2">
+              <h2 className="text-xl font-bold tracking-tight text-foreground md:text-2xl">
+                Darija Social Media <br /> Audio & Video Translator
+              </h2>
+              <div>
+                <span className="inline-block rounded border border-blue-600 px-2 py-1 text-xs font-normal text-blue-600">
+                  Coming Soon
+                </span>
+              </div>
+            </div>
+
             <div className="my-3 flex items-center justify-center gap-4 text-sm text-muted-foreground sm:justify-start">
               <svg
                 className="size-8"
