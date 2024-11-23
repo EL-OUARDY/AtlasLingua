@@ -1,5 +1,4 @@
-from datetime import timedelta
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, make_response, request, url_for, redirect
 from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
@@ -7,11 +6,20 @@ from flask_jwt_extended import (
     set_access_cookies,
     set_refresh_cookies,
     unset_jwt_cookies,
+    create_refresh_token,
 )
+
+import os
+from datetime import timedelta
 
 from app.schemas.user_schema import user_schema
 from app.schemas.login_schema import login_schema
 from app.services.auth_service import AuthService
+
+from app import oauth
+
+# Initialize the Google client
+google = oauth.create_client("google")
 
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
@@ -19,7 +27,6 @@ bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 @bp.route("/register", methods=["POST"])
 def register():
-
     # validate posted data
     errors = user_schema.validate(request.json)
     if errors:
@@ -86,3 +93,28 @@ def profile():
     current_user_id = get_jwt_identity()
     user = AuthService.get_user_by_id(current_user_id)
     return user_schema.dump(user), 200
+
+
+@bp.route("/login/google")
+def login_google():
+    redirect_uri = url_for("auth.authorize_google", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@bp.route("/authorize/google")
+def authorize_google():
+    token = google.authorize_access_token()
+    if not token:
+        return jsonify(message="Failed to authenticate."), 400
+
+    resp = google.get("oauth2/v3/userinfo")
+    user_info = resp.json()
+    user = AuthService.process_google_user(user_info)
+    if user:
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+        response = make_response(redirect(f"{os.getenv('FRONTEND_URL')}/login"))
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
+        return response
+    return jsonify(message="Failed to authenticate."), 400

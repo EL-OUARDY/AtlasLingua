@@ -98,25 +98,6 @@ function Feedback() {
       </div>
       <Separator className="my-6 hidden sm:block" />
       <div className="grid h-full w-full gap-8 rounded-lg p-4 sm:bg-background sm:p-6 md:gap-4 xl:grid-cols-[1fr_1fr]">
-        <div className="h-full">
-          <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-            <Hash className="h-6 w-6" />
-            <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
-            <p className="leading-tight text-muted-foreground">
-              Feedback is vital to the growth and improvement of our translator.
-              Your insights help us refine our translations, enhance user
-              experience, and add features that matter most to you. As language
-              is dynamic and nuanced, your input ensures our app stays accurate
-              and relevant. Whether you're a native Darija speaker, an English
-              learner, or somewhere in between, your perspective is invaluable.
-              By sharing your thoughts, you're not just helping us – you're
-              contributing to a community resource that bridges cultures and
-              facilitates communication. Every comment, suggestion, or report
-              you provide plays a crucial role in making this tool more
-              effective for everyone.
-            </p>
-          </div>
-        </div>
         <Card className="flex flex-col justify-center">
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">
@@ -180,6 +161,25 @@ function Feedback() {
             </CardFooter>
           </form>
         </Card>
+        <div className="h-full">
+          <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
+            <Hash className="h-6 w-6" />
+            <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
+            <p className="leading-tight text-muted-foreground">
+              Feedback is vital to the growth and improvement of our translator.
+              Your insights help us refine our translations, enhance user
+              experience, and add features that matter most to you. As language
+              is dynamic and nuanced, your input ensures our app stays accurate
+              and relevant. Whether you're a native Darija speaker, an English
+              learner, or somewhere in between, your perspective is invaluable.
+              By sharing your thoughts, you're not just helping us – you're
+              contributing to a community resource that bridges cultures and
+              facilitates communication. Every comment, suggestion, or report
+              you provide plays a crucial role in making this tool more
+              effective for everyone.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -7,13 +7,16 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 import os
 from flask_bcrypt import Bcrypt
+from authlib.integrations.flask_client import OAuth
 
-# Initialize the database, migration, marshmallow and JWT manager objects
+
+# Initialize the database, migration, marshmallow and JWT manager objects, OAuth
 db = SQLAlchemy()
 migrate = Migrate()
 ma = Marshmallow()
 jwt = JWTManager()
 bcrypt = Bcrypt()
+oauth = OAuth()  # Initialize OAuth
 
 
 def create_app():
@@ -50,6 +53,24 @@ def create_app():
     )
     app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # Enable CSRF protection
     app.config["JWT_COOKIE_SAMESITE"] = "Lax"  # Set SameSite policy
+
+    # Google OAuth setup
+    app.config["GOOGLE_CLIENT_ID"] = os.getenv("GOOGLE_CLIENT_ID")
+    app.config["GOOGLE_CLIENT_SECRET"] = os.getenv("GOOGLE_CLIENT_SECRET")
+    app.config["GOOGLE_DISCOVERY_URL"] = (
+        "https://accounts.google.com/.well-known/openid-configuration"
+    )
+    oauth.init_app(app)
+    google = oauth.register(
+        name="google",
+        client_id=app.config["GOOGLE_CLIENT_ID"],
+        client_secret=app.config["GOOGLE_CLIENT_SECRET"],
+        server_metadata_url=app.config["GOOGLE_DISCOVERY_URL"],
+        access_token_url="https://oauth2.googleapis.com/token",
+        authorize_url="https://accounts.google.com/o/oauth2/auth",
+        api_base_url="https://www.googleapis.com/",
+        client_kwargs={"scope": "openid email profile"},
+    )
 
     # Initialize the database, migration, marshmallow and JWT manager with the app
     db.init_app(app)

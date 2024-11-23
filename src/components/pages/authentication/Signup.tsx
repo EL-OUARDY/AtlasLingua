@@ -81,6 +81,11 @@ function Signup() {
       });
   }
 
+  function googleLogin() {
+    const API_BASE_URL = import.meta.env.VITE_API_URL;
+    window.location.href = API_BASE_URL + "/auth/login/google";
+  }
+
   return (
     <AuthLayout role="signup">
       <Card className="mx-auto w-full border-none">
@@ -162,7 +167,7 @@ function Signup() {
                   </span>
                 </div>
               </div>
-              <Button variant="outline" type="button">
+              <Button variant="outline" type="button" onClick={googleLogin}>
                 <svg
                   className="mr-2 size-5"
                   xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +194,7 @@ function Signup() {
                     d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                   ></path>
                 </svg>
-                Google
+                Continue with Google
               </Button>
             </div>
             <div className="mt-4 text-center text-sm text-muted-foreground">

@@ -20,3 +20,21 @@ def generate_shareable_link_id():
     random_string = "".join(secrets.choice(characters) for _ in range(15))
 
     return random_string
+
+
+def generate_password(length=8):
+    """
+    Generates a secure random password of a specified length.
+
+    Parameters:
+    - length (int): The length of the password to generate. Default is 8.
+
+    Returns:
+    - str: A randomly generated password string.
+    """
+    # Define the character set: letters, digits, and punctuation
+    characters = string.ascii_letters + string.digits + string.punctuation
+
+    # Generate the password
+    password = "".join(secrets.choice(characters) for _ in range(length))
+    return password
