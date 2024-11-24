@@ -11,7 +11,6 @@ import {
   Loader2,
   MessageSquareTextIcon,
   Mic,
-  Share2Icon,
   ShieldCheck,
   Star,
 } from "lucide-react";
@@ -36,18 +35,10 @@ import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { cleanText, getRandomElement, isRTL } from "@/lib/utils";
 import { APP_NAME } from "@/shared/constants";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "../ui/drawer";
-import { Input } from "../ui/input";
 import ReportDialog from "../ReportDialog";
 import { useUser } from "@/contexts/UserContext";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
+import ShareTranslation from "../ShareTranslation";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -61,15 +52,13 @@ function TranslateText() {
 
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
-  const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false);
   const [favoriteId, setFavoriteId] = useState<number | undefined>();
-  const [shareableLink, setShareableLink] = useState<string>();
+
+  const [shareableLink, setShareableLink] = useState<string>("");
 
   const { setIsHistoryOpen, addToHistory } = useHistory();
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
-
-  const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
 
   const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
@@ -714,15 +703,9 @@ function TranslateText() {
                     )}
                     <span className="sr-only">Copy</span>
                   </Button>
-                  <Button
-                    onClick={() => setIsShareOpen(true)}
-                    variant="ghost"
-                    size="icon"
-                    className="hover:bg-background/60 dark:hover:bg-background/30"
-                  >
-                    <Share2Icon className="size-5 text-muted-foreground" />
-                    <span className="sr-only">Share</span>
-                  </Button>
+
+                  <ShareTranslation link={shareableLink} />
+
                   <WTooltip side="top" content="Report Translation">
                     <Button
                       variant="ghost"
@@ -787,48 +770,6 @@ function TranslateText() {
           translationId={translationID}
           setIsOpen={setReportOpen}
         />
-      )}
-
-      {/* share drawer */}
-      {isShareOpen && (
-        <Drawer open={isShareOpen} onOpenChange={setIsShareOpen}>
-          <DrawerContent>
-            <div className="mx-auto w-full max-w-sm py-4">
-              <DrawerHeader className="text-left">
-                <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
-                <DrawerDescription className="text-muted-foreground">
-                  Share this link with your friends.
-                </DrawerDescription>
-              </DrawerHeader>
-
-              <DrawerFooter className="pt-0">
-                <div className="flex gap-2">
-                  <Input
-                    className="text-muted-foreground no-ring"
-                    value={shareableLink}
-                    readOnly
-                  />
-                  <Button
-                    onClick={() => {
-                      navigator.clipboard.writeText(shareableLink as string);
-                      setIsLinkCopied(true);
-                      setTimeout(() => setIsLinkCopied(false), 2000);
-                    }}
-                    variant="secondary"
-                    className="shrink-0"
-                  >
-                    {!isLinkCopied ? (
-                      <Copy className="size-5 text-muted-foreground" />
-                    ) : (
-                      <Check className="size-5 text-muted-foreground" />
-                    )}
-                    <span className="sr-only">Copy</span>
-                  </Button>
-                </div>
-              </DrawerFooter>
-            </div>
-          </DrawerContent>
-        </Drawer>
       )}
     </div>
   );
