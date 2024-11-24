@@ -44,6 +44,7 @@ function Feedback() {
     resolver: zodResolver(feedbackSchema),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   function onSubmit(data: IFeedbackRequest) {
     if (!user) {
@@ -54,14 +55,8 @@ function Feedback() {
     const { request } = feedbackService.submitFeedback(data);
     request
       .then(() => {
-        toast.success("Feedback has been sent successfully!", {
-          duration: 10000,
-          action: {
-            label: "OK",
-            onClick: () => {},
-          },
-        });
         reset(); // clear the form
+        setIsSubmitted(true);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -107,59 +102,89 @@ function Feedback() {
               What aspect of the app would you like to comment on?
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Input
-                  {...register("subject")}
-                  id="subject"
-                  placeholder="Enter feedback subject"
-                  autoComplete="off"
-                />
-                {errors.subject && (
-                  <p className="text-sm font-medium text-destructive">
-                    {errors.subject.message}
-                  </p>
-                )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="body">Feedback</Label>
-                <Textarea
-                  {...register("body")}
-                  id="body"
-                  placeholder="Please include all information relevant to your feedback."
-                />
-                {errors.body && (
-                  <p className="text-sm font-medium text-destructive">
-                    {errors.body.message}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="justify-between space-x-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  reset();
-                }}
+          {isSubmitted ? (
+            <div className="p-6 pt-0">
+              <div
+                className="mb-4 rounded-lg bg-green-100 p-4 text-sm text-green-700 dark:bg-muted/50"
+                role="alert"
               >
-                Clear
-              </Button>
-              <Button disabled={isSubmitting} type="submit">
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                    wait
-                  </>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </CardFooter>
-          </form>
+                <svg
+                  className="mr-1 inline size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1024 1024"
+                  version="1.1"
+                >
+                  <path
+                    d="M905.92 237.76a32 32 0 0 0-52.48 36.48A416 416 0 1 1 96 512a418.56 418.56 0 0 1 297.28-398.72 32 32 0 1 0-18.24-61.44A480 480 0 1 0 992 512a477.12 477.12 0 0 0-86.08-274.24z"
+                    fill="#16a34a"
+                  />
+                  <path
+                    d="M630.72 113.28A413.76 413.76 0 0 1 768 185.28a32 32 0 0 0 39.68-50.24 476.8 476.8 0 0 0-160-83.2 32 32 0 0 0-18.24 61.44zM489.28 86.72a36.8 36.8 0 0 0 10.56 6.72 30.08 30.08 0 0 0 24.32 0 37.12 37.12 0 0 0 10.56-6.72A32 32 0 0 0 544 64a33.6 33.6 0 0 0-9.28-22.72A32 32 0 0 0 505.6 32a20.8 20.8 0 0 0-5.76 1.92 23.68 23.68 0 0 0-5.76 2.88l-4.8 3.84a32 32 0 0 0-6.72 10.56A32 32 0 0 0 480 64a32 32 0 0 0 2.56 12.16 37.12 37.12 0 0 0 6.72 10.56zM230.08 467.84a36.48 36.48 0 0 0 0 51.84L413.12 704a36.48 36.48 0 0 0 51.84 0l328.96-330.56A36.48 36.48 0 0 0 742.08 320l-303.36 303.36-156.8-155.52a36.8 36.8 0 0 0-51.84 0z"
+                    fill="#16a34a"
+                  />
+                </svg>
+                <span>
+                  Thank you for your feedback! We appreciate your input and are
+                  always striving to improve. If you have any more thoughts or
+                  suggestions, feel free to share!
+                </span>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <CardContent className="grid gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="subject">Subject</Label>
+                  <Input
+                    {...register("subject")}
+                    id="subject"
+                    placeholder="Enter feedback subject"
+                    autoComplete="off"
+                  />
+                  {errors.subject && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.subject.message}
+                    </p>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="body">Feedback</Label>
+                  <Textarea
+                    {...register("body")}
+                    id="body"
+                    placeholder="Please include all information relevant to your feedback."
+                  />
+                  {errors.body && (
+                    <p className="text-sm font-medium text-destructive">
+                      {errors.body.message}
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter className="justify-between space-x-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    reset();
+                  }}
+                >
+                  Clear
+                </Button>
+                <Button disabled={isSubmitting} type="submit">
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      wait
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </CardFooter>
+            </form>
+          )}
         </Card>
         <div className="h-full">
           <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
