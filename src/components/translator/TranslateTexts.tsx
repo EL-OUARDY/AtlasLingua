@@ -6,7 +6,6 @@ import {
   Check,
   Copy,
   CornerDownLeft,
-  Flag,
   History,
   Loader2,
   MessageSquareTextIcon,
@@ -59,8 +58,6 @@ function TranslateText() {
   const { setIsHistoryOpen, addToHistory } = useHistory();
 
   const [prevTranslation, setPrevTranslation] = useState<string>("");
-
-  const [isReportOpen, setReportOpen] = useState<boolean>(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -704,21 +701,14 @@ function TranslateText() {
                     <span className="sr-only">Copy</span>
                   </Button>
 
+                  {/* Share Button */}
                   <ShareTranslation link={shareableLink} />
 
-                  <WTooltip side="top" content="Report Translation">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="hover:bg-background/60 dark:hover:bg-background/30"
-                      onClick={() => {
-                        setReportOpen(true);
-                      }}
-                    >
-                      <Flag className="size-5 text-muted-foreground" />
-                      <span className="sr-only">Report Translation</span>
-                    </Button>
-                  </WTooltip>
+                  {/* Report Translation Button */}
+                  <ReportDialog
+                    translation={translationService.stringify(translation)}
+                    translationId={translationID}
+                  />
                 </div>
               </>
             )}
@@ -761,16 +751,6 @@ function TranslateText() {
           </Link>
         </div>
       </div>
-
-      {/* report dialog */}
-      {isReportOpen && (
-        <ReportDialog
-          isOpen={isReportOpen}
-          translation={translationService.stringify(translation)}
-          translationId={translationID}
-          setIsOpen={setReportOpen}
-        />
-      )}
     </div>
   );
 }
