@@ -92,7 +92,7 @@ function Privacy() {
         <h3 className="mb-2 mt-4 text-2xl font-bold tracking-tight">
           Your Rights
         </h3>
-        <p className="text-base text-muted-foreground">
+        <div className="text-base text-muted-foreground">
           <ul>
             You have the right to:
             <li className="ml-4">
@@ -101,7 +101,7 @@ function Privacy() {
             <li className="ml-4"> - Request deletion of your data.</li>
             <li className="ml-4"> - Update your personal information</li>
           </ul>
-        </p>
+        </div>
         <h3 className="mb-2 mt-4 text-2xl font-bold tracking-tight">
           Community Contributions
         </h3>

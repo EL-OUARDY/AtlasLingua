@@ -10,6 +10,7 @@ import {
   MessagesSquare,
   BadgeInfo,
   Mail,
+  LockKeyholeIcon,
 } from "lucide-react";
 
 interface ISideBarLink {
@@ -27,17 +28,17 @@ export const MenuLinks: ISideBarLink[] = [
     onlyMobile: false,
   },
   {
-    text: "Dictionary",
-    href: ROUTES.dictionary,
-    icon: BookOpenText,
-    onlyMobile: false,
-  },
-  { text: "Favorites", href: ROUTES.favorites, icon: Star, onlyMobile: false },
-  { text: "Learn", href: ROUTES.learn, icon: Library, onlyMobile: false },
-  {
     text: "Community",
     href: ROUTES.community,
     icon: MessagesSquare,
+    onlyMobile: false,
+  },
+  { text: "Learn", href: ROUTES.learn, icon: Library, onlyMobile: false },
+  { text: "Favorites", href: ROUTES.favorites, icon: Star, onlyMobile: false },
+  {
+    text: "Dictionary",
+    href: ROUTES.dictionary,
+    icon: BookOpenText,
     onlyMobile: false,
   },
   // {
@@ -56,6 +57,12 @@ export const MenuLinks: ISideBarLink[] = [
     text: "Contribution",
     href: ROUTES.contribution,
     icon: Handshake,
+    onlyMobile: false,
+  },
+  {
+    text: "Privacy Policy",
+    href: ROUTES.privacy,
+    icon: LockKeyholeIcon,
     onlyMobile: false,
   },
   {
