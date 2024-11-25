@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, make_response, request, url_for, redirect
 from flask_jwt_extended import (
     create_access_token,
+    decode_token,
     get_jwt_identity,
     jwt_required,
     set_access_cookies,
@@ -118,3 +119,53 @@ def authorize_google():
         set_refresh_cookies(response, refresh_token)
         return response
     return jsonify(message="Failed to authenticate."), 400
+
+
+@bp.route("/forgot-password", methods=["POST"])
+def forgot_password():
+    data = request.get_json()
+    email = data.get("email")
+
+    user = AuthService.get_user_by_email(email)
+    if not user:
+        return jsonify({"message": "Email not found"}), 404
+
+    reset_token = create_access_token(
+        identity=user.id, expires_delta=timedelta(hours=1)
+    )
+    reset_link = (
+        f"{os.getenv('FRONTEND_URL')}/reset-password?token={reset_token}"
+    )
+
+    # send reset email
+    AuthService.send_password_reset_email(user.email, reset_link)
+
+    return jsonify({"message": "Password reset email sent"}), 200
+
+
+@bp.route("/reset-password", methods=["POST"])
+def reset_password():
+    data = request.get_json()
+    reset_token = data.get("token")
+    new_password = data.get("new_password")
+
+    if not reset_token or not new_password:
+        return jsonify({"message": "Token and new password are required"}), 400
+
+    try:
+        # Decode the token to extract the user's identity
+        decoded_token = decode_token(reset_token)
+        user_id = decoded_token.get(
+            "sub"
+        )  # 'sub' typically stores the user's identity
+    except Exception as e:
+        return jsonify({"message": "Invalid or expired token"}), 400
+
+    # Fetch the user from the database
+    user = AuthService.get_user_by_id(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # Update the user's password
+    AuthService.update_user_password(user, new_password)
+    return jsonify({"message": "Password updated successfully"}), 200

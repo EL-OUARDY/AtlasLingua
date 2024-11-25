@@ -37,7 +37,7 @@ function ProfileSettings() {
   const defaultValues: Partial<ProfileFormValues> = {
     username: user?.name,
     email: user?.email,
-    bio: user?.bio,
+    bio: user?.bio || "",
   };
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

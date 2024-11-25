@@ -8,7 +8,7 @@ from flask_cors import CORS
 import os
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
-
+from flask_mail import Mail
 
 # Initialize the database, migration, marshmallow and JWT manager objects, OAuth
 db = SQLAlchemy()
@@ -17,6 +17,7 @@ ma = Marshmallow()
 jwt = JWTManager()
 bcrypt = Bcrypt()
 oauth = OAuth()  # Initialize OAuth
+mail = Mail()
 
 
 def create_app():
@@ -46,20 +47,7 @@ def create_app():
         os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
     )
 
-    # Configure JWT
-    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-    app.config["JWT_COOKIE_SECURE"] = (
-        True  # Only allow cookies to be sent over HTTPS
-    )
-    app.config["JWT_COOKIE_CSRF_PROTECT"] = True  # Enable CSRF protection
-    app.config["JWT_COOKIE_SAMESITE"] = "Lax"  # Set SameSite policy
-
     # Google OAuth setup
-    app.config["GOOGLE_CLIENT_ID"] = os.getenv("GOOGLE_CLIENT_ID")
-    app.config["GOOGLE_CLIENT_SECRET"] = os.getenv("GOOGLE_CLIENT_SECRET")
-    app.config["GOOGLE_DISCOVERY_URL"] = (
-        "https://accounts.google.com/.well-known/openid-configuration"
-    )
     oauth.init_app(app)
     google = oauth.register(
         name="google",
@@ -72,11 +60,12 @@ def create_app():
         client_kwargs={"scope": "openid email profile"},
     )
 
-    # Initialize the database, migration, marshmallow and JWT manager with the app
+    # Initialize the database, migration, marshmallow and JWT manager, Mail
     db.init_app(app)
     migrate.init_app(app, db)
     ma.init_app(app)
     jwt.init_app(app)
+    mail.init_app(app)
 
     # Import and register Blueprints for the application routes
     from app.routes import dictionary
