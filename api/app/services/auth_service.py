@@ -4,6 +4,9 @@ from app.models.user import User
 from app import db, bcrypt, mail
 from app.utils.helpers import generate_password
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 
 class AuthService:
@@ -54,58 +57,74 @@ class AuthService:
         return user
 
     @staticmethod
-    def send_password_reset_email(email, reset_link):
-        try:
-            msg = Message(
-                f"{os.getenv('APP_NAME')} | Password Reset Request",
-                recipients=[email],
-            )
+    def send_password_reset_email(recipient_email, reset_link):
 
-            msg.body = f"Click the link to reset your password: {reset_link}"
+        sender_email = "AtlasLingua <noreply@atlaslingua.com>"
 
-            msg.html = f"""
-            <html>
-            <body style="font-family: Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
-                <div style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                    <!-- Header -->
-                    <div style="background-color: #0369a1; padding: 20px; text-align: center; color: white;">
-                        <img src="{os.getenv('FRONTEND_URL')}/logo.svg" alt="Site Logo" style="width: 50px; margin-bottom: 10px;">
-                        <h1 style="margin: 0; font-size: 24px;">AtlasLingua</h1>
-                    </div>
-
-                    <!-- Body -->
-                    <div style="padding: 20px; background-color: #f9f9f9;">
-                        <h2 style="color: #333;">Password Reset Request</h2>
-                        <p>Hi,</p>
-                        <p>We received a request to reset your password. If this was you, click the button below to reset your
-                            password:</p>
-                        <a href="{reset_link}" style="
-                                    display: inline-block;
-                                    padding: 10px 20px;
-                                    color: white;
-                                    background-color: #0369a1;
-                                    text-decoration: none;
-                                    border-radius: 5px;
-                                    font-weight: bold;
-                                ">Reset Your Password</a>
-                        <p>If you didn't request this, you can safely ignore this email. Your password won't be changed.</p>
-                    </div>
-
-                    <!-- Footer -->
-                    <div style="padding: 10px; text-align: center; background-color: #f1f1f1; color: #555; font-size: 12px;">
-                        <p>© AtlasLingua — All rights reserved.</p>
-                        <p><a href="{os.getenv('FRONTEND_URL')}" style="color: #0369a1; text-decoration: none;">Visit Our Website</a>
-                        </p>
-                    </div>
+        # Email HTML content
+        html_content = f"""
+        <html>
+        <body style="font-family: Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
+            <div style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                <!-- Header -->
+                <div style="background-color: #0369a1; padding: 20px; text-align: center; color: white;">
+                    <h1 style="margin: 0; font-size: 24px;">AtlasLingua</h1>
                 </div>
-            </body>
-            </html>
-            """
 
-            mail.send(msg)
+                <!-- Body -->
+                <div style="padding: 20px; background-color: #f9f9f9;">
+                    <p>Hi,</p>
+                    <p>We received a request to reset your password. If this was you, click the button below to reset your
+                        password:</p>
+                    <a href="{reset_link}" style="
+                                display: inline-block;
+                                padding: 10px 20px;
+                                color: white;
+                                background-color: #0369a1;
+                                text-decoration: none;
+                                border-radius: 5px;
+                                font-weight: bold;
+                            ">Reset Your Password</a>
+                    <p>If you didn't request this, you can safely ignore this email. Your password won't be changed.</p>
+                </div>
 
+                <!-- Footer -->
+                <div style="padding: 10px; text-align: center; background-color: #f1f1f1; color: #555; font-size: 12px;">
+                    <p>© AtlasLingua — All rights reserved.</p>
+                    <p><a href="{os.getenv('FRONTEND_URL')}" style="color: #0369a1; text-decoration: none;">Visit Our Website</a>
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        # Create the email
+        message = MIMEMultipart("alternative")
+        message["From"] = sender_email
+        message["To"] = recipient_email
+        message["Subject"] = "Password Reset"
+
+        # Attach the HTML content
+        html_part = MIMEText(html_content, "html", "utf-8")
+        message.attach(html_part)
+
+        try:
+            # Connect to the SMTP server
+            with smtplib.SMTP(
+                os.getenv("MAIL_SERVER"), os.getenv("MAIL_PORT")
+            ) as server:
+                server.starttls()  # Secure the connection
+                server.login(
+                    os.getenv("MAIL_USERNAME"), os.getenv("MAIL_PASSWORD")
+                )
+                server.sendmail(
+                    sender_email,
+                    recipient_email,
+                    message.as_string().encode("utf-8"),
+                )
         except Exception as e:
-            print(f"Failed to send email: {str(e)}")
+            print(f"An error occurred: {e}")
 
     @staticmethod
     def update_user_password(user, new_password):
