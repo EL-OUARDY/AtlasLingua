@@ -128,7 +128,10 @@ def forgot_password():
 
     user = AuthService.get_user_by_email(email)
     if not user:
-        return jsonify({"message": "Email not found"}), 404
+        return (
+            jsonify({"message": "No account found with this email address."}),
+            404,
+        )
 
     reset_token = create_access_token(
         identity=user.id, expires_delta=timedelta(hours=1)

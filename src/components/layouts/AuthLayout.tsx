@@ -15,7 +15,7 @@ import { APP_NAME, APP_INFO } from "@/shared/constants";
 import { ChevronUp, Hash } from "lucide-react";
 import { Link } from "react-router-dom";
 
-type Role = "login" | "signup";
+type Role = "login" | "signup" | "forgot-password";
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ interface Props {
 function AuthLayout({ children, role, description }: Props) {
   return (
     <div className="relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      {role == "signup" && (
+      {(role == "signup" || role == "forgot-password") && (
         <Link
           to={ROUTES.login}
           className={cn(

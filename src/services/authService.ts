@@ -42,9 +42,31 @@ class authService {
 
   logout() {
     const controller = new AbortController();
-    const request = apiClient.post<IUser>("/auth/logout", {
+    const request = apiClient.post("/auth/logout", {
       signal: controller.signal,
     });
+
+    return { request, cancel: () => controller.abort() };
+  }
+
+  forgotPassword(formData: { email: string }) {
+    const controller = new AbortController();
+    const request = apiClient.post("/auth/forgot-password", formData, {
+      signal: controller.signal,
+    });
+
+    return { request, cancel: () => controller.abort() };
+  }
+
+  resetPassword(new_password: string, token: string) {
+    const controller = new AbortController();
+    const request = apiClient.post(
+      "/auth/reset-password",
+      { new_password, token },
+      {
+        signal: controller.signal,
+      },
+    );
 
     return { request, cancel: () => controller.abort() };
   }

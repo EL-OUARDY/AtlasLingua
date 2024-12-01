@@ -55,53 +55,57 @@ class AuthService:
 
     @staticmethod
     def send_password_reset_email(email, reset_link):
-        msg = Message(
-            f"{os.getenv('APP_NAME')} | Password Reset Request",
-            recipients=[email],
-        )
+        try:
+            msg = Message(
+                f"{os.getenv('APP_NAME')} | Password Reset Request",
+                recipients=[email],
+            )
 
-        msg.body = f"Click the link to reset your password: {reset_link}"
+            msg.body = f"Click the link to reset your password: {reset_link}"
 
-        msg.html = f"""
-        <html>
-        <body style="font-family: Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
-            <div style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
-                <!-- Header -->
-                <div style="background-color: #0369a1; padding: 20px; text-align: center; color: white;">
-                    <img src="{os.getenv('FRONTEND_URL')}/logo.svg" alt="Site Logo" style="width: 50px; margin-bottom: 10px;">
-                    <h1 style="margin: 0; font-size: 24px;">AtlasLingua</h1>
+            msg.html = f"""
+            <html>
+            <body style="font-family: Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
+                <div style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <!-- Header -->
+                    <div style="background-color: #0369a1; padding: 20px; text-align: center; color: white;">
+                        <img src="{os.getenv('FRONTEND_URL')}/logo.svg" alt="Site Logo" style="width: 50px; margin-bottom: 10px;">
+                        <h1 style="margin: 0; font-size: 24px;">AtlasLingua</h1>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <h2 style="color: #333;">Password Reset Request</h2>
+                        <p>Hi,</p>
+                        <p>We received a request to reset your password. If this was you, click the button below to reset your
+                            password:</p>
+                        <a href="{reset_link}" style="
+                                    display: inline-block;
+                                    padding: 10px 20px;
+                                    color: white;
+                                    background-color: #0369a1;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    font-weight: bold;
+                                ">Reset Your Password</a>
+                        <p>If you didn't request this, you can safely ignore this email. Your password won't be changed.</p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="padding: 10px; text-align: center; background-color: #f1f1f1; color: #555; font-size: 12px;">
+                        <p>© AtlasLingua — All rights reserved.</p>
+                        <p><a href="{os.getenv('FRONTEND_URL')}" style="color: #0369a1; text-decoration: none;">Visit Our Website</a>
+                        </p>
+                    </div>
                 </div>
+            </body>
+            </html>
+            """
 
-                <!-- Body -->
-                <div style="padding: 20px; background-color: #f9f9f9;">
-                    <h2 style="color: #333;">Password Reset Request</h2>
-                    <p>Hi,</p>
-                    <p>We received a request to reset your password. If this was you, click the button below to reset your
-                        password:</p>
-                    <a href="{reset_link}" style="
-                                display: inline-block;
-                                padding: 10px 20px;
-                                color: white;
-                                background-color: #0369a1;
-                                text-decoration: none;
-                                border-radius: 5px;
-                                font-weight: bold;
-                            ">Reset Your Password</a>
-                    <p>If you didn't request this, you can safely ignore this email. Your password won't be changed.</p>
-                </div>
+            mail.send(msg)
 
-                <!-- Footer -->
-                <div style="padding: 10px; text-align: center; background-color: #f1f1f1; color: #555; font-size: 12px;">
-                    <p>© AtlasLingua — All rights reserved.</p>
-                    <p><a href="{os.getenv('FRONTEND_URL')}" style="color: #0369a1; text-decoration: none;">Visit Our Website</a>
-                    </p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-
-        mail.send(msg)
+        except Exception as e:
+            print(f"Failed to send email: {str(e)}")
 
     @staticmethod
     def update_user_password(user, new_password):

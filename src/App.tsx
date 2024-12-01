@@ -28,6 +28,8 @@ import Summarization from "./components/translator/Summarization";
 import { UserProvider } from "./contexts/UserContext";
 import { Toaster } from "./components/ui/sonner";
 import ContributionGuidelines from "./components/pages/ContributionGuidelines";
+import ForgotPassword from "./components/pages/authentication/ForgotPassword";
+import ResetPassword from "./components/pages/authentication/ResetPassword";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
             {/* main routes */}
             <Route path={ROUTES.login} element={<Login />} />
             <Route path={ROUTES.signup} element={<Signup />} />
+            <Route path={ROUTES.forgotPassword} element={<ForgotPassword />} />
+            <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
             <Route path={ROUTES.contact} element={<Contact />} />
             <Route path="/" element={<Layout />}>
               <Route path={"/"} element={<Translator />}>
@@ -62,7 +66,7 @@ function App() {
               <Route path={ROUTES.learn} element={<Learn />} />
               <Route path={ROUTES.community} element={<Community />} />
               <Route
-                path={ROUTES.live_assistance}
+                path={ROUTES.liveAssistance}
                 element={<LiveAssistance />}
               />
               <Route path={ROUTES.contribution} element={<Contribution />} />
@@ -70,7 +74,7 @@ function App() {
               <Route path={ROUTES.about} element={<About />} />
               <Route path={ROUTES.privacy} element={<Privacy />} />
               <Route
-                path={ROUTES.contribution_guidelines}
+                path={ROUTES.contributionGuidelines}
                 element={<ContributionGuidelines />}
               />
               <Route path={ROUTES.settings.general} element={<Settings />}>

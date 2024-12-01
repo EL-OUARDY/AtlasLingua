@@ -116,7 +116,7 @@ function Login() {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <Link
-                    to="#"
+                    to={ROUTES.forgotPassword}
                     className="ml-auto inline-block text-sm underline"
                     tabIndex={-1}
                   >
