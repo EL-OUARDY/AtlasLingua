@@ -1,7 +1,6 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_mail import Message
 from app.models.user import User
-from app import db, bcrypt, mail
+from app import db, bcrypt
 from app.utils.helpers import generate_password
 import os
 import smtplib

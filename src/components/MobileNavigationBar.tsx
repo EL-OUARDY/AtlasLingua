@@ -12,18 +12,18 @@ function MobileNavigationBar() {
   return (
     <div className="fixed bottom-0 z-30 flex w-full justify-between gap-3 border-t bg-background p-2 px-4 md:hidden">
       <NavLink
-        to={ROUTES.dictionary}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
-      >
-        <BookOpenText className="size-6" />
-        <span className="sr-only">Dictionary</span>
-      </NavLink>
-      <NavLink
         to={ROUTES.community}
         className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
         <MessagesSquare className="size-6" />
         <span className="sr-only">Community</span>
+      </NavLink>
+      <NavLink
+        to={ROUTES.dictionary}
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
+      >
+        <BookOpenText className="size-6" />
+        <span className="sr-only">Dictionary</span>
       </NavLink>
       <NavLink
         to={ROUTES.translate.index}
