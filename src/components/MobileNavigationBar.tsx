@@ -1,7 +1,7 @@
 import { ROUTES } from "@/routes/routes";
 import {
   Languages,
-  BookOpenText,
+  Settings,
   Star,
   MessagesSquare,
   Library,
@@ -19,12 +19,13 @@ function MobileNavigationBar() {
         <span className="sr-only">Community</span>
       </NavLink>
       <NavLink
-        to={ROUTES.dictionary}
+        to={ROUTES.favorites}
         className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
-        <BookOpenText className="size-6" />
-        <span className="sr-only">Dictionary</span>
+        <Star className="size-6" />
+        <span className="sr-only">Favorites</span>
       </NavLink>
+
       <NavLink
         to={ROUTES.translate.index}
         className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground"
@@ -34,19 +35,20 @@ function MobileNavigationBar() {
         </div>
         <span className="sr-only">Translate</span>
       </NavLink>
-      <NavLink
-        to={ROUTES.favorites}
-        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
-      >
-        <Star className="size-6" />
-        <span className="sr-only">Favorites</span>
-      </NavLink>
+
       <NavLink
         to={ROUTES.learn}
         className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
         <Library className="size-6" />
         <span className="sr-only">Learn</span>
+      </NavLink>
+      <NavLink
+        to={ROUTES.settings.general}
+        className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
+      >
+        <Settings className="size-6" />
+        <span className="sr-only">Settings</span>
       </NavLink>
     </div>
   );

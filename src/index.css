@@ -60,15 +60,6 @@
 }
 
 /* edy styles */
-body {
-  background-image: url("/img/beams.jpg");
-  @apply bg-cover bg-center;
-}
-
-.dark body {
-  background-image: none;
-}
-
 @font-face {
   font-family: "Geist";
   src:
@@ -85,6 +76,19 @@ body {
     url("/fonts/Geist-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
+}
+
+html.font-system-ui {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+body {
+  background-image: url("/img/beams.jpg");
+  @apply bg-cover bg-center;
+}
+
+.dark body {
+  background-image: none;
 }
 
 /* active links */

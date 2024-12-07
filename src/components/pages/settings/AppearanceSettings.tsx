@@ -21,12 +21,13 @@ import {
   SelectGroup,
   SelectItem,
 } from "@/components/ui/select";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const FormSchema = z.object({
-  theme: z.enum(["light", "dark"], {
+  theme: z.enum(["light", "dark", "system"], {
     required_error: "Please select a theme.",
   }),
-  font: z.enum(["geist", "manrope", "system"], {
+  font: z.enum(["geist", "system"], {
     invalid_type_error: "Select a font",
     required_error: "Please select a font.",
   }),
@@ -34,20 +35,21 @@ const FormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof FormSchema>;
 
-// from database
-const defaultValues: Partial<AppearanceFormValues> = {
-  theme: "light",
-  font: "geist",
-};
-
 function AppearanceSettings() {
+  const { theme, font, setTheme, setFont } = useTheme();
+  const defaultValues: Partial<AppearanceFormValues> = {
+    theme: theme,
+    font: font,
+  };
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues,
   });
 
   function onSubmit(data: AppearanceFormValues) {
-    console.log(data);
+    setTheme(data.theme);
+    setFont(data.font);
+    // update user preferences in the database
   }
 
   return (
@@ -73,7 +75,7 @@ function AppearanceSettings() {
                 <FormLabel>Font</FormLabel>
                 <div className="relative w-max">
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={setFont}
                     defaultValue={field.value}
                     name={field.name}
                   >
@@ -85,8 +87,7 @@ function AppearanceSettings() {
                     <SelectContent>
                       <SelectGroup>
                         <SelectItem value="geist">Geist</SelectItem>
-                        <SelectItem value="manrope">Manrope</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
+                        <SelectItem value="system">System Font</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -110,7 +111,7 @@ function AppearanceSettings() {
                 <FormMessage />
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
+                    onValueChange={setTheme}
                     defaultValue={field.value}
                     name={field.name}
                     className="grid max-w-md grid-cols-2 gap-8 pt-2"
