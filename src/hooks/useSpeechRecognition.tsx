@@ -14,6 +14,9 @@ interface UseSpeechRecognitionReturn {
   error: string | null;
   startListening: () => void;
   stopListening: () => void;
+  speaking: boolean;
+  speakText: (text: string) => void;
+  stopSpeaking: () => void;
 }
 
 export function useSpeechRecognition(
@@ -31,6 +34,8 @@ export function useSpeechRecognition(
   const [error, setError] = useState<string | null>(null);
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  const [speaking, setSpeaking] = useState<boolean>(false);
 
   useEffect(() => {
     const SpeechRecognitionConstructor =
@@ -96,6 +101,46 @@ export function useSpeechRecognition(
     }
   }, []);
 
+  const speakText = useCallback(
+    (text: string) => {
+      if (!("speechSynthesis" in window)) {
+        setError("Speech Synthesis not supported in this browser.");
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+
+      // Optional: adjust pitch, rate, volume
+      // utterance.pitch = 1;
+      // utterance.rate = 1;
+      // utterance.volume = 1;
+
+      utterance.onstart = () => {
+        setSpeaking(true);
+      };
+
+      utterance.onend = () => {
+        setSpeaking(false);
+      };
+
+      utterance.onerror = (e) => {
+        setError("Speech synthesis error: " + e.error);
+        setSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    },
+    [lang],
+  );
+
+  const stopSpeaking = useCallback(() => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+    }
+  }, []);
+
   return {
     transcript,
     setTranscript,
@@ -103,5 +148,8 @@ export function useSpeechRecognition(
     error,
     startListening,
     stopListening,
+    speaking,
+    speakText,
+    stopSpeaking,
   };
 }
