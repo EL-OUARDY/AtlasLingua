@@ -9,7 +9,6 @@ import {
   History,
   Loader2,
   MessageSquareTextIcon,
-  Mic,
   ShieldCheck,
   Star,
 } from "lucide-react";
@@ -38,6 +37,7 @@ import ReportDialog from "../ReportDialog";
 import { useUser } from "@/contexts/UserContext";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
 import ShareTranslation from "../ShareTranslation";
+import VoiceInput from "../VoiceInput";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -358,26 +358,16 @@ function TranslateText() {
               dir={isRTL(textToTranslate) ? "rtl" : "ltr"}
             />
 
-            <div className="sticky bottom-0 left-0 w-full">
+            <div className="w-full">
               <Separator className="dark:bg-secondary-foreground/10" />
               <div className="flex items-center p-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-background/60 dark:hover:bg-background/30"
-                  onClick={() => {
-                    toast.warning("Feature Coming Soon.", {
-                      description: "Stay tuned! ",
-                      action: {
-                        label: "OK",
-                        onClick: () => {},
-                      },
-                    });
-                  }}
-                >
-                  <Mic className="size-5 text-muted-foreground" />
-                  <span className="sr-only">Use Microphone</span>
-                </Button>
+                <VoiceInput
+                  language={sourceLang}
+                  text={textToTranslate}
+                  handleTranscriptChange={setTextToTranslate}
+                  shouldStopListening={isTranslating}
+                />
+
                 {isRTL(textToTranslate) && sourceLang === "darija" && (
                   <WTooltip
                     side="top"
