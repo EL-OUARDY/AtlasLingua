@@ -7,7 +7,7 @@ import WTooltip from "../ui/custom/WTooltip";
 import { ScrollArea } from "../ui/scroll-area";
 
 function TranslateMedia() {
-  const [output, setOutput] = useState<string>("");
+  const [output, _setOutput] = useState<string>("");
   const fileInput = useRef<HTMLInputElement>(null);
   const [selectedFileName, setSelectedFileName] = useState<
     string | undefined

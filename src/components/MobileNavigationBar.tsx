@@ -1,12 +1,7 @@
 import { ROUTES } from "@/routes/routes";
-import {
-  Languages,
-  Settings,
-  Star,
-  MessagesSquare,
-  Library,
-} from "lucide-react";
+import { Settings, Star, MessagesSquare, Library } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { LanguagesIcon } from "./ui/icons/Languages";
 
 function MobileNavigationBar() {
   return (
@@ -31,7 +26,7 @@ function MobileNavigationBar() {
         className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground"
       >
         <div className="absolute bottom-2 rounded-full border border-secondary bg-background p-4">
-          <Languages className="h-6 w-6" />
+          <LanguagesIcon className="size-6" />
         </div>
         <span className="sr-only">Translate</span>
       </NavLink>
