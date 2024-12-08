@@ -1,13 +1,5 @@
-import {
-  ChevronDownIcon,
-  CircleIcon,
-  Copy,
-  Flag,
-  ListCollapse,
-  ShieldCheck,
-  StarIcon,
-} from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Check, CircleIcon, Copy, ShieldCheck, StarIcon } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,16 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { IDictionary } from "@/models/Dictionary";
 import WTooltip from "./ui/custom/WTooltip";
-import { toast } from "sonner";
+import { useState } from "react";
 
 interface Props {
   word: IDictionary;
@@ -34,6 +19,7 @@ interface Props {
 }
 
 function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
+  const [isCopied, setIsCopied] = useState<boolean>(false);
   return (
     <Card className={className}>
       <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-6">
@@ -54,7 +40,7 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
             >
               {word.favorite && (
                 <>
-                  <WTooltip side="top" content="Remove from list">
+                  <WTooltip side="top" content="Remove From <br> My Favorites">
                     <StarIcon
                       onClick={() => removeFavorite(word)}
                       className="size-4 cursor-pointer fill-orange-600 stroke-orange-500"
@@ -64,7 +50,7 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
               )}
               {!word.favorite && (
                 <>
-                  <WTooltip side="top" content="Save">
+                  <WTooltip side="top" content="Save To <br> My Favorites">
                     <StarIcon
                       onClick={() => addFavorite(word)}
                       className="size-4 cursor-pointer"
@@ -73,46 +59,6 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
                 </>
               )}
             </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className="p-0 shadow-none">
-                  <ChevronDownIcon className="h-4 w-4 text-secondary-foreground" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                alignOffset={-5}
-                className=""
-                forceMount
-              >
-                <DropdownMenuItem className="cursor-pointer">
-                  <ListCollapse className="mr-2 h-4 w-4" /> Details
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      `${word.english} = ${word.darija}`,
-                    );
-                    toast("Copied to clipboard", {
-                      action: {
-                        label: "Hide",
-                        onClick: () => {},
-                      },
-                    });
-                  }}
-                >
-                  <Copy className="mr-2 h-4 w-4" /> Copy
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  <Flag className="mr-2 h-4 w-4" /> Report
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       </CardHeader>
@@ -130,6 +76,23 @@ function WordCard({ word, className, addFavorite, removeFavorite }: Props) {
                 <ShieldCheck className="size-4 text-green-600" />
               </WTooltip>
             )}
+
+            <WTooltip side="top" content={isCopied ? "Copied" : "Copy"}>
+              {!isCopied ? (
+                <Copy
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `${word.english} = ${word.darija}`,
+                    );
+                    setIsCopied(true);
+                    setTimeout(() => setIsCopied(false), 2000);
+                  }}
+                  className="size-4 cursor-pointer"
+                />
+              ) : (
+                <Check className="size-4" />
+              )}
+            </WTooltip>
           </div>
         </div>
       </CardContent>

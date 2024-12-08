@@ -23,7 +23,7 @@ function WordCardSkeleton() {
             <Skeleton className="h-4 w-full" />
           </CardDescription>
           <div className="min-size-10 absolute right-4 top-4 !m-0 flex h-fit items-center justify-between gap-2 rounded-md">
-            <Skeleton className="h-10 w-[4.5rem]" />
+            <Skeleton className="h-10 w-[3rem]" />
           </div>
         </div>
       </CardHeader>

@@ -1,7 +1,5 @@
-import { ROUTES } from "@/routes/routes";
 import { motion, useAnimation, Variants } from "framer-motion";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 
 const pathVariants: Variants = {
   initial: { opacity: 1, pathLength: 1, pathOffset: 0 },
@@ -40,15 +38,11 @@ const LanguagesIcon = ({ className }: Props) => {
   const svgControls = useAnimation();
   const pathControls = useAnimation();
 
-  const location = useLocation();
-
   useEffect(() => {
     // Start the animation on component mount
-    if (location.pathname.includes(ROUTES.translate.index)) {
-      svgControls.start("animate");
-      pathControls.start("animate");
-    }
-  }, [svgControls, pathControls, location]);
+    svgControls.start("animate");
+    pathControls.start("animate");
+  }, [svgControls, pathControls]);
 
   return (
     <motion.svg

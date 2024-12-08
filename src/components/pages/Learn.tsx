@@ -149,8 +149,11 @@ function Learn() {
         />
 
         <div className="mt-4 w-full sm:hidden">
-          <Select onValueChange={(link) => setSelectedCategory(link)}>
-            <SelectTrigger className="w-full">
+          <Select
+            value={selectedCategory}
+            onValueChange={(link) => setSelectedCategory(link)}
+          >
+            <SelectTrigger className="w-full capitalize">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>

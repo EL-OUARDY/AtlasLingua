@@ -1,9 +1,10 @@
 import { ROUTES } from "@/routes/routes";
 import { Settings, Star, MessagesSquare, Library } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { LanguagesIcon } from "./ui/icons/Languages";
 
 function MobileNavigationBar() {
+  const location = useLocation();
   return (
     <div className="fixed bottom-0 z-30 flex w-full justify-between gap-3 border-t bg-background p-2 px-4 md:hidden">
       <NavLink
@@ -26,7 +27,9 @@ function MobileNavigationBar() {
         className="relative inline-flex flex-col items-center px-6 py-3 text-xs font-medium text-muted-foreground hover:text-foreground"
       >
         <div className="absolute bottom-2 rounded-full border border-secondary bg-background p-4">
-          <LanguagesIcon className="size-6" />
+          <LanguagesIcon
+            className={`size-6 ${location.pathname === ROUTES.home && "text-primary"}`}
+          />
         </div>
         <span className="sr-only">Translate</span>
       </NavLink>
