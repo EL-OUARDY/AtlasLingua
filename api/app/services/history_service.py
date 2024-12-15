@@ -42,6 +42,7 @@ class HistoryService:
             "english" if source == LanguagesEnum.ENGLISH.value else "darija"
         )
         filter = {filter_attribute: text_to_translate}
+        filter["source_language"] = source
         filter["processed_by"] = processed_by
 
         result = history_schema.dump(
