@@ -21,7 +21,9 @@ import {
   SelectGroup,
   SelectItem,
 } from "@/components/ui/select";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme, Theme, Font } from "@/contexts/ThemeContext";
+import { Check } from "lucide-react";
+import { useState } from "react";
 
 const FormSchema = z.object({
   theme: z.enum(["light", "dark", "system"], {
@@ -36,6 +38,7 @@ const FormSchema = z.object({
 type AppearanceFormValues = z.infer<typeof FormSchema>;
 
 function AppearanceSettings() {
+  const [isSaved, setIsSaved] = useState<boolean>(false);
   const { theme, font, setTheme, setFont } = useTheme();
   const defaultValues: Partial<AppearanceFormValues> = {
     theme: theme,
@@ -50,6 +53,10 @@ function AppearanceSettings() {
     setTheme(data.theme);
     setFont(data.font);
     // update user preferences in the database
+    setIsSaved(true);
+    setTimeout(() => {
+      setIsSaved(false);
+    }, 2000);
   }
 
   return (
@@ -75,7 +82,10 @@ function AppearanceSettings() {
                 <FormLabel>Font</FormLabel>
                 <div className="relative w-max">
                   <Select
-                    onValueChange={setFont}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setFont(value as Font);
+                    }}
                     defaultValue={field.value}
                     name={field.name}
                   >
@@ -111,7 +121,11 @@ function AppearanceSettings() {
                 <FormMessage />
                 <FormControl>
                   <RadioGroup
-                    onValueChange={setTheme}
+                    onValueChange={(value) => {
+                      setTheme(value as Theme);
+                      field.onChange(value);
+                    }}
+                    value={field.value}
                     defaultValue={field.value}
                     name={field.name}
                     className="grid max-w-md grid-cols-2 gap-8 pt-2"
@@ -174,8 +188,18 @@ function AppearanceSettings() {
             )}
           />
 
-          <Button type="submit" className="w-fit">
-            Update preferences
+          <Button
+            disabled={isSaved}
+            type="submit"
+            className="w-fit disabled:opacity-100"
+          >
+            {isSaved ? (
+              <>
+                <Check className="mr-2 size-4" /> Saved
+              </>
+            ) : (
+              "Update preferences"
+            )}
           </Button>
         </form>
       </Form>

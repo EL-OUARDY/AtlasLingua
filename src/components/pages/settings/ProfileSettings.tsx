@@ -21,11 +21,6 @@ const FormSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
   bio: z.string().max(255).optional(),
 });
 
@@ -35,8 +30,7 @@ function ProfileSettings() {
   const { user } = useUser();
   // from database
   const defaultValues: Partial<ProfileFormValues> = {
-    username: user?.name,
-    email: user?.email,
+    username: user?.name || "",
     bio: user?.bio || "",
   };
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -83,27 +77,24 @@ function ProfileSettings() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="user@atlaslingua.com"
-                    autoComplete="on"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This where you'll receive notifications form us.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="space-y-2">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Email
+            </label>
+            <Input
+              disabled
+              type="email"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="user@atlaslingua.com"
+              value={user?.email}
+            />
+            <p
+              id=":r1rr:-form-item-description"
+              className="text-sm text-muted-foreground"
+            >
+              This where you'll receive notifications form us.
+            </p>
+          </div>
           <FormField
             control={form.control}
             name="bio"
@@ -117,10 +108,6 @@ function ProfileSettings() {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  You can <span>@mention</span> other users and organizations to
-                  link to them.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light" | "system";
-type Font = "geist" | "system";
+export type Theme = "dark" | "light" | "system";
+export type Font = "geist" | "system";
 
 type ThemeProviderProps = {
   children: React.ReactNode;

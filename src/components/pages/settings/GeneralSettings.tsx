@@ -1,12 +1,9 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -14,17 +11,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { MenuLinks } from "@/shared/menu-links";
 import { Switch } from "@/components/ui/switch";
 
 const FormSchema = z.object({
   show_arabic: z.boolean().default(true).optional(),
   sanitize_output: z.boolean().default(true).optional(),
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one item.",
-  }),
 });
 
 type FormValues = z.infer<typeof FormSchema>;
@@ -33,7 +25,6 @@ type FormValues = z.infer<typeof FormSchema>;
 const defaultValues: Partial<FormValues> = {
   show_arabic: true,
   sanitize_output: false,
-  items: MenuLinks.map((x) => x.text),
 };
 
 function GeneralSettings() {
@@ -115,64 +106,7 @@ function GeneralSettings() {
               />
             </div>
           </div>
-
-          <FormField
-            control={form.control}
-            name="items"
-            render={() => (
-              <FormItem>
-                <div className="mb-4">
-                  <FormLabel className="text-base">
-                    Navigation sidebar
-                  </FormLabel>
-                  <FormDescription>
-                    Select the items you want to display in the sidebar.
-                  </FormDescription>
-                </div>
-                {MenuLinks.map((item, index) => (
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name="items"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={index}
-                          className="flex flex-row items-start space-x-3 space-y-0"
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(item.text)}
-                              name={item.text}
-                              disabled={
-                                ["Translator", "Dictionary"].includes(item.text)
-                                  ? true
-                                  : false
-                              }
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, item.text])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.text,
-                                      ),
-                                    );
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            {item.text}
-                          </FormLabel>
-                        </FormItem>
-                      );
-                    }}
-                  />
-                ))}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Update display</Button>
+          <Button type="submit">Save changes</Button>
         </form>
       </Form>
     </>

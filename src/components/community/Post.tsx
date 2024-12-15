@@ -47,7 +47,7 @@ function Post({ postId }: Props) {
           <div className="flex w-full items-start pb-4">
             <div className="flex w-full items-start gap-4 text-sm">
               <Avatar>
-                <AvatarImage alt={post.user.name} />
+                <AvatarImage src={post.user.avatar} alt={post.user.name} />
                 <AvatarFallback className="bg-background dark:bg-secondary">
                   {post.user.name
                     .split(" ")
@@ -182,7 +182,7 @@ function Post({ postId }: Props) {
                     <Textarea
                       id="comment"
                       defaultValue={"@Emma Wilson "}
-                      className="no-ring p-4 text-sm"
+                      className="p-4 text-sm no-ring"
                       placeholder={`Reply to ${post.user.name}...`}
                     />
                     <div className="flex items-center">
