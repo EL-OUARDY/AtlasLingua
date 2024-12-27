@@ -30,7 +30,7 @@ interface Props {
   postId: number;
 }
 
-function Post({ postId }: Props) {
+function SinglePost({ postId }: Props) {
   const [post, setPost] = useState<ICommunityPost>();
   const [showNewComment, setShowNewComment] = useState<boolean>(false);
 
@@ -67,30 +67,29 @@ function Post({ postId }: Props) {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <div className="cursor-pointer">
-                        <MoreVertical className="h-4 w-4" />
+                        <MoreVertical className="size-4" />
                         <span className="sr-only">More</span>
                       </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
-                        <Edit3Icon className="mr-2 h-4 w-4" /> Edit
+                        <Edit3Icon className="mr-2 size-4" /> Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Trash2Icon className="mr-2 h-4 w-4" /> Delete
+                        <Trash2Icon className="mr-2 size-4" /> Delete
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>
-                        <Share2Icon className="mr-2 h-4 w-4" /> Share
+                        <Share2Icon className="mr-2 size-4" /> Share
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>
-                        <Flag className="mr-2 h-4 w-4" /> Report
+                        <Flag className="mr-2 size-4" /> Report
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <div className="line-clamp-1 text-xs">{post.user.bio}</div>
                 {post.date && (
                   <div className="text-xs text-muted-foreground">
                     {format(new Date(post.date), "PPpp")}
@@ -215,4 +214,4 @@ function Post({ postId }: Props) {
   );
 }
 
-export default Post;
+export default SinglePost;

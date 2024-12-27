@@ -13,8 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
+import { useUser } from "@/contexts/UserContext";
 
 function NewPost() {
+  const { user } = useUser();
   return (
     <div className="relative flex h-full w-full min-w-[180px] flex-col rounded-lg border p-4">
       <div className="flex max-h-full flex-1 flex-col">
@@ -56,12 +58,9 @@ function NewPost() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="line-clamp-1 text-xs">
-                {"Linguistics student"}
-              </div>
-              {"user@atlaslingua.com" && (
+              {user && (
                 <div className="text-xs text-muted-foreground">
-                  {"user@atlaslingua.com"}
+                  {user.email}
                 </div>
               )}
             </div>
@@ -73,7 +72,7 @@ function NewPost() {
           <div className="flex h-full flex-col gap-4">
             <Textarea
               id="post-content"
-              className="no-ring h-full max-h-72 p-4 text-sm"
+              className="h-full max-h-72 p-4 text-sm no-ring"
               placeholder={`What's in your mind?`}
             />
             <div className="flex w-full max-w-sm flex-col gap-4">

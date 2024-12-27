@@ -53,7 +53,7 @@ function PostsList({ posts, onSelect }: Props) {
                   </div>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <EllipsisVertical className="h-4 w-4 cursor-pointer text-secondary-foreground" />
+                      <EllipsisVertical className="size-4 cursor-pointer text-secondary-foreground" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       align="end"
@@ -62,26 +62,25 @@ function PostsList({ posts, onSelect }: Props) {
                       forceMount
                     >
                       <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                        <Edit3Icon className="mr-2 h-4 w-4" /> Edit
+                        <Edit3Icon className="mr-2 size-4" /> Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                        <Trash2Icon className="mr-2 h-4 w-4" /> Delete
+                        <Trash2Icon className="mr-2 size-4" /> Delete
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                        <Share2Icon className="mr-2 h-4 w-4" /> Share
+                        <Share2Icon className="mr-2 size-4" /> Share
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={(e) => e.stopPropagation()}>
-                        <Flag className="mr-2 h-4 w-4" /> Report
+                        <Flag className="mr-2 size-4" /> Report
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
               </div>
             </div>
-            <div className="text-sm font-medium">{post.user.role}</div>
           </div>
           <div className="line-clamp-2 text-sm text-muted-foreground">
             {post.content.substring(0, 300)}

@@ -39,7 +39,9 @@ def create_app():
     CORS(
         app,
         supports_credentials=True,
-        resources={r"/api/*": {"origins": os.getenv("FRONTEND_URL")}},
+        resources={
+            r"/api/*": {"origins": os.getenv("FRONTEND_URL").split(",")}
+        },
     )
 
     # Configure the Flask application from environment variable

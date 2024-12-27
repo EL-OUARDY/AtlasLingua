@@ -9,7 +9,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import PostsList from "../community/PostsList";
 import { dummyCommunityPosts } from "@/shared/dummy-data";
 import { APP_NAME } from "@/shared/constants";
-import Post from "../community/Post";
+import SinglePost from "../community/SinglePost";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
@@ -111,11 +111,6 @@ function Community() {
         <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
           <div className="flex items-center gap-4 md:flex-row">
             <div className="flex items-center">
-              {/* <h2 className="text-2xl font-bold tracking-tight">Community</h2> */}
-              {/* <p className="mt-1 text-muted-foreground">
-                  Make friends, share your thoughts and leverage the power of a
-                  great community.
-                </p> */}
               <Tabs
                 className="hidden lg:block"
                 defaultValue="latest"
@@ -170,7 +165,7 @@ function Community() {
             </div>
             <div className="ml-auto flex gap-2 md:grow-0">
               <div className="relative hidden md:block">
-                <Search className="absolute left-2.5 top-2.5 hidden h-4 w-4 text-muted-foreground md:block" />
+                <Search className="absolute left-2.5 top-2.5 hidden size-4 text-muted-foreground md:block" />
                 <Input
                   value={searchQuery}
                   id="search"
@@ -180,10 +175,11 @@ function Community() {
                   type="search"
                   placeholder="Search..."
                   className="hidden w-full rounded-lg bg-background pl-8 md:block md:w-[150px] lg:w-[250px]"
+                  autoComplete="off"
                 />
               </div>
               <Button className="hidden xl:flex" onClick={newPostButtonClick}>
-                <SquarePen className="mr-2 h-4 w-4" /> New Post
+                <SquarePen className="mr-2 size-4" /> New Post
               </Button>
               <Button variant={"outline"} size={"icon"} className="md:hidden">
                 <Search className="size-4 md:size-5" />
@@ -245,7 +241,7 @@ function Community() {
                     <WTooltip side="top" content="New post">
                       <a
                         onClick={newPostButtonClick}
-                        className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 items-center justify-center shadow-lg`}
+                        className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center shadow-lg`}
                       >
                         <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
                       </a>
@@ -258,7 +254,7 @@ function Community() {
             <ResizablePanel defaultSize={0}>
               <div className="flex h-full items-center justify-center">
                 {selectedPostId ? (
-                  <Post postId={selectedPostId} />
+                  <SinglePost postId={selectedPostId} />
                 ) : (
                   <NewPost />
                 )}

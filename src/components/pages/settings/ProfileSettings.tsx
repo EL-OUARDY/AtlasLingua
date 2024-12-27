@@ -18,8 +18,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/contexts/UserContext";
 
 const FormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
   }),
   bio: z.string().max(255).optional(),
 });
@@ -30,7 +30,7 @@ function ProfileSettings() {
   const { user } = useUser();
   // from database
   const defaultValues: Partial<ProfileFormValues> = {
-    username: user?.name || "",
+    name: user?.name || "",
     bio: user?.bio || "",
   };
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -54,14 +54,14 @@ function ProfileSettings() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-4 sm:w-[360px] md:w-[460px]"
+          className="flex w-full flex-col gap-4 sm:w-[360px] md:w-[480px]"
         >
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="AtlasLingua"
