@@ -1,8 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -22,42 +19,21 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { useTheme, Theme, Font } from "@/contexts/ThemeContext";
-import { Check } from "lucide-react";
-import { useState } from "react";
 
-const FormSchema = z.object({
-  theme: z.enum(["light", "dark", "system"], {
-    required_error: "Please select a theme.",
-  }),
-  font: z.enum(["geist", "system"], {
-    invalid_type_error: "Select a font",
-    required_error: "Please select a font.",
-  }),
-});
-
-type AppearanceFormValues = z.infer<typeof FormSchema>;
+interface AppearanceFormValues {
+  theme: Theme;
+  font: Font;
+}
 
 function AppearanceSettings() {
-  const [isSaved, setIsSaved] = useState<boolean>(false);
   const { theme, font, setTheme, setFont } = useTheme();
   const defaultValues: Partial<AppearanceFormValues> = {
     theme: theme,
     font: font,
   };
   const form = useForm<AppearanceFormValues>({
-    resolver: zodResolver(FormSchema),
     defaultValues,
   });
-
-  function onSubmit(data: AppearanceFormValues) {
-    setTheme(data.theme);
-    setFont(data.font);
-    // update user preferences in the database
-    setIsSaved(true);
-    setTimeout(() => {
-      setIsSaved(false);
-    }, 2000);
-  }
 
   return (
     <>
@@ -70,10 +46,7 @@ function AppearanceSettings() {
       </div>
       <Separator />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form className="flex flex-col gap-4">
           <FormField
             control={form.control}
             name="font"
@@ -187,20 +160,6 @@ function AppearanceSettings() {
               </FormItem>
             )}
           />
-
-          <Button
-            disabled={isSaved}
-            type="submit"
-            className="w-fit disabled:opacity-100"
-          >
-            {isSaved ? (
-              <>
-                <Check className="mr-2 size-4" /> Saved
-              </>
-            ) : (
-              "Update preferences"
-            )}
-          </Button>
         </form>
       </Form>
     </>

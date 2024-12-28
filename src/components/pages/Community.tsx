@@ -39,7 +39,7 @@ function Community() {
   const [search, setSearch] = useState<string>("");
   const [filter, setFilter] = useState<ICommunityFilter>({
     searchQuery: "",
-    sortBy: "Latest",
+    sortBy: "latest",
   });
 
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
@@ -159,10 +159,10 @@ function Community() {
                   Latest
                 </TabsTrigger>
                 <TabsTrigger
-                  value="voted"
+                  value="popular"
                   className="text-zinc-600 dark:text-zinc-200"
                 >
-                  Most Voted
+                  Popular
                 </TabsTrigger>
                 <TabsTrigger
                   value="unanswered"
@@ -199,9 +199,9 @@ function Community() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[140px] justify-between px-3 py-2"
+                    className="w-[140px] justify-between px-3 py-2 capitalize"
                   >
-                    {filter.sortBy}
+                    {filter.sortBy === "user" ? "My Posts" : filter.sortBy}
                     <ChevronDown className="h-4 w-4 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -214,7 +214,7 @@ function Community() {
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
-                      setFilter({ ...filter, sortBy: "Latest" });
+                      setFilter({ ...filter, sortBy: "latest" });
                       hidePostPanel();
                     }}
                     className="cursor-pointer"
@@ -224,17 +224,17 @@ function Community() {
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
-                      setFilter({ ...filter, sortBy: "Most Voted" });
+                      setFilter({ ...filter, sortBy: "popular" });
                       hidePostPanel();
                     }}
                     className="cursor-pointer"
                   >
-                    <TrendingUp className="mr-2 size-4" /> Most Voted
+                    <TrendingUp className="mr-2 size-4" /> Popular
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
-                      setFilter({ ...filter, sortBy: "Unanswered" });
+                      setFilter({ ...filter, sortBy: "unanswered" });
                       hidePostPanel();
                     }}
                     className="cursor-pointer"
@@ -246,7 +246,7 @@ function Community() {
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();
-                      setFilter({ ...filter, sortBy: "My Posts" });
+                      setFilter({ ...filter, sortBy: "user" });
                       hidePostPanel();
                     }}
                     className="cursor-pointer"

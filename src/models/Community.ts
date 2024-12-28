@@ -15,5 +15,5 @@ export interface ICommunityPost {
 
 export interface ICommunityFilter {
   searchQuery: string;
-  sortBy: "Latest" | "Most Voted" | "Unanswered" | "My Posts";
+  sortBy: "latest" | "popular" | "unanswered" | "user";
 }
