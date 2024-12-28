@@ -1,4 +1,4 @@
-import { ICommunityPost } from "@/models/CommunityPost";
+import { ICommunityPost } from "@/models/Community";
 
 export const dummyCommunityPosts: ICommunityPost[] = [
   {

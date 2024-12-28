@@ -1,4 +1,4 @@
-import { ICommunityPost } from "@/models/CommunityPost";
+import { ICommunityPost } from "@/models/Community";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { format, formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";

@@ -12,3 +12,8 @@ export interface ICommunityPost {
   date: string;
   commentsNumber?: number;
 }
+
+export interface ICommunityFilter {
+  searchQuery: string;
+  sortBy: "Latest" | "Most Voted" | "Unanswered" | "My Posts";
+}
