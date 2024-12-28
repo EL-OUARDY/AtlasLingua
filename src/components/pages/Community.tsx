@@ -14,7 +14,6 @@ import { ResizableHandle, ResizablePanel } from "../ui/resizable";
 import { Button, buttonVariants } from "../ui/button";
 import { ImperativePanelGroupHandle, PanelGroup } from "react-resizable-panels";
 import { breakpoints } from "@/shared/screen-breakpoints";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import PostsList from "../community/PostsList";
 import { APP_NAME } from "@/shared/constants";
 import SinglePost from "../community/SinglePost";
@@ -24,7 +23,6 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
 import NewPost from "../community/NewPost";
 import WTooltip from "../ui/custom/WTooltip";
-import { toast } from "sonner";
 import { ICommunityFilter } from "@/models/Community";
 import {
   DropdownMenu,
@@ -35,7 +33,7 @@ import {
 } from "../ui/dropdown-menu";
 
 function Community() {
-  const [selectedPostId, setSelectedPostId] = useState<number | undefined>();
+  const [selectedPostId, setSelectedPostId] = useState<string | undefined>();
   const [search, setSearch] = useState<string>("");
   const [filter, setFilter] = useState<ICommunityFilter>({
     searchQuery: "",
@@ -51,27 +49,11 @@ function Community() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    toast("Community Feature Coming Soon", {
-      duration: 60000,
-      action: {
-        label: "Hide",
-        onClick: () => {},
-      },
-      description:
-        "This is just a demo of what the community platform will look like in the future. The ability to post and reply to others is not yet implemented. Stay tuned for updates!",
-    });
-
-    return () => {
-      toast.dismiss();
-    };
-  }, []);
-
-  useEffect(() => {
     // get post id from the url
     const searchParams = new URLSearchParams(location.search);
     const newPost = searchParams.get("new_post");
     const postId = searchParams.get("post_id");
-    setSelectedPostId(postId ? Number(postId) : undefined);
+    setSelectedPostId(postId ? postId : undefined);
     if (newPost) setSelectedPostId(undefined);
 
     // set panels size
@@ -110,7 +92,7 @@ function Community() {
     existSearch();
   }
 
-  function showPostPanel(id: number) {
+  function showPostPanel(id: string) {
     navigate(`${ROUTES.community}/?post_id=${id}`);
   }
 
@@ -136,8 +118,6 @@ function Community() {
 
   return (
     <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
-      {JSON.stringify(filter)} <br />
-      {JSON.stringify(search)}
       <div className="flex items-center gap-2 md:flex-row">
         <div className="flex flex-1 items-center">
           <Tabs
@@ -351,11 +331,7 @@ function Community() {
       >
         <ResizablePanel defaultSize={100}>
           <div className="relative flex h-full flex-col">
-            <ScrollArea className="h-full w-full">
-              <PostsList onSelect={showPostPanel} filter={filter} />
-              <ScrollBar orientation="horizontal" className="cursor-grab" />
-            </ScrollArea>
-
+            <PostsList onPostSelected={showPostPanel} filter={filter} />
             {selectedPostId && (
               <div className="absolute bottom-4 right-4 hidden md:flex">
                 <WTooltip side="top" content="New post">

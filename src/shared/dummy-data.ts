@@ -2,7 +2,7 @@ import { ICommunityPost } from "@/models/Community";
 
 export const dummyCommunityPosts: ICommunityPost[] = [
   {
-    id: 1,
+    id: "1",
     content:
       "Just learned how to say 'Thank you' in Darija: 'Shukran'! This app is amazing for picking up everyday phrases.",
     votes: 15,
@@ -10,14 +10,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Sarah Johnson",
       avatar: "https://example.com/avatars/sarah.jpg",
-      bio: "English teacher exploring Moroccan culture",
       role: "Learner",
+      id: 1004,
     },
     date: "2024-07-01T14:30:00Z",
-    commentsNumber: 3,
+    commentsCount: 3,
   },
   {
-    id: 7,
+    id: "7",
     content:
       "Quick tip: 'Inshallah' is used a lot in daily Darija conversations. It means 'God willing' or 'hopefully'.",
     votes: 25,
@@ -25,14 +25,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Hassan Mansouri",
       avatar: "https://example.com/avatars/hassan.jpg",
-      bio: "Moroccan linguistics student",
       role: "contributor",
+      id: 1004,
     },
     date: "2024-06-25T10:05:00Z",
-    commentsNumber: 1,
+    commentsCount: 1,
   },
   {
-    id: 3,
+    id: "3",
     content:
       "Anyone know how to say 'Where is the nearest cafe?' in Darija? Planning my trip to Marrakech!",
     votes: 5,
@@ -40,14 +40,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Emma Wilson",
       avatar: "https://example.com/avatars/emma.jpg",
-      bio: "Travel enthusiast and language lover",
       role: "Learner",
+      id: 1004,
     },
     date: "2024-06-29T18:45:00Z",
-    commentsNumber: 5,
+    commentsCount: 5,
   },
   {
-    id: 4,
+    id: "4",
     content:
       "Just added 50 new food-related phrases to the database. Enjoy learning about Moroccan cuisine!",
     votes: 22,
@@ -55,14 +55,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Fatima Zahra",
       avatar: "https://example.com/avatars/fatima.jpg",
-      bio: "Moroccan chef and language enthusiast",
       role: "contributor",
+      id: 1004,
     },
     date: "2024-06-28T11:20:00Z",
-    commentsNumber: 4,
+    commentsCount: 4,
   },
   {
-    id: 5,
+    id: "5",
     content:
       "The audio pronunciation feature is so helpful! I'm finally getting the hang of those tricky Darija sounds.",
     votes: 13,
@@ -70,14 +70,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "David Lee",
       avatar: "https://example.com/avatars/david.jpg",
-      bio: "Aspiring polyglot",
       role: "Learner",
+      id: 1004,
     },
     date: "2024-06-27T15:50:00Z",
-    commentsNumber: 0,
+    commentsCount: 0,
   },
   {
-    id: 6,
+    id: "6",
     content:
       "Suggestion: Can we add a section for Darija proverbs and their meanings? It would be great for cultural insight!",
     votes: 18,
@@ -85,15 +85,15 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Laila Bennani",
       avatar: "https://example.com/avatars/laila.jpg",
-      bio: "Darija teacher and cultural expert",
       role: "contributor",
+      id: 1004,
     },
     date: "2024-06-26T13:10:00Z",
-    commentsNumber: 4,
+    commentsCount: 4,
   },
 
   {
-    id: 8,
+    id: "8",
     content:
       "The difference between formal Arabic and Darija is fascinating. This app is really helping me navigate both!",
     votes: 9,
@@ -101,14 +101,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Anna Schmidt",
       avatar: "https://example.com/avatars/anna.jpg",
-      bio: "Linguistics PhD student",
       role: "Learner",
+      id: 1004,
     },
     date: "2024-06-24T16:40:00Z",
-    commentsNumber: 16,
+    commentsCount: 16,
   },
   {
-    id: 9,
+    id: "9",
     content:
       "Just updated the 'Transportation' category with 30 new entries. Navigating Morocco will be easier for travelers now!",
     votes: 14,
@@ -116,14 +116,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Karim Idrissi",
       avatar: "https://example.com/avatars/karim.jpg",
-      bio: "Tour guide and language enthusiast",
       role: "contributor",
+      id: 1004,
     },
     date: "2024-06-23T08:55:00Z",
-    commentsNumber: 9,
+    commentsCount: 9,
   },
   {
-    id: 10,
+    id: "10",
     content:
       "Love the new feature that shows regional variations of phrases. Darija in Tangier vs Marrakech - so interesting!",
     votes: 20,
@@ -131,14 +131,14 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Tom Parker",
       avatar: "https://example.com/avatars/tom.jpg",
-      bio: "Expat living in Rabat",
       role: "Learner",
+      id: 1004,
     },
     date: "2024-06-22T19:30:00Z",
-    commentsNumber: 0,
+    commentsCount: 0,
   },
   {
-    id: 2,
+    id: "2",
     content:
       "هاد الترجمة ماشي دقيقة. 'Marhaba' means 'Hello', not 'Goodbye'. Can we update this?",
     votes: 8,
@@ -146,11 +146,11 @@ export const dummyCommunityPosts: ICommunityPost[] = [
     user: {
       name: "Youssef Alami",
       avatar: "https://example.com/avatars/youssef.jpg",
-      bio: "Native Darija speaker from Casablanca",
       role: "contributor",
+      id: 1004,
     },
     date: "2024-06-30T09:15:00Z",
-    commentsNumber: 0,
+    commentsCount: 0,
   },
 ];
 

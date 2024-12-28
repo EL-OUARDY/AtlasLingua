@@ -43,10 +43,7 @@ function FavoriteCardSkeleton() {
           </Button>
 
           <div className="ml-auto">
-            <Button
-              variant="ghost"
-              className="cursor-default border border-muted"
-            >
+            <Button variant="ghost" className="border border-muted">
               <Skeleton className="size-4 rounded-sm" />
             </Button>
           </div>

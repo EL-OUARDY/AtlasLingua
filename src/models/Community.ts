@@ -1,16 +1,16 @@
 export interface ICommunityPost {
-  id: number;
+  id: string;
   content: string;
   votes: number;
   tags: string[];
   user: {
+    id: number;
     name: string;
-    avatar: string;
-    bio: string;
+    avatar?: string;
     role: string;
   };
   date: string;
-  commentsNumber?: number;
+  commentsCount?: number;
 }
 
 export interface ICommunityFilter {

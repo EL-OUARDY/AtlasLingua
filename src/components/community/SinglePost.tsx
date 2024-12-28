@@ -27,7 +27,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 
 interface Props {
-  postId: number;
+  postId: string;
 }
 
 function SinglePost({ postId }: Props) {
