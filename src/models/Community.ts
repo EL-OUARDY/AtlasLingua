@@ -2,7 +2,7 @@ export interface ICommunityPost {
   id: string;
   content: string;
   votes: number;
-  tags: string[];
+  tags?: string[];
   user: {
     id: number;
     name: string;
@@ -11,6 +11,18 @@ export interface ICommunityPost {
   };
   date: string;
   commentsCount?: number;
+}
+
+export interface ICommunityComment {
+  id: string;
+  content: string;
+  votes: number;
+  user: {
+    id: number;
+    name: string;
+    role: string;
+  };
+  date: string;
 }
 
 export interface ICommunityFilter {

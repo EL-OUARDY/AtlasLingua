@@ -1,4 +1,3 @@
-import { ICommunityPost } from "@/models/Community";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { format, formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
@@ -7,7 +6,6 @@ import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import { useEffect, useState } from "react";
-import { dummyCommunityPosts, dummyPostComments } from "@/shared/dummy-data";
 import {
   CheckCircle2Icon,
   Edit3Icon,
@@ -25,24 +23,37 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { ScrollArea } from "../ui/scroll-area";
+import { Badge } from "../ui/badge";
+import { useCommunityPosts } from "@/hooks/useCommunity";
+import PostCardSkeleton from "../skeletons/PostCardSkeleton";
+import SinglePostSkeleton from "../skeletons/SinglePostSkeleton";
 
 interface Props {
   postId: string;
 }
 
 function SinglePost({ postId }: Props) {
-  const [post, setPost] = useState<ICommunityPost>();
-  const [showNewComment, setShowNewComment] = useState<boolean>(false);
+  const {
+    post,
+    fetchPost,
+    comments,
+    fetchComments,
+    loadingComments,
+    hasMoreComments,
+    loadingSinglePost,
+  } = useCommunityPosts();
+
+  const [isNewCommentVisible, setIsNewCommentVisible] =
+    useState<boolean>(false);
 
   useEffect(() => {
-    // get post data
-    setShowNewComment(false);
-    setPost(dummyCommunityPosts.find((p) => p.id === postId));
+    fetchPost(postId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
   return (
     <div className="relative flex h-full w-full min-w-[180px] flex-col rounded-lg border p-4">
-      {post && (
+      {post && !loadingSinglePost ? (
         <div className="flex max-h-full flex-1 flex-col">
           <div className="flex w-full items-start pb-4">
             <div className="flex w-full items-start gap-4 text-sm">
@@ -102,8 +113,25 @@ function SinglePost({ postId }: Props) {
           <ScrollArea className="overflow-auto whitespace-pre-wrap pt-4 text-sm">
             <div className="flex h-full flex-col gap-4">
               <div className="w-full rounded-lg border-0 border-l-2 border-primary/50 bg-background p-2 text-muted-foreground dark:bg-muted/40">
-                {post.content}
-                <Separator className="my-4" />
+                <div className="flex flex-col gap-2">
+                  <div className="">{post.content}</div>
+                  <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
+                        {post.tags.map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant={"outline"}
+                            className="font-thin group-[.post-selected]:border-muted-foreground/20 group-[.post-selected]:bg-secondary"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Separator className="my-3" />
                 <div className="flex items-center">
                   <div className="text-xs text-muted-foreground">
                     {formatDistanceToNow(post.date, { addSuffix: true })}
@@ -124,7 +152,7 @@ function SinglePost({ postId }: Props) {
                     <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                       <ReplyAllIcon
                         onClick={() => {
-                          setShowNewComment(true);
+                          setIsNewCommentVisible(true);
                         }}
                         className="mr-2 size-5 stroke-1"
                       />
@@ -132,7 +160,7 @@ function SinglePost({ postId }: Props) {
                   </div>
                 </div>
               </div>
-              {dummyPostComments.map((comment, index) => (
+              {comments.map((comment, index) => (
                 <div
                   key={index}
                   className="w-full rounded-lg border bg-background p-2 text-muted-foreground dark:bg-muted/40"
@@ -160,7 +188,7 @@ function SinglePost({ postId }: Props) {
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                         <ReplyAllIcon
                           onClick={() => {
-                            setShowNewComment(true);
+                            setIsNewCommentVisible(true);
                           }}
                           className="mr-2 size-5 stroke-1"
                         />
@@ -169,10 +197,38 @@ function SinglePost({ postId }: Props) {
                   </div>
                 </div>
               ))}
+
+              {/* Show a loader while fetching comments */}
+              {loadingComments &&
+                Array(4)
+                  .fill(null)
+                  .map((_, index) => (
+                    <PostCardSkeleton
+                      key={index}
+                      header={false}
+                      textLines={2}
+                      showTags={false}
+                    />
+                  ))}
+
+              <div className="w-full text-center">
+                {/* "Load More" button (hidden if no more data or currently loading) */}
+                {hasMoreComments && !loadingComments && (
+                  <Button
+                    onClick={() => {
+                      fetchComments(postId);
+                    }}
+                    variant="outline"
+                    className="max-w-fit text-xs"
+                  >
+                    Load More
+                  </Button>
+                )}
+              </div>
             </div>
           </ScrollArea>
 
-          {showNewComment && (
+          {isNewCommentVisible && (
             <>
               <Separator className="mt-auto" />
               <div className="pt-4">
@@ -209,6 +265,8 @@ function SinglePost({ postId }: Props) {
             </>
           )}
         </div>
+      ) : (
+        <SinglePostSkeleton />
       )}
     </div>
   );

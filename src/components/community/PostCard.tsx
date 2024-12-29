@@ -93,7 +93,7 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
         {post.content.substring(0, 300)}
       </div>
       <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
-        {post.tags.length > 0 && (
+        {post.tags && post.tags.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
             {post.tags.map((tag) => (
               <Badge
