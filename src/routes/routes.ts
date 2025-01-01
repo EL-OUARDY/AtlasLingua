@@ -3,6 +3,7 @@ export const ROUTES = {
   translate: {
     index: "/translate",
     summarization: "/translate/summarization",
+    transliteration: "/translate/transliteration",
   },
   share: "/share/:shareableLinkParam",
   login: "/login",

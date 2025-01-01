@@ -29,6 +29,7 @@ import { Toaster } from "./components/ui/sonner";
 import ContributionGuidelines from "./components/pages/ContributionGuidelines";
 import ForgotPassword from "./components/pages/authentication/ForgotPassword";
 import ResetPassword from "./components/pages/authentication/ResetPassword";
+import Transliteration from "./components/translator/Transliteration";
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
                 <Route
                   path={ROUTES.translate.summarization}
                   element={<Summarization />}
+                />
+                <Route
+                  path={ROUTES.translate.transliteration}
+                  element={<Transliteration />}
                 />
                 <Route path={ROUTES.share} element={<TranslateText />} />
               </Route>

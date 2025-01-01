@@ -6,6 +6,7 @@ import { FileText, Languages, HistoryIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useHistory } from "@/contexts/HistoryContext";
 import TranslationHistory from "../translator/TranslationHistory";
+import TransliterationIcon from "../ui/icons/TransliterationIcon";
 
 const translationTypes = [
   {
@@ -19,6 +20,12 @@ const translationTypes = [
     link: ROUTES.translate.summarization,
     description: "Smart recap",
     icon: FileText,
+  },
+  {
+    type: "Transliteration",
+    link: ROUTES.translate.transliteration,
+    description: "Arabic → Latin",
+    icon: TransliterationIcon,
   },
 ];
 
