@@ -23,7 +23,6 @@ import GeneralSettings from "./components/pages/settings/GeneralSettings";
 import AppearanceSettings from "./components/pages/settings/AppearanceSettings";
 import NotificationSettings from "./components/pages/settings/NotificationSettings";
 import TranslateText from "./components/translator/TranslateTexts";
-import TranslateMedia from "./components/translator/TranslateMedia";
 import Summarization from "./components/translator/Summarization";
 import { UserProvider } from "./contexts/UserContext";
 import { Toaster } from "./components/ui/sonner";
@@ -49,10 +48,6 @@ function App() {
                 <Route
                   path={ROUTES.translate.index}
                   element={<TranslateText />}
-                />
-                <Route
-                  path={ROUTES.translate.media}
-                  element={<TranslateMedia />}
                 />
                 <Route
                   path={ROUTES.translate.summarization}

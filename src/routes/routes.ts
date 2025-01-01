@@ -2,7 +2,6 @@ export const ROUTES = {
   home: "/",
   translate: {
     index: "/translate",
-    media: "/translate/media",
     summarization: "/translate/summarization",
   },
   share: "/share/:shareableLinkParam",

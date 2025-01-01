@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { ROUTES } from "@/routes/routes";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { FileText, ImagePlay, Languages, HistoryIcon } from "lucide-react";
+import { FileText, Languages, HistoryIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useHistory } from "@/contexts/HistoryContext";
 import TranslationHistory from "../translator/TranslationHistory";
@@ -19,12 +19,6 @@ const translationTypes = [
     link: ROUTES.translate.summarization,
     description: "Smart recap",
     icon: FileText,
-  },
-  {
-    type: "Media",
-    link: ROUTES.translate.media,
-    description: "Audios, Videos",
-    icon: ImagePlay,
   },
 ];
 
