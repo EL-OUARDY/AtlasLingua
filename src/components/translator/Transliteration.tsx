@@ -85,8 +85,8 @@ function Transliteration() {
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Convert your Darija text (in Arabic script) into Latin characters
-            for easy reading and typing. Just paste or type your text below,
-            then click Transliterate.
+            for easy reading. Just paste or type your text below, then click
+            Transliterate.
           </p>
         </div>
         <Separator />
