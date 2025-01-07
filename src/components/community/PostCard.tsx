@@ -18,6 +18,7 @@ import {
 import { Separator } from "../ui/separator";
 import { formatDistanceToNow } from "date-fns";
 import { Badge } from "../ui/badge";
+import { Timestamp } from "firebase/firestore";
 
 interface Props {
   post: ICommunityPost;
@@ -120,8 +121,12 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
                 ? "text-foreground"
                 : "text-muted-foreground",
             )}
+            title={(post.date as Timestamp).toDate().toLocaleString()}
           >
-            {formatDistanceToNow(post.date, { addSuffix: true })}
+            {formatDistanceToNow(
+              (post.date as Timestamp).toDate().toLocaleString(),
+              { addSuffix: true },
+            )}
           </div>
           <div
             className={cn(

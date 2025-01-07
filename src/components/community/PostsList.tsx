@@ -4,14 +4,14 @@ import { Button } from "../ui/button";
 import PostCard from "./PostCard";
 import PostCardSkeleton from "../skeletons/PostCardSkeleton";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import { useCommunityPosts } from "@/hooks/useCommunity";
+import { useCommunity } from "@/contexts/CommunityContext";
 
 interface Props {
   filter: ICommunityFilter;
   onPostSelected: (id: string) => void;
 }
 function PostsList({ filter, onPostSelected }: Props) {
-  const { posts, fetchPosts, loadingPosts, hasMorePosts } = useCommunityPosts();
+  const { posts, fetchPosts, loadingPosts, hasMorePosts } = useCommunity();
   const [selectedPost, setSelectedPost] = useState<string>("");
 
   // On mount, load posts
@@ -23,6 +23,13 @@ function PostsList({ filter, onPostSelected }: Props) {
   return (
     <>
       <ScrollArea className="h-full w-full">
+        {posts.length === 0 && !loadingPosts && (
+          <div className="flex size-full items-center justify-center text-center">
+            <div className="flex flex-col items-center gap-4">
+              <p className="">No posts available.</p>
+            </div>
+          </div>
+        )}
         <div className="grid gap-4 pt-0 sm:grid-cols-auto-fill-270">
           {posts.map((post, index) => (
             <PostCard

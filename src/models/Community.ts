@@ -1,3 +1,5 @@
+import { FieldValue, Timestamp } from "firebase/firestore";
+
 export interface ICommunityPost {
   id: string;
   content: string;
@@ -9,7 +11,7 @@ export interface ICommunityPost {
     avatar?: string;
     role: string;
   };
-  date: string;
+  date: Timestamp | FieldValue;
   commentsCount?: number;
 }
 
@@ -22,7 +24,7 @@ export interface ICommunityComment {
     name: string;
     role: string;
   };
-  date: string;
+  date: Timestamp | FieldValue;
 }
 
 export interface ICommunityFilter {

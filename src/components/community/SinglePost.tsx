@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
@@ -24,9 +24,10 @@ import {
 } from "../ui/dropdown-menu";
 import { ScrollArea } from "../ui/scroll-area";
 import { Badge } from "../ui/badge";
-import { useCommunityPosts } from "@/hooks/useCommunity";
+import { useCommunity } from "@/contexts/CommunityContext";
 import PostCardSkeleton from "../skeletons/PostCardSkeleton";
 import SinglePostSkeleton from "../skeletons/SinglePostSkeleton";
+import { Timestamp } from "firebase/firestore";
 
 interface Props {
   postId: string;
@@ -41,7 +42,7 @@ function SinglePost({ postId }: Props) {
     loadingComments,
     hasMoreComments,
     loadingSinglePost,
-  } = useCommunityPosts();
+  } = useCommunity();
 
   const [isNewCommentVisible, setIsNewCommentVisible] =
     useState<boolean>(false);
@@ -103,7 +104,7 @@ function SinglePost({ postId }: Props) {
                 </div>
                 {post.date && (
                   <div className="text-xs text-muted-foreground">
-                    {format(new Date(post.date), "PPpp")}
+                    {(post.date as Timestamp).toDate().toLocaleString()}
                   </div>
                 )}
               </div>
@@ -134,7 +135,10 @@ function SinglePost({ postId }: Props) {
                 <Separator className="my-3" />
                 <div className="flex items-center">
                   <div className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(post.date, { addSuffix: true })}
+                    {formatDistanceToNow(
+                      (post.date as Timestamp).toDate().toLocaleString(),
+                      { addSuffix: true },
+                    )}
                   </div>
                   <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
                     <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
@@ -170,7 +174,10 @@ function SinglePost({ postId }: Props) {
                   <Separator className="my-4" />
                   <div className="flex items-center">
                     <div className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(comment.date, { addSuffix: true })}
+                      {formatDistanceToNow(
+                        (comment.date as Timestamp).toDate().toLocaleString(),
+                        { addSuffix: true },
+                      )}
                     </div>
                     <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">

@@ -122,7 +122,7 @@ function Signup() {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="user@atlaslingua.com"
+                  placeholder={`user@${APP_NAME.toLowerCase()}.com`}
                   autoComplete="on"
                 />
                 {errors.email && (

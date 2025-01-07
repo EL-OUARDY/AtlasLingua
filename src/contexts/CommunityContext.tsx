@@ -11,11 +11,40 @@ import {
   startAfter,
   getDoc,
   doc,
+  addDoc,
 } from "firebase/firestore";
-import { useRef, useState } from "react";
+import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
 
-export function useCommunityPosts(fetchLimit: number = 20) {
+interface ICommunityContext {
+  posts: ICommunityPost[];
+  loadingPosts: boolean;
+  hasMorePosts: boolean;
+  fetchPosts: () => Promise<void>;
+  post: ICommunityPost | null | undefined;
+  fetchPost: (postId: string) => Promise<void>;
+  loadingSinglePost: boolean;
+  comments: ICommunityComment[];
+  fetchComments: (postId: string) => Promise<void>;
+  loadingComments: boolean;
+  hasMoreComments: boolean;
+  addPost: (newPost: Omit<ICommunityPost, "id">) => Promise<void>;
+}
+
+const CommunityContext = createContext<ICommunityContext>(
+  {} as ICommunityContext,
+);
+
+// custom hook to expose the CommunityContext
+export function useCommunity() {
+  return useContext(CommunityContext);
+}
+
+interface Props {
+  children: ReactNode;
+  fetchLimit?: number;
+}
+export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
   const [posts, setPosts] = useState<ICommunityPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
@@ -33,7 +62,7 @@ export function useCommunityPosts(fetchLimit: number = 20) {
   const lastFetchedCommentDoc =
     useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
 
-  const fetchPosts = async () => {
+  async function fetchPosts() {
     setLoadingPosts(true);
 
     try {
@@ -81,7 +110,7 @@ export function useCommunityPosts(fetchLimit: number = 20) {
     } finally {
       setLoadingPosts(false);
     }
-  };
+  }
 
   async function fetchPost(postId: string) {
     lastFetchedCommentDoc.current = null;
@@ -91,7 +120,7 @@ export function useCommunityPosts(fetchLimit: number = 20) {
     await fetchComments(postId);
   }
 
-  const getPost = async (postId: string): Promise<ICommunityPost | null> => {
+  async function getPost(postId: string): Promise<ICommunityPost | null> {
     setLoadingSinglePost(true);
     try {
       const postRef = doc(db, "posts", postId);
@@ -120,7 +149,7 @@ export function useCommunityPosts(fetchLimit: number = 20) {
     } finally {
       setLoadingSinglePost(false);
     }
-  };
+  }
 
   async function fetchComments(postId: string) {
     setLoadingComments(true);
@@ -176,17 +205,32 @@ export function useCommunityPosts(fetchLimit: number = 20) {
     }
   }
 
-  return {
-    posts,
-    loadingPosts,
-    hasMorePosts,
-    fetchPosts,
-    post,
-    fetchPost,
-    loadingSinglePost,
-    comments,
-    fetchComments,
-    loadingComments,
-    hasMoreComments,
-  };
+  async function addPost(newPost: Omit<ICommunityPost, "id">): Promise<void> {
+    // Firestore reference
+    const postsRef = collection(db, "posts");
+
+    // Add the document
+    await addDoc(postsRef, newPost);
+  }
+
+  return (
+    <CommunityContext.Provider
+      value={{
+        posts,
+        loadingPosts,
+        hasMorePosts,
+        fetchPosts,
+        post,
+        fetchPost,
+        loadingSinglePost,
+        comments,
+        fetchComments,
+        loadingComments,
+        hasMoreComments,
+        addPost,
+      }}
+    >
+      {children}
+    </CommunityContext.Provider>
+  );
 }

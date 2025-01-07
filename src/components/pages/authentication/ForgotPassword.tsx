@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { APP_NAME } from "@/shared/constants";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -103,7 +104,7 @@ function ForgotPassword() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="user@atlaslingua.com"
+                    placeholder={`user@${APP_NAME.toLowerCase()}.com`}
                     autoComplete="on"
                   />
                   {errors.email && (
