@@ -63,12 +63,13 @@ def create_app():
         client_kwargs={"scope": "openid email profile"},
     )
 
-    db.init_app(app)  # Initialize the database
+    # Initialize Flask extensions
+    db.init_app(app)  # database
     migrate.init_app(app, db)  # migration
     ma.init_app(app)  # marshmallow
     jwt.init_app(app)  # JWT manager
     mail.init_app(app)  # Mail
-    initialize_firebase(app)  # Initialize Firebase
+    initialize_firebase(app)  # Firebase
 
     # Import and register Blueprints for the application routes
     from app.routes import dictionary

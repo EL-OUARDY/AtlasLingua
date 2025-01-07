@@ -32,80 +32,83 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
         "relative flex h-fit flex-col items-start gap-3 overflow-hidden rounded-lg border bg-background p-4 text-left text-sm transition-all dark:bg-muted/40",
         selectedPost === post.id && "post-selected group !bg-muted",
       )}
-      onClick={() => {
-        onSelect(post.id);
-      }}
     >
-      <div className="flex w-full flex-col gap-1">
-        <div className="flex items-center">
-          <div className="flex w-full items-center gap-1">
-            <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
-              <div className="mr-auto flex items-center gap-2">
-                {post.user.name}
-                {post.user.role === "contributor" && (
-                  <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
-                )}
+      <div
+        onClick={() => {
+          onSelect(post.id);
+        }}
+        className="flex flex-col gap-3"
+      >
+        <div className="flex w-full flex-col gap-1">
+          <div className="flex items-center">
+            <div className="flex w-full items-center gap-1">
+              <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
+                <div className="mr-auto flex items-center gap-2">
+                  {post.user.name}
+                  {post.user.role === "contributor" && (
+                    <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
+                  )}
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <EllipsisVertical className="size-4 cursor-pointer text-secondary-foreground" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    alignOffset={-5}
+                    className=""
+                    forceMount
+                  >
+                    <DropdownMenuItem
+                      onClick={(e) => e.stopPropagation()}
+                      className="cursor-pointer"
+                    >
+                      <Edit3Icon className="mr-2 size-4" /> Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={(e) => e.stopPropagation()}
+                      className="cursor-pointer"
+                    >
+                      <Trash2Icon className="mr-2 size-4" /> Delete
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={(e) => e.stopPropagation()}
+                      className="cursor-pointer"
+                    >
+                      <Share2Icon className="mr-2 size-4" /> Share
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={(e) => e.stopPropagation()}
+                      className="cursor-pointer"
+                    >
+                      <Flag className="mr-2 size-4" /> Report
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <EllipsisVertical className="size-4 cursor-pointer text-secondary-foreground" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  alignOffset={-5}
-                  className=""
-                  forceMount
-                >
-                  <DropdownMenuItem
-                    onClick={(e) => e.stopPropagation()}
-                    className="cursor-pointer"
-                  >
-                    <Edit3Icon className="mr-2 size-4" /> Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={(e) => e.stopPropagation()}
-                    className="cursor-pointer"
-                  >
-                    <Trash2Icon className="mr-2 size-4" /> Delete
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={(e) => e.stopPropagation()}
-                    className="cursor-pointer"
-                  >
-                    <Share2Icon className="mr-2 size-4" /> Share
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={(e) => e.stopPropagation()}
-                    className="cursor-pointer"
-                  >
-                    <Flag className="mr-2 size-4" /> Report
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           </div>
         </div>
-      </div>
-      <div className="line-clamp-2 text-sm text-muted-foreground">
-        {post.content.substring(0, 300)}
-      </div>
-      <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
-            {post.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant={"outline"}
-                className="font-thin group-[.post-selected]:border-muted-foreground/20 group-[.post-selected]:bg-secondary"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+        <div className="line-clamp-2 text-sm text-muted-foreground">
+          {post.content.substring(0, 300)}
+        </div>
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant={"outline"}
+                  className="font-thin group-[.post-selected]:border-muted-foreground/20 group-[.post-selected]:bg-secondary"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <Separator className="group-[.post-selected]:bg-muted-foreground/10" />
       <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
@@ -140,7 +143,12 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
               </svg>
               {post.votes}
             </div>
-            <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+            <div
+              onClick={() => {
+                onSelect(post.id);
+              }}
+              className="flex cursor-pointer items-center justify-center hover:text-foreground"
+            >
               <svg
                 className="mr-2 size-3 stroke-1"
                 fill="currentColor"

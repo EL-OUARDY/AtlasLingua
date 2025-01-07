@@ -18,6 +18,7 @@ from app.schemas.login_schema import login_schema
 from app.services.auth_service import AuthService
 
 from app import oauth
+from app.services.firebase_service import FirebaseService
 
 # Initialize the Google client
 google = oauth.create_client("google")
@@ -55,7 +56,14 @@ def login():
     )
     if access_token and refresh_token:
         user = AuthService.get_user_by_email(data["email"])
-        response = jsonify(user_schema.dump(user))
+
+        # Add firebase token to user data
+        user_data = user_schema.dump(user)
+        user_data["firebase_token"] = FirebaseService.create_custom_token(
+            str(user.id)
+        )
+
+        response = jsonify(user_data)
 
         # set JWT cookies
         set_access_cookies(response, access_token, max_age=timedelta(hours=1))
@@ -93,7 +101,14 @@ def refresh():
 def profile():
     current_user_id = get_jwt_identity()
     user = AuthService.get_user_by_id(current_user_id)
-    return user_schema.dump(user), 200
+
+    # Add firebase token to user data
+    user_data = user_schema.dump(user)
+    user_data["firebase_token"] = FirebaseService.create_custom_token(
+        str(user.id)
+    )
+
+    return jsonify(user_data), 200
 
 
 @bp.route("/login/google")
