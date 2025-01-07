@@ -1,3 +1,4 @@
 .env
 venv
 __pycache__
+/app/firebase/serviceAccountKey.json

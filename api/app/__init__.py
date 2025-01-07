@@ -9,14 +9,15 @@ import os
 from flask_bcrypt import Bcrypt
 from authlib.integrations.flask_client import OAuth
 from flask_mail import Mail
+from app.firebase import initialize_firebase
 
-# Initialize the database, migration, marshmallow and JWT manager objects, OAuth
+# Initialize Flask extensions
 db = SQLAlchemy()
 migrate = Migrate()
 ma = Marshmallow()
 jwt = JWTManager()
 bcrypt = Bcrypt()
-oauth = OAuth()  # Initialize OAuth
+oauth = OAuth()
 mail = Mail()
 
 
@@ -62,12 +63,12 @@ def create_app():
         client_kwargs={"scope": "openid email profile"},
     )
 
-    # Initialize the database, migration, marshmallow and JWT manager, Mail
-    db.init_app(app)
-    migrate.init_app(app, db)
-    ma.init_app(app)
-    jwt.init_app(app)
-    mail.init_app(app)
+    db.init_app(app)  # Initialize the database
+    migrate.init_app(app, db)  # migration
+    ma.init_app(app)  # marshmallow
+    jwt.init_app(app)  # JWT manager
+    mail.init_app(app)  # Mail
+    initialize_firebase(app)  # Initialize Firebase
 
     # Import and register Blueprints for the application routes
     from app.routes import dictionary
