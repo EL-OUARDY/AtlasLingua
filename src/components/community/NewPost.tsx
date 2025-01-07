@@ -45,7 +45,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
 import { ICommunityPost } from "@/models/Community";
 import { serverTimestamp } from "firebase/firestore";
-import { USER_ROLES } from "@/models/User";
+import { ANONYMOUS_NAME, USER_ROLES } from "@/models/User";
 import { toast } from "sonner";
 
 const newPostSchema = z.object({
@@ -116,7 +116,7 @@ function NewPost() {
       tags: data.tags.map((x) => x.text),
       user: {
         id: user.id as number,
-        name: data.anonymous ? "No Name" : user.name,
+        name: data.anonymous ? ANONYMOUS_NAME : user.name,
         avatar: "",
         role: user.role || USER_ROLES.MEMBER,
       },

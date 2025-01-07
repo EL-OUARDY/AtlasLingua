@@ -38,7 +38,7 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
         onClick={() => {
           onSelect(post.id);
         }}
-        className="flex flex-col gap-3"
+        className="flex w-full flex-col gap-3"
       >
         <div className="flex w-full flex-col gap-1">
           <div className="flex items-center">

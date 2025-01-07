@@ -19,3 +19,5 @@ export const USER_ROLES = {
 
 // Type for type-safety
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
+
+export const ANONYMOUS_NAME = "No Name";

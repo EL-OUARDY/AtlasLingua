@@ -12,6 +12,7 @@ import {
   getDoc,
   doc,
   addDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -210,7 +211,13 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     const postsRef = collection(db, "posts");
 
     // Add the document
-    await addDoc(postsRef, newPost);
+    const docRef = await addDoc(postsRef, newPost);
+
+    // Add the new post to the beginning of the list
+    setPosts((prevPosts) => [
+      { ...newPost, id: docRef.id, date: Timestamp.fromDate(new Date()) },
+      ...prevPosts,
+    ]);
   }
 
   return (
