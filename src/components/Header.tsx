@@ -20,6 +20,8 @@ import { useUser } from "@/contexts/UserContext";
 import authService from "@/services/authService";
 import { CanceledError } from "axios";
 import { toast } from "sonner";
+import { signOut } from "firebase/auth";
+import { auth } from "@/services/firebaseConfig";
 
 function Header() {
   const { toggleNotification } = useNotification();
@@ -30,6 +32,8 @@ function Header() {
     request
       .then(() => {
         setUser(undefined);
+        // Firebase logout
+        signOut(auth);
         window.location.href = ROUTES.home;
       })
       .catch((err) => {

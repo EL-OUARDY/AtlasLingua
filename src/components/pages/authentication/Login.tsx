@@ -21,6 +21,8 @@ import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { APP_NAME } from "@/shared/constants";
+import { signInWithCustomToken } from "firebase/auth";
+import { auth } from "@/services/firebaseConfig";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -61,6 +63,10 @@ function Login() {
     request
       .then(({ data }) => {
         setUser(data);
+        // Authenticate the user with Firebase
+        if (data.firebase_token) {
+          signInWithCustomToken(auth, data.firebase_token);
+        }
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;

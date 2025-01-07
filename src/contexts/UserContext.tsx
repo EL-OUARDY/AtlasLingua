@@ -4,6 +4,8 @@ import apiClient, { axiosConfig } from "@/services/api";
 import authService from "@/services/authService";
 import axios, { CanceledError } from "axios";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { auth } from "@/services/firebaseConfig";
+import { signInWithCustomToken } from "firebase/auth";
 
 interface IUserContext {
   user: IUser | undefined;
@@ -62,6 +64,10 @@ export function UserProvider({ children }: Props) {
     request
       .then(({ data }) => {
         setUser(data);
+        // Authenticate the user with Firebase
+        if (data.firebase_token) {
+          signInWithCustomToken(auth, data.firebase_token);
+        }
       })
       .catch(() => {});
 
