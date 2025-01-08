@@ -30,72 +30,78 @@ import ContributionGuidelines from "./components/pages/ContributionGuidelines";
 import ForgotPassword from "./components/pages/authentication/ForgotPassword";
 import ResetPassword from "./components/pages/authentication/ResetPassword";
 import Transliteration from "./components/translator/Transliteration";
+import ShareLinkProvider from "./contexts/ShareLinkContext";
 
 function App() {
   return (
     <>
       <UserProvider>
         <ThemeProvider defaultTheme="system" storageKey={APP_NAME + "-theme"}>
-          <Routes>
-            {/* main routes */}
-            <Route path={ROUTES.login} element={<Login />} />
-            <Route path={ROUTES.signup} element={<Signup />} />
-            <Route path={ROUTES.forgotPassword} element={<ForgotPassword />} />
-            <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
-            <Route path={ROUTES.contact} element={<Contact />} />
-            <Route path="/" element={<Layout />}>
-              <Route path={"/"} element={<Translator />}>
-                <Route index element={<TranslateText />} />
-                <Route
-                  path={ROUTES.translate.index}
-                  element={<TranslateText />}
-                />
-                <Route
-                  path={ROUTES.translate.summarization}
-                  element={<Summarization />}
-                />
-                <Route
-                  path={ROUTES.translate.transliteration}
-                  element={<Transliteration />}
-                />
-                <Route path={ROUTES.share} element={<TranslateText />} />
-              </Route>
-              <Route path={ROUTES.translate.index} element={<Translator />} />
-              <Route path={ROUTES.dictionary} element={<Dictionary />} />
-              <Route path={ROUTES.favorites} element={<Favorites />} />
-              <Route path={ROUTES.learn} element={<Learn />} />
-              <Route path={ROUTES.community} element={<Community />} />
+          <ShareLinkProvider>
+            <Routes>
+              {/* main routes */}
+              <Route path={ROUTES.login} element={<Login />} />
+              <Route path={ROUTES.signup} element={<Signup />} />
               <Route
-                path={ROUTES.liveAssistance}
-                element={<LiveAssistance />}
+                path={ROUTES.forgotPassword}
+                element={<ForgotPassword />}
               />
-              <Route path={ROUTES.contribution} element={<Contribution />} />
-              <Route path={ROUTES.feedback} element={<Feedback />} />
-              <Route path={ROUTES.about} element={<About />} />
-              <Route path={ROUTES.privacy} element={<Privacy />} />
-              <Route
-                path={ROUTES.contributionGuidelines}
-                element={<ContributionGuidelines />}
-              />
-              <Route path={ROUTES.settings.general} element={<Settings />}>
-                <Route index element={<GeneralSettings />} />
+              <Route path={ROUTES.resetPassword} element={<ResetPassword />} />
+              <Route path={ROUTES.contact} element={<Contact />} />
+              <Route path="/" element={<Layout />}>
+                <Route path={"/"} element={<Translator />}>
+                  <Route index element={<TranslateText />} />
+                  <Route
+                    path={ROUTES.translate.index}
+                    element={<TranslateText />}
+                  />
+                  <Route
+                    path={ROUTES.translate.summarization}
+                    element={<Summarization />}
+                  />
+                  <Route
+                    path={ROUTES.translate.transliteration}
+                    element={<Transliteration />}
+                  />
+                  <Route path={ROUTES.share} element={<TranslateText />} />
+                </Route>
+                <Route path={ROUTES.translate.index} element={<Translator />} />
+                <Route path={ROUTES.dictionary} element={<Dictionary />} />
+                <Route path={ROUTES.favorites} element={<Favorites />} />
+                <Route path={ROUTES.learn} element={<Learn />} />
+                <Route path={ROUTES.community} element={<Community />} />
                 <Route
-                  path={ROUTES.settings.profile}
-                  element={<ProfileSettings />}
+                  path={ROUTES.liveAssistance}
+                  element={<LiveAssistance />}
                 />
+                <Route path={ROUTES.contribution} element={<Contribution />} />
+                <Route path={ROUTES.feedback} element={<Feedback />} />
+                <Route path={ROUTES.about} element={<About />} />
+                <Route path={ROUTES.privacy} element={<Privacy />} />
                 <Route
-                  path={ROUTES.settings.appearance}
-                  element={<AppearanceSettings />}
+                  path={ROUTES.contributionGuidelines}
+                  element={<ContributionGuidelines />}
                 />
-                <Route
-                  path={ROUTES.settings.notifications}
-                  element={<NotificationSettings />}
-                />
+                <Route path={ROUTES.settings.general} element={<Settings />}>
+                  <Route index element={<GeneralSettings />} />
+                  <Route
+                    path={ROUTES.settings.profile}
+                    element={<ProfileSettings />}
+                  />
+                  <Route
+                    path={ROUTES.settings.appearance}
+                    element={<AppearanceSettings />}
+                  />
+                  <Route
+                    path={ROUTES.settings.notifications}
+                    element={<NotificationSettings />}
+                  />
+                </Route>
+                <Route path={ROUTES.notFound} element={<NotFound />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
-              <Route path={ROUTES.notFound} element={<NotFound />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
+            </Routes>
+          </ShareLinkProvider>
         </ThemeProvider>
         <Toaster />
       </UserProvider>

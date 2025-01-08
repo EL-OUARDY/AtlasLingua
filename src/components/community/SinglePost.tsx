@@ -28,6 +28,8 @@ import { useCommunity } from "@/contexts/CommunityContext";
 import PostCardSkeleton from "../skeletons/PostCardSkeleton";
 import SinglePostSkeleton from "../skeletons/SinglePostSkeleton";
 import { Timestamp } from "firebase/firestore";
+import { useShareLink } from "@/contexts/ShareLinkContext";
+import { ROUTES } from "@/routes/routes";
 
 interface Props {
   postId: string;
@@ -46,6 +48,8 @@ function SinglePost({ postId }: Props) {
 
   const [isNewCommentVisible, setIsNewCommentVisible] =
     useState<boolean>(false);
+
+  const { openShareDialog } = useShareLink();
 
   useEffect(() => {
     fetchPost(postId);
@@ -84,19 +88,27 @@ function SinglePost({ postId }: Props) {
                       </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <Edit3Icon className="mr-2 size-4" /> Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <Trash2Icon className="mr-2 size-4" /> Delete
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openShareDialog(
+                            `${window.location.origin + ROUTES.community}?post_id=${post.id}`,
+                          );
+                        }}
+                        className="cursor-pointer"
+                      >
                         <Share2Icon className="mr-2 size-4" /> Share
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <Flag className="mr-2 size-4" /> Report
                       </DropdownMenuItem>
                     </DropdownMenuContent>

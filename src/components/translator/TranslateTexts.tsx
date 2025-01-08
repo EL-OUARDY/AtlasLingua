@@ -9,6 +9,7 @@ import {
   History,
   Loader2,
   MessageSquareTextIcon,
+  Share2Icon,
   ShieldCheck,
   Star,
 } from "lucide-react";
@@ -36,10 +37,10 @@ import favoriteService, { IFavorite } from "@/services/favoriteService";
 import ReportDialog from "../ReportDialog";
 import { useUser } from "@/contexts/UserContext";
 import { TextGenerateEffect } from "../ui/text-generate-effect";
-import ShareTranslation from "../ShareTranslation";
 import VoiceInput from "../VoiceInput";
 import SpeakText from "../SpeakText";
 import TransliterationIcon from "../ui/icons/TransliterationIcon";
+import { useShareLink } from "@/contexts/ShareLinkContext";
 
 function TranslateText() {
   const [sourceLang, setSourceLang] = useState<Language>("english");
@@ -56,6 +57,7 @@ function TranslateText() {
   const [favoriteId, setFavoriteId] = useState<number | undefined>();
 
   const [shareableLink, setShareableLink] = useState<string>("");
+  const { openShareDialog } = useShareLink();
 
   const { setIsHistoryOpen, addToHistory } = useHistory();
 
@@ -605,7 +607,15 @@ function TranslateText() {
                   </Button>
 
                   {/* Share Button */}
-                  <ShareTranslation link={shareableLink} />
+                  <Button
+                    onClick={() => openShareDialog(shareableLink)}
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-background/60 dark:hover:bg-background/30"
+                  >
+                    <Share2Icon className="size-5 text-muted-foreground" />
+                    <span className="sr-only">Share</span>
+                  </Button>
 
                   {/* Report Translation Button */}
                   <ReportDialog

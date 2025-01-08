@@ -1,6 +1,6 @@
 import { APP_NAME } from "@/shared/constants";
-import { Copy, Check, Share2Icon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Copy, Check } from "lucide-react";
+import { Button } from "../components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -8,37 +8,55 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "./ui/drawer";
-import { Input } from "./ui/input";
-import { useState } from "react";
+} from "../components/ui/drawer";
+import { Input } from "../components/ui/input";
+import { createContext, ReactNode, useContext, useState } from "react";
 
-interface Props {
-  link: string;
+interface IShareLinkContext {
+  openShareDialog: (link: string) => void;
 }
 
-function ShareTranslation({ link }: Props) {
+const ShareLinkContext = createContext<IShareLinkContext>(
+  {} as IShareLinkContext,
+);
+
+// custom hook to expose the ShareLinkContext
+export function useShareLink() {
+  return useContext(ShareLinkContext);
+}
+
+interface Props {
+  children: ReactNode;
+}
+
+function ShareLinkProvider({ children }: Props) {
+  const [link, setLink] = useState<string>("");
+  const [message, setMessage] = useState<string>(
+    "Share this link with your friends.",
+  );
   const [isLinkCopied, setIsLinkCopied] = useState<boolean>(false);
   const [isShareOpen, setIsShareOpen] = useState<boolean>(false);
 
-  return (
-    <>
-      <Button
-        onClick={() => setIsShareOpen(true)}
-        variant="ghost"
-        size="icon"
-        className="hover:bg-background/60 dark:hover:bg-background/30"
-      >
-        <Share2Icon className="size-5 text-muted-foreground" />
-        <span className="sr-only">Share</span>
-      </Button>
+  function openShareDialog(link: string, message: string = "") {
+    setLink(link);
+    if (message) setMessage(message);
+    setIsShareOpen(true);
+  }
 
+  return (
+    <ShareLinkContext.Provider
+      value={{
+        openShareDialog,
+      }}
+    >
+      {children}
       <Drawer open={isShareOpen} onOpenChange={setIsShareOpen}>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm py-4">
             <DrawerHeader className="text-left">
               <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
               <DrawerDescription className="text-muted-foreground">
-                Share this link with your friends.
+                {message}
               </DrawerDescription>
             </DrawerHeader>
 
@@ -70,8 +88,8 @@ function ShareTranslation({ link }: Props) {
           </div>
         </DrawerContent>
       </Drawer>
-    </>
+    </ShareLinkContext.Provider>
   );
 }
 
-export default ShareTranslation;
+export default ShareLinkProvider;
