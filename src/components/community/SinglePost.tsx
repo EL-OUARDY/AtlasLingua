@@ -164,6 +164,14 @@ function SinglePost({ postId }: Props) {
                   </div>
                 </div>
               </div>
+              {comments.length === 0 && !loadingComments && (
+                <div className="flex size-full flex-col items-center justify-center gap-4 text-center">
+                  <Separator />
+                  <div className="flex flex-col items-center gap-4 text-muted-foreground">
+                    <p className="">No comments available.</p>
+                  </div>
+                </div>
+              )}
               {comments.map((comment, index) => (
                 <div
                   key={index}
@@ -251,6 +259,7 @@ function SinglePost({ postId }: Props) {
                       <Label
                         htmlFor="anonymous"
                         className="flex items-center gap-2 text-xs font-normal"
+                        title="Your post will show with an alias"
                       >
                         <Switch
                           id="anonymous"

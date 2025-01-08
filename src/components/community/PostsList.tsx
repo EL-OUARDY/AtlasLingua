@@ -25,7 +25,7 @@ function PostsList({ filter, onPostSelected }: Props) {
       <ScrollArea className="h-full w-full">
         {posts.length === 0 && !loadingPosts && (
           <div className="flex size-full items-center justify-center text-center">
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-4 text-muted-foreground">
               <p className="">No posts available.</p>
             </div>
           </div>

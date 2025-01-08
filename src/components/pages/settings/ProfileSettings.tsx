@@ -19,6 +19,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
+import { useEffect } from "react";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -43,6 +44,8 @@ function ProfileSettings() {
     defaultValues: defaultValues,
   });
 
+  const { setValue } = form;
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
@@ -53,6 +56,13 @@ function ProfileSettings() {
     // navigate to login
     navigate(ROUTES.login);
   }
+
+  useEffect(() => {
+    if (user) {
+      setValue("name", user?.name);
+      setValue("bio", user?.bio || "");
+    }
+  }, [setValue, user]);
 
   return (
     <>

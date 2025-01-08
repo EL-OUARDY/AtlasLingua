@@ -18,7 +18,7 @@ function Welcome() {
     const hasSeenWelcome = getCookie("isWelcomeMessageShown");
     if (!hasSeenWelcome) {
       setOpen(true);
-      setCookie("isWelcomeMessageShown", "true", 2); // expires after 2 day
+      setCookie("isWelcomeMessageShown", "true", 7); // expires after 7 day
     }
   }, []);
 

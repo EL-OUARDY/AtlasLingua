@@ -6,6 +6,7 @@ import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import {
   CheckCircle2Icon,
+  Hash,
   Loader2,
   MoreVertical,
   Settings2,
@@ -25,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import { useEffect, useState } from "react";
@@ -84,7 +85,6 @@ function NewPost() {
   const [tags, setTags] = useState<Tag[]>(defaultValues.tags);
   const [tagsError, setTagsError] = useState<string>();
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -106,7 +106,7 @@ function NewPost() {
 
   async function onSubmit(data: INewPost) {
     if (!user || !isAuthenticated) {
-      loginFirst(true);
+      loginFirst();
       return;
     }
     setIsSubmitting(true);
@@ -136,6 +136,7 @@ function NewPost() {
       setTags([]);
       reset();
       localStorage.removeItem(APP_NAME + "-new-post-content");
+      navigate(ROUTES.community);
     } catch (err) {
       toast("Can't proccess your request. Please try again!", {
         action: {
@@ -148,14 +149,16 @@ function NewPost() {
     }
   }
 
-  function loginFirst(refresh: boolean = false) {
+  function loginFirst() {
     // save return url
-    localStorage.setItem(APP_NAME + "-return-url", location.pathname);
+    localStorage.setItem(
+      APP_NAME + "-return-url",
+      ROUTES.community + "?new_post=true",
+    );
     // Save new post content before leaving
     localStorage.setItem(APP_NAME + "-new-post-content", getValues("content"));
     // navigate to login
-    if (refresh) window.location.href = ROUTES.login;
-    else navigate(ROUTES.login);
+    navigate(ROUTES.login);
   }
 
   return (
@@ -164,50 +167,57 @@ function NewPost() {
         <div className="flex w-full items-start pb-4">
           <div className="flex w-full items-start gap-4 text-sm">
             <Avatar>
-              <AvatarImage alt={APP_NAME} />
+              <AvatarImage
+                // src={user.avatar}
+                alt={APP_NAME}
+              />
               <AvatarFallback className="bg-background dark:bg-secondary">
-                {APP_NAME.split(" ")
-                  .slice(0, 2)
-                  .map((chunk) => chunk[0])
-                  .join("")}
+                {user?.name ? (
+                  user?.name
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((chunk) => chunk[0])
+                    .join("")
+                ) : (
+                  <Hash className="size-4" />
+                )}
               </AvatarFallback>
             </Avatar>
             <div className="grid w-full gap-1">
-              <div className="flex items-center font-semibold">
-                <div className="mr-auto flex items-center gap-1">
-                  {APP_NAME}
-                  {"contributor" === "contributor" && (
+              <div className="flex items-center">
+                <div className="mr-auto flex items-center gap-1 font-semibold capitalize">
+                  {user?.name || APP_NAME}
+                  {user?.role === USER_ROLES.CONTRIBUTOR && (
                     <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                   )}
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div className="cursor-pointer">
-                      <MoreVertical className="h-4 w-4" />
-                      <span className="sr-only">More</span>
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      <Link to={ROUTES.settings.profile}>Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Settings2 className="mr-2 h-4 w-4" />
-                      <Link to={ROUTES.settings.general}>Settings</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {user && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <div className="cursor-pointer">
+                        <MoreVertical className="h-4 w-4" />
+                        <span className="sr-only">More</span>
+                      </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>
+                        <User className="mr-2 h-4 w-4" />
+                        <Link to={ROUTES.settings.profile}>Profile</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Settings2 className="mr-2 h-4 w-4" />
+                        <Link to={ROUTES.settings.general}>Settings</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
               <div className="text-xs text-muted-foreground">
                 {user && isAuthenticated ? (
                   user.email
                 ) : (
-                  <span
-                    onClick={() => loginFirst(true)}
-                    className="cursor-pointer"
-                  >
+                  <span onClick={loginFirst} className="cursor-pointer">
                     Please sign in to post
                   </span>
                 )}
@@ -251,6 +261,7 @@ function NewPost() {
                         <Label
                           htmlFor="anonymous"
                           className="flex items-center gap-2 text-xs font-normal"
+                          title="Your post will show with an alias"
                         >
                           <Switch
                             checked={field.value}
@@ -310,6 +321,7 @@ function NewPost() {
                                       return true;
                                     }
                                   }}
+                                  styleClasses={{ input: "text-xs" }}
                                 />
                               </FormControl>
                               <FormDescription className="text-left text-xs font-medium">

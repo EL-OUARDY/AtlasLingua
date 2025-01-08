@@ -30,7 +30,7 @@ const loginSchema = z.object({
 });
 
 function Login() {
-  const { user, setUser } = useUser();
+  const { user, setUser, isAuthenticated } = useUser();
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -49,13 +49,13 @@ function Login() {
   useEffect(() => {
     // if user is logged in redirect to return url or homepage
     const returnUrl = localStorage.getItem(APP_NAME + "-return-url");
-    if (user) {
+    if (user && isAuthenticated) {
       if (returnUrl) {
         localStorage.removeItem(APP_NAME + "-return-url");
         navigate(returnUrl);
       } else navigate("/");
     }
-  }, [navigate, user]);
+  }, [isAuthenticated, navigate, user]);
 
   function onSubmit(credentials: ILoginCredentials) {
     setIsSubmitting(true);

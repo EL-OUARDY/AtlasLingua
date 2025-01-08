@@ -34,7 +34,7 @@ const registerSchema = z.object({
 });
 
 function Signup() {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const navigate = useNavigate();
   const {
     register,
@@ -47,8 +47,8 @@ function Signup() {
 
   useEffect(() => {
     // if user is logged in redirect to returnUrl or homepage
-    if (user) navigate("/");
-  }, [navigate, user]);
+    if (user && isAuthenticated) navigate("/");
+  }, [isAuthenticated, navigate, user]);
 
   function onSubmit(formData: IRegisterData) {
     setIsSubmitting(true);
