@@ -21,6 +21,7 @@ import { Badge } from "../ui/badge";
 import { Timestamp } from "firebase/firestore";
 import { useShareLink } from "@/contexts/ShareLinkContext";
 import { ROUTES } from "@/routes/routes";
+import { useReportPost } from "@/contexts/ReportPostContext";
 
 interface Props {
   post: ICommunityPost;
@@ -30,6 +31,7 @@ interface Props {
 
 function PostCard({ post, selectedPost, onSelect }: Props) {
   const { openShareDialog } = useShareLink();
+  const { openReportDialog } = useReportPost();
   return (
     <div
       className={cn(
@@ -89,7 +91,10 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openReportDialog(post.id);
+                      }}
                       className="cursor-pointer"
                     >
                       <Flag className="mr-2 size-4" /> Report

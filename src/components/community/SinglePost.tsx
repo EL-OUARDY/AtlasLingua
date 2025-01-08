@@ -30,6 +30,7 @@ import SinglePostSkeleton from "../skeletons/SinglePostSkeleton";
 import { Timestamp } from "firebase/firestore";
 import { useShareLink } from "@/contexts/ShareLinkContext";
 import { ROUTES } from "@/routes/routes";
+import { useReportPost } from "@/contexts/ReportPostContext";
 
 interface Props {
   postId: string;
@@ -50,6 +51,7 @@ function SinglePost({ postId }: Props) {
     useState<boolean>(false);
 
   const { openShareDialog } = useShareLink();
+  const { openReportDialog } = useReportPost();
 
   useEffect(() => {
     fetchPost(postId);
@@ -108,7 +110,13 @@ function SinglePost({ postId }: Props) {
                       </DropdownMenuItem>
 
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openReportDialog(post.id);
+                        }}
+                        className="cursor-pointer"
+                      >
                         <Flag className="mr-2 size-4" /> Report
                       </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -31,3 +31,10 @@ export interface ICommunityFilter {
   searchQuery: string;
   sortBy: "latest" | "popular" | "unanswered" | "user";
 }
+
+export interface IReportPost {
+  userId: number | undefined;
+  postId: string;
+  reasons: string[];
+  description?: string | undefined;
+}

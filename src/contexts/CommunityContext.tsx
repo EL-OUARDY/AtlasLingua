@@ -1,4 +1,8 @@
-import { ICommunityComment, ICommunityPost } from "@/models/Community";
+import {
+  ICommunityComment,
+  ICommunityPost,
+  IReportPost,
+} from "@/models/Community";
 import { db } from "@/services/firebaseConfig";
 import {
   collection,
@@ -16,6 +20,7 @@ import {
 } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
+import ReportPostProvider from "./ReportPostContext";
 
 interface ICommunityContext {
   posts: ICommunityPost[];
@@ -30,6 +35,7 @@ interface ICommunityContext {
   loadingComments: boolean;
   hasMoreComments: boolean;
   addPost: (newPost: Omit<ICommunityPost, "id">) => Promise<void>;
+  reportPost: (report: IReportPost) => Promise<void>;
 }
 
 const CommunityContext = createContext<ICommunityContext>(
@@ -220,6 +226,14 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     ]);
   }
 
+  async function reportPost(report: IReportPost): Promise<void> {
+    // Firestore reference
+    const postsRef = collection(db, "post_reports");
+
+    // Add the document
+    await addDoc(postsRef, report);
+  }
+
   return (
     <CommunityContext.Provider
       value={{
@@ -235,9 +249,10 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         loadingComments,
         hasMoreComments,
         addPost,
+        reportPost,
       }}
     >
-      {children}
+      <ReportPostProvider>{children}</ReportPostProvider>
     </CommunityContext.Provider>
   );
 }

@@ -51,7 +51,7 @@ function ShareLinkProvider({ children }: Props) {
     >
       {children}
       <Drawer open={isShareOpen} onOpenChange={setIsShareOpen}>
-        <DrawerContent>
+        <DrawerContent onOpenAutoFocus={() => {}}>
           <div className="mx-auto w-full max-w-sm py-4">
             <DrawerHeader className="text-left">
               <DrawerTitle className="mb-2">{APP_NAME}</DrawerTitle>
@@ -66,6 +66,7 @@ function ShareLinkProvider({ children }: Props) {
                   className="text-muted-foreground no-ring"
                   value={link}
                   readOnly
+                  tabIndex={-1}
                 />
                 <Button
                   onClick={() => {
