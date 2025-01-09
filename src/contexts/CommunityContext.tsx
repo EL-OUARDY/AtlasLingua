@@ -34,7 +34,11 @@ interface ICommunityContext {
   fetchComments: (postId: string) => Promise<void>;
   loadingComments: boolean;
   hasMoreComments: boolean;
-  addPost: (newPost: Omit<ICommunityPost, "id">) => Promise<void>;
+  addPost: (post: Omit<ICommunityPost, "id">) => Promise<ICommunityPost>;
+  addComment: (
+    postId: string,
+    comment: Omit<ICommunityComment, "id">,
+  ) => Promise<ICommunityComment>;
   reportPost: (report: IReportPost) => Promise<void>;
 }
 
@@ -212,18 +216,46 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     }
   }
 
-  async function addPost(newPost: Omit<ICommunityPost, "id">): Promise<void> {
+  async function addPost(
+    post: Omit<ICommunityPost, "id">,
+  ): Promise<ICommunityPost> {
     // Firestore reference
     const postsRef = collection(db, "posts");
 
     // Add the document
-    const docRef = await addDoc(postsRef, newPost);
+    const docRef = await addDoc(postsRef, post);
 
     // Add the new post to the beginning of the list
-    setPosts((prevPosts) => [
-      { ...newPost, id: docRef.id, date: Timestamp.fromDate(new Date()) },
-      ...prevPosts,
-    ]);
+    const newPost: ICommunityPost = {
+      ...post,
+      id: docRef.id,
+      date: Timestamp.fromDate(new Date()),
+    };
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
+    return newPost;
+  }
+
+  async function addComment(
+    postId: string,
+    comment: Omit<ICommunityComment, "id">,
+  ): Promise<ICommunityComment> {
+    // Reference to the specific post document
+    const postDocRef = doc(db, "posts", postId);
+
+    // Reference to the comments sub-collection of the specific post
+    const commentsRef = collection(postDocRef, "comments");
+
+    // Add the new comment to the comments sub-collection
+    const docRef = await addDoc(commentsRef, comment);
+
+    // Add the new comment to the end of the list
+    const newComment: ICommunityComment = {
+      ...comment,
+      id: docRef.id,
+      date: Timestamp.fromDate(new Date()),
+    };
+    setComments((prevComments) => [...prevComments, newComment]);
+    return newComment;
   }
 
   async function reportPost(report: IReportPost): Promise<void> {
@@ -249,6 +281,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         loadingComments,
         hasMoreComments,
         addPost,
+        addComment,
         reportPost,
       }}
     >

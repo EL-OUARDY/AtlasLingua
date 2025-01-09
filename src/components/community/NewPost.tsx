@@ -111,7 +111,7 @@ function NewPost() {
     }
     setIsSubmitting(true);
     // Construct a new post
-    const newPost: Omit<ICommunityPost, "id"> = {
+    const post: Omit<ICommunityPost, "id"> = {
       content: data.content,
       tags: data.tags.map((x) => x.text),
       user: {
@@ -126,7 +126,7 @@ function NewPost() {
     };
 
     try {
-      await addPost(newPost);
+      await addPost(post);
       toast("Post created successfully.", {
         action: {
           label: "Hide",
@@ -260,7 +260,7 @@ function NewPost() {
                       <FormControl>
                         <Label
                           htmlFor="anonymous"
-                          className="flex items-center gap-2 text-xs font-normal"
+                          className="flex cursor-pointer items-center gap-2 text-xs font-normal"
                           title="Your post will show with an alias"
                         >
                           <Switch
@@ -268,7 +268,7 @@ function NewPost() {
                             onCheckedChange={field.onChange}
                             name={field.name}
                             id="anonymous"
-                            aria-label="Comment anonymously"
+                            aria-label="post anonymously"
                           />{" "}
                           Share anonymously
                         </Label>

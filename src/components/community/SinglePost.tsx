@@ -1,10 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
-import { Label } from "../ui/label";
-import { Switch } from "../ui/switch";
 import { useEffect, useState } from "react";
 import {
   CheckCircle2Icon,
@@ -31,12 +28,17 @@ import { Timestamp } from "firebase/firestore";
 import { useShareLink } from "@/contexts/ShareLinkContext";
 import { ROUTES } from "@/routes/routes";
 import { useReportPost } from "@/contexts/ReportPostContext";
+import { useUser } from "@/contexts/UserContext";
+import CommentForm from "./CommentForm";
+import UpVoteIcon from "../ui/icons/UpVoteIcon";
+import WTooltip from "../ui/custom/WTooltip";
 
 interface Props {
   postId: string;
 }
 
 function SinglePost({ postId }: Props) {
+  const { user } = useUser();
   const {
     post,
     fetchPost,
@@ -53,8 +55,15 @@ function SinglePost({ postId }: Props) {
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
 
+  const [mentionedUser, setMentionedUser] = useState<string>("");
+
   useEffect(() => {
     fetchPost(postId);
+
+    setIsNewCommentVisible(false);
+    const searchParams = new URLSearchParams(location.search);
+    const isNewComment = searchParams.get("new_comment");
+    if (isNewComment) setIsNewCommentVisible(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
 
@@ -90,13 +99,17 @@ function SinglePost({ postId }: Props) {
                       </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Edit3Icon className="mr-2 size-4" /> Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Trash2Icon className="mr-2 size-4" /> Delete
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
+                      {user && user.id === post.user.id && (
+                        <>
+                          <DropdownMenuItem className="cursor-pointer">
+                            <Edit3Icon className="mr-2 size-4" /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer">
+                            <Trash2Icon className="mr-2 size-4" /> Delete
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                        </>
+                      )}
                       <DropdownMenuItem
                         onClick={(e) => {
                           e.stopPropagation();
@@ -161,26 +174,23 @@ function SinglePost({ postId }: Props) {
                     )}
                   </div>
                   <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                      <svg
-                        className="mr-2 size-3 stroke-1"
-                        fill="currentColor"
-                        icon-name="upvote-outline"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166.368a1.128 1.128 0 0 1 1.668.004l7.872 8.581a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 1.31 2.258 9.75H7.25v8ZM2.227 9.784l-.012.016c.01-.006.014-.01.012-.016Z"></path>{" "}
-                      </svg>
-                      {post.votes}
-                    </div>
-                    <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                      <ReplyAllIcon
-                        onClick={() => {
-                          setIsNewCommentVisible(true);
-                        }}
-                        className="mr-2 size-5 stroke-1"
-                      />
-                    </div>
+                    <WTooltip content="Upvote">
+                      <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                        <UpVoteIcon className="mr-2 size-3 stroke-1" />
+                        {post.votes}
+                      </div>
+                    </WTooltip>
+                    <WTooltip content="Reply">
+                      <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                        <ReplyAllIcon
+                          onClick={() => {
+                            setMentionedUser("");
+                            setIsNewCommentVisible(true);
+                          }}
+                          className="mr-2 size-5 stroke-1"
+                        />
+                      </div>
+                    </WTooltip>
                   </div>
                 </div>
               </div>
@@ -208,26 +218,23 @@ function SinglePost({ postId }: Props) {
                       )}
                     </div>
                     <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
-                      <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                        <svg
-                          className="mr-2 size-3 stroke-1"
-                          fill="currentColor"
-                          icon-name="upvote-outline"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M12.877 19H7.123A1.125 1.125 0 0 1 6 17.877V11H2.126a1.114 1.114 0 0 1-1.007-.7 1.249 1.249 0 0 1 .171-1.343L9.166.368a1.128 1.128 0 0 1 1.668.004l7.872 8.581a1.25 1.25 0 0 1 .176 1.348 1.113 1.113 0 0 1-1.005.7H14v6.877A1.125 1.125 0 0 1 12.877 19ZM7.25 17.75h5.5v-8h4.934L10 1.31 2.258 9.75H7.25v8ZM2.227 9.784l-.012.016c.01-.006.014-.01.012-.016Z"></path>{" "}
-                        </svg>
-                        {comment.votes}
-                      </div>
-                      <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                        <ReplyAllIcon
-                          onClick={() => {
-                            setIsNewCommentVisible(true);
-                          }}
-                          className="mr-2 size-5 stroke-1"
-                        />
-                      </div>
+                      <WTooltip content="Upvote">
+                        <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                          <UpVoteIcon className="mr-2 size-3 stroke-1" />
+                          {comment.votes}
+                        </div>
+                      </WTooltip>
+                      <WTooltip content="Reply">
+                        <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                          <ReplyAllIcon
+                            onClick={() => {
+                              setMentionedUser(comment.user.name);
+                              setIsNewCommentVisible(true);
+                            }}
+                            className="mr-2 size-5 stroke-1"
+                          />
+                        </div>
+                      </WTooltip>
                     </div>
                   </div>
                 </div>
@@ -267,36 +274,11 @@ function SinglePost({ postId }: Props) {
             <>
               <Separator className="mt-auto" />
               <div className="pt-4">
-                <form>
-                  <div className="grid gap-4">
-                    <Textarea
-                      id="comment"
-                      defaultValue={"@Emma Wilson "}
-                      className="p-4 text-sm no-ring"
-                      placeholder={`Reply to ${post.user.name}...`}
-                    />
-                    <div className="flex items-center">
-                      <Label
-                        htmlFor="anonymous"
-                        className="flex items-center gap-2 text-xs font-normal"
-                        title="Your post will show with an alias"
-                      >
-                        <Switch
-                          id="anonymous"
-                          aria-label="Comment anonymously"
-                        />{" "}
-                        Comment anonymously
-                      </Label>
-                      <Button
-                        onClick={(e) => e.preventDefault()}
-                        size="sm"
-                        className="ml-auto"
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                </form>
+                <CommentForm
+                  post={post}
+                  onCommentSuccess={() => setIsNewCommentVisible(false)}
+                  mentionedUser={mentionedUser}
+                />
               </div>
             </>
           )}

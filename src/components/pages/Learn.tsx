@@ -124,7 +124,7 @@ function Learn() {
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Learn</h2>
           <p className="mt-1 text-muted-foreground">
-            Darija Learning Center: Tools and Resources.
+            Handy Vocabulary to Get You Started.
           </p>
         </div>
         <div className="relative flex-1 md:ml-auto md:grow-0">
