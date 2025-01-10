@@ -290,7 +290,7 @@ function SinglePost({ postId }: Props) {
                             <DropdownMenuItem
                               onClick={(e) => {
                                 e.stopPropagation();
-                                openReportDialog(post.id);
+                                openReportDialog(post.id, comment.id);
                               }}
                               className="cursor-pointer"
                             >

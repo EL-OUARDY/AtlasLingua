@@ -33,7 +33,7 @@ import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 
 interface IReportPostContext {
-  openReportDialog: (postId: string) => void;
+  openReportDialog: (postId: string, commentId?: string) => void;
 }
 
 const ReportPostContext = createContext<IReportPostContext>(
@@ -51,6 +51,7 @@ interface Props {
 
 const reportSchema = z.object({
   postId: z.string(),
+  commentId: z.string().optional(),
   reasons: z.array(z.string()).min(1, "Please select at least one reason"),
   description: z
     .string()
@@ -74,12 +75,13 @@ function ReportPostProvider({ children }: Props) {
     resolver: zodResolver(reportSchema),
     defaultValues: {
       postId: "",
+      commentId: "",
       reasons: [],
       description: "",
     },
   });
 
-  const { setValue } = form;
+  const { setValue, reset } = form;
 
   const { user, isAuthenticated } = useUser();
   const { reportPost } = useCommunity();
@@ -91,10 +93,12 @@ function ReportPostProvider({ children }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  function openReportDialog(postId: string) {
+  function openReportDialog(postId: string, commentId: string = "") {
     if (!user || !isAuthenticated) loginFirst();
     setHasSubmitted(false);
+    reset();
     setValue("postId", postId);
+    setValue("commentId", commentId);
     setIsReportOpen(true);
   }
 
@@ -167,6 +171,17 @@ function ReportPostProvider({ children }: Props) {
                   />
                   <FormField
                     control={form.control}
+                    name="commentId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input {...field} type="hidden" disabled />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="reasons"
                     render={() => (
                       <FormItem>
@@ -199,7 +214,7 @@ function ReportPostProvider({ children }: Props) {
                                       tabIndex={-1}
                                     />
                                   </FormControl>
-                                  <FormLabel className="font-normal text-muted-foreground">
+                                  <FormLabel className="cursor-pointer font-normal text-muted-foreground">
                                     {reason.label}
                                   </FormLabel>
                                 </FormItem>
