@@ -38,22 +38,20 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
   const { openReportDialog } = useReportPost();
   return (
     <div
+      onClick={() => {
+        onSelect(post.id);
+      }}
       className={cn(
         "relative flex h-fit flex-col items-start gap-3 overflow-hidden rounded-lg border bg-background p-4 text-left text-sm transition-all dark:bg-muted/40",
         selectedPost === post.id && "post-selected group !bg-muted",
       )}
     >
-      <div
-        onClick={() => {
-          onSelect(post.id);
-        }}
-        className="flex w-full flex-col gap-3"
-      >
+      <div className="flex w-full flex-col gap-3">
         <div className="flex w-full flex-col gap-1">
           <div className="flex items-center">
             <div className="flex w-full items-center gap-1">
               <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
-                <div className="mr-auto flex items-center gap-2">
+                <div className="mr-auto flex items-center gap-2 capitalize">
                   {post.user.name}
                   {post.user.role === "contributor" && (
                     <CheckCircle2Icon className="size-4 rounded-full text-green-600" />

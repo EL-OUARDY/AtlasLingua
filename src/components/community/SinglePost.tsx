@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {
   CheckCircle2Icon,
   Edit3Icon,
+  EllipsisVertical,
   Flag,
   MoreVertical,
   ReplyAllIcon,
@@ -32,6 +33,8 @@ import { useUser } from "@/contexts/UserContext";
 import CommentForm from "./CommentForm";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
+import { ICommunityComment } from "@/models/Community";
+import { IUser } from "@/models/User";
 
 interface Props {
   postId: string;
@@ -49,23 +52,34 @@ function SinglePost({ postId }: Props) {
     loadingSinglePost,
   } = useCommunity();
 
-  const [isNewCommentVisible, setIsNewCommentVisible] =
+  const [commentToUpdate, setCommentToUpdate] =
+    useState<ICommunityComment | null>(null);
+
+  const [isCommentFormVisible, setIsCommentFormVisible] =
     useState<boolean>(false);
 
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
 
-  const [mentionedUser, setMentionedUser] = useState<string>("");
+  const [mentionedUser, setMentionedUser] = useState<Partial<IUser> | null>(
+    null,
+  );
 
   useEffect(() => {
     fetchPost(postId);
 
-    setIsNewCommentVisible(false);
+    setIsCommentFormVisible(false);
     const searchParams = new URLSearchParams(location.search);
     const isNewComment = searchParams.get("new_comment");
-    if (isNewComment) setIsNewCommentVisible(true);
+    if (isNewComment) setIsCommentFormVisible(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
+
+  function resetCommentState() {
+    setIsCommentFormVisible(false);
+    setCommentToUpdate(null);
+    setMentionedUser(null);
+  }
 
   return (
     <div className="relative flex h-full w-full min-w-[180px] flex-col rounded-lg border p-4">
@@ -76,7 +90,7 @@ function SinglePost({ postId }: Props) {
               <Avatar>
                 <AvatarImage src={post.user.avatar} alt={post.user.name} />
                 <AvatarFallback className="bg-background dark:bg-secondary">
-                  {post.user.name
+                  {(post.user.name as string)
                     .split(" ")
                     .slice(0, 2)
                     .map((chunk) => chunk[0])
@@ -85,7 +99,7 @@ function SinglePost({ postId }: Props) {
               </Avatar>
               <div className="grid w-full gap-1">
                 <div className="flex items-center font-semibold">
-                  <div className="mr-auto flex items-center gap-1">
+                  <div className="mr-auto flex items-center gap-1 capitalize">
                     {post.user.name}
                     {post.user.role === "contributor" && (
                       <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
@@ -165,7 +179,7 @@ function SinglePost({ postId }: Props) {
                     )}
                   </div>
                 </div>
-                <Separator className="my-3" />
+                <Separator className="mb-2 mt-3" />
                 <div className="flex items-center">
                   <div className="text-xs text-muted-foreground">
                     {formatDistanceToNow(
@@ -184,8 +198,8 @@ function SinglePost({ postId }: Props) {
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                         <ReplyAllIcon
                           onClick={() => {
-                            setMentionedUser("");
-                            setIsNewCommentVisible(true);
+                            setMentionedUser(null);
+                            setIsCommentFormVisible(true);
                           }}
                           className="mr-2 size-5 stroke-1"
                         />
@@ -207,9 +221,10 @@ function SinglePost({ postId }: Props) {
                   key={index}
                   className="w-full rounded-lg border bg-background p-2 text-muted-foreground dark:bg-muted/40"
                 >
-                  <span className="tracking-tight text-primary">{`${comment.user.name}: `}</span>
+                  <span className="capitalize tracking-tight text-primary">{`${comment.user.name}: `}</span>
+                  {comment.mentionedUser && `@${comment.mentionedUser} `}
                   {comment.content}
-                  <Separator className="my-4" />
+                  <Separator className="mb-2 mt-4" />
                   <div className="flex items-center">
                     <div className="text-xs text-muted-foreground">
                       {formatDistanceToNow(
@@ -217,24 +232,73 @@ function SinglePost({ postId }: Props) {
                         { addSuffix: true },
                       )}
                     </div>
-                    <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
-                      <WTooltip content="Upvote">
-                        <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                          <UpVoteIcon className="mr-2 size-3 stroke-1" />
-                          {comment.votes}
-                        </div>
-                      </WTooltip>
-                      <WTooltip content="Reply">
-                        <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                          <ReplyAllIcon
-                            onClick={() => {
-                              setMentionedUser(comment.user.name);
-                              setIsNewCommentVisible(true);
-                            }}
-                            className="mr-2 size-5 stroke-1"
-                          />
-                        </div>
-                      </WTooltip>
+                    <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
+                      <div className="flex gap-4">
+                        <WTooltip content="Upvote">
+                          <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                            <UpVoteIcon className="mr-2 size-3 stroke-1" />
+                            {comment.votes}
+                          </div>
+                        </WTooltip>
+                        <WTooltip content="Reply">
+                          <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                            <ReplyAllIcon
+                              onClick={() => {
+                                setMentionedUser(comment.user);
+                                setIsCommentFormVisible(true);
+                              }}
+                              className="mr-2 size-5 stroke-1"
+                            />
+                          </div>
+                        </WTooltip>
+                      </div>
+                      <div className="flex gap-1">
+                        <Separator orientation="vertical" className="h-4" />
+                        <DropdownMenu>
+                          <WTooltip content="More">
+                            <DropdownMenuTrigger asChild>
+                              <EllipsisVertical className="size-4 cursor-pointer text-muted-foreground hover:text-foreground" />
+                            </DropdownMenuTrigger>
+                          </WTooltip>
+                          <DropdownMenuContent
+                            align="end"
+                            alignOffset={-5}
+                            className=""
+                            forceMount
+                          >
+                            {user && user.id === comment.user.id && (
+                              <>
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCommentToUpdate(comment);
+                                    setIsCommentFormVisible(true);
+                                  }}
+                                  className="cursor-pointer"
+                                >
+                                  <Edit3Icon className="mr-2 size-4" /> Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="cursor-pointer"
+                                >
+                                  <Trash2Icon className="mr-2 size-4" /> Delete
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                              </>
+                            )}
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openReportDialog(post.id);
+                              }}
+                              className="cursor-pointer"
+                            >
+                              <Flag className="mr-2 size-4" /> Report
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -270,14 +334,17 @@ function SinglePost({ postId }: Props) {
             </div>
           </ScrollArea>
 
-          {isNewCommentVisible && (
+          {isCommentFormVisible && (
             <>
               <Separator className="mt-auto" />
               <div className="pt-4">
                 <CommentForm
                   post={post}
-                  onCommentSuccess={() => setIsNewCommentVisible(false)}
+                  comment={commentToUpdate}
                   mentionedUser={mentionedUser}
+                  onCommentCreated={resetCommentState}
+                  onCommentUpdated={resetCommentState}
+                  onClose={resetCommentState}
                 />
               </div>
             </>

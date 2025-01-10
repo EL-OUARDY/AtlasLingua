@@ -5,6 +5,7 @@ export interface IUser {
   bio?: string;
   role?: string;
   firebase_token: string;
+  avatar?: string;
 }
 
 /**

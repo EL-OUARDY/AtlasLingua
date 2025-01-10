@@ -1,16 +1,12 @@
 import { FieldValue, Timestamp } from "firebase/firestore";
+import { IUser } from "./User";
 
 export interface ICommunityPost {
   id: string;
   content: string;
   votes: number;
   tags?: string[];
-  user: {
-    id: number;
-    name: string;
-    avatar?: string;
-    role: string;
-  };
+  user: Partial<IUser>;
   date: Timestamp | FieldValue;
   commentsCount?: number;
 }
@@ -19,12 +15,9 @@ export interface ICommunityComment {
   id: string;
   content: string;
   votes: number;
-  user: {
-    id: number;
-    name: string;
-    role: string;
-  };
+  user: Partial<IUser>;
   date: Timestamp | FieldValue;
+  mentionedUser?: string;
 }
 
 export interface ICommunityFilter {

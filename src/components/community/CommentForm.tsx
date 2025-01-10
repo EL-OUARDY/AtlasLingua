@@ -16,20 +16,13 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { Loader2 } from "lucide-react";
+import { CornerDownRight, Loader2, XIcon } from "lucide-react";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { serverTimestamp } from "firebase/firestore";
-import { ANONYMOUS_NAME, USER_ROLES } from "@/models/User";
+import { ANONYMOUS_NAME, IUser, USER_ROLES } from "@/models/User";
 import { toast } from "sonner";
 import { useCommunity } from "@/contexts/CommunityContext";
-
-interface Props {
-  post: ICommunityPost;
-  comment?: ICommunityComment;
-  onCommentSuccess: (comment: ICommunityPost) => void;
-  mentionedUser?: string;
-}
 
 const commentSchema = z.object({
   content: z
@@ -46,14 +39,25 @@ const defaultValues = {
   anonymous: false,
 };
 
+interface Props {
+  post: ICommunityPost;
+  comment?: ICommunityComment | null;
+  onCommentCreated: (comment: ICommunityPost) => void;
+  onCommentUpdated: (comment: ICommunityPost) => void;
+  onClose: () => void;
+  mentionedUser?: Partial<IUser> | null;
+}
+
 function CommentForm({
   post,
   comment = null,
-  onCommentSuccess,
-  mentionedUser = "",
+  onCommentCreated,
+  onCommentUpdated,
+  onClose,
+  mentionedUser = null,
 }: Props) {
   const { user, isAuthenticated } = useUser();
-  const { addComment } = useCommunity();
+  const { addComment, editComment } = useCommunity();
 
   const form = useForm<ICommentValues>({
     resolver: zodResolver(commentSchema),
@@ -66,25 +70,30 @@ function CommentForm({
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValue(
-      "content",
-      localStorage.getItem(`${APP_NAME}-new-comment-content-${post.id}`) || "",
-    );
+    if (!comment)
+      setValue(
+        "content",
+        localStorage.getItem(`${APP_NAME}-new-comment-content-${post.id}`) ||
+          "",
+      );
+    else {
+      setValue("content", comment.content);
+      setValue(
+        "anonymous",
+        comment.user.name === ANONYMOUS_NAME ? true : false,
+      );
+    }
     return () => {
       // Component unmounted
       // Save new comment content before leaving
-      localStorage.setItem(
-        `${APP_NAME}-new-comment-content-${post.id}`,
-        getValues("content"),
-      );
+      if (!comment)
+        // Only save content when adding a new comment not updating it
+        localStorage.setItem(
+          `${APP_NAME}-new-comment-content-${post.id}`,
+          getValues("content"),
+        );
     };
-  }, [getValues, setValue, post.id]);
-
-  useEffect(() => {
-    if (mentionedUser && mentionedUser !== ANONYMOUS_NAME)
-      setValue("content", `@${mentionedUser} `);
-    else setValue("content", "");
-  }, [mentionedUser, setValue]);
+  }, [getValues, setValue, post.id, comment]);
 
   async function onSubmit(data: ICommentValues) {
     if (!user || !isAuthenticated) {
@@ -92,29 +101,51 @@ function CommentForm({
       return;
     }
     setIsSubmitting(true);
-    // Construct a new comment
-    const comment: Omit<ICommunityComment, "id"> = {
-      content: data.content,
-      user: {
-        id: user.id as number,
-        name: data.anonymous ? ANONYMOUS_NAME : user.name,
-        role: user.role || USER_ROLES.MEMBER,
-      },
-      date: serverTimestamp(),
-      votes: 0,
-    };
 
     try {
-      const newComment = await addComment(post.id, comment);
-      toast("Comment created successfully.", {
-        action: {
-          label: "Hide",
-          onClick: () => {},
-        },
-      });
-      reset();
-      localStorage.removeItem(`${APP_NAME}-new-comment-content-${post.id}`);
-      onCommentSuccess(newComment);
+      if (comment) {
+        // update comment
+        // Construct an updated comment
+        const commentObj: ICommunityComment = {
+          ...comment,
+          content: data.content,
+          user: {
+            id: user.id as number,
+            name: data.anonymous ? comment.user.name : user.name,
+            role: user.role || USER_ROLES.MEMBER,
+          },
+        };
+        const updatedComment = await editComment(
+          post.id,
+          comment.id,
+          commentObj,
+        );
+        reset();
+        onCommentUpdated(updatedComment);
+      } else {
+        // Add new comment
+        // Construct a new comment
+        const commentObj: Omit<ICommunityComment, "id"> = {
+          content: data.content,
+          user: {
+            id: user.id as number,
+            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            role: user.role || USER_ROLES.MEMBER,
+          },
+          date: serverTimestamp(),
+          votes: 0,
+          mentionedUser:
+            mentionedUser &&
+            mentionedUser.name !== ANONYMOUS_NAME &&
+            mentionedUser.id !== user.id
+              ? mentionedUser.name
+              : "",
+        };
+        const newComment = await addComment(post.id, commentObj);
+        reset();
+        localStorage.removeItem(`${APP_NAME}-new-comment-content-${post.id}`);
+        onCommentCreated(newComment);
+      }
     } catch (err) {
       toast("Can't proccess your request. Please try again!", {
         action: {
@@ -134,10 +165,12 @@ function CommentForm({
       ROUTES.community + `?post_id=${post.id}&new_comment=true`,
     );
     // Save new comment content before leaving
-    localStorage.setItem(
-      `${APP_NAME}-new-comment-content-${post.id}`,
-      getValues("content"),
-    );
+    if (!comment)
+      // Only save content when adding a new comment not updating it
+      localStorage.setItem(
+        `${APP_NAME}-new-comment-content-${post.id}`,
+        getValues("content"),
+      );
     // navigate to login
     navigate(ROUTES.login);
   }
@@ -145,6 +178,26 @@ function CommentForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="mb-3 flex items-center text-xs">
+          <div className="flex items-center gap-1 italic text-muted-foreground">
+            <CornerDownRight className="size-4" />
+            <span>
+              Replying to @
+              {mentionedUser &&
+              mentionedUser.name !== ANONYMOUS_NAME &&
+              mentionedUser.id !== user?.id
+                ? mentionedUser.name
+                : post.user.name}
+            </span>
+          </div>
+          <div
+            onClick={onClose}
+            className="ml-auto flex cursor-pointer items-center text-muted-foreground hover:text-foreground"
+          >
+            <XIcon className="size-4" />
+            <span>Cancel</span>
+          </div>
+        </div>
         <div className="grid gap-4">
           <FormField
             control={form.control}
@@ -156,7 +209,7 @@ function CommentForm({
                     {...field}
                     id="comment-content"
                     className="p-4 text-sm no-ring"
-                    placeholder={`Reply to ${post.user.name}...`}
+                    placeholder="Write your comment"
                   />
                 </FormControl>
                 <FormMessage />

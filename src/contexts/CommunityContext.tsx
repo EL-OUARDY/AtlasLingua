@@ -17,6 +17,7 @@ import {
   doc,
   addDoc,
   Timestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -38,6 +39,11 @@ interface ICommunityContext {
   addComment: (
     postId: string,
     comment: Omit<ICommunityComment, "id">,
+  ) => Promise<ICommunityComment>;
+  editComment: (
+    postId: string,
+    commentId: string,
+    updatedCommentData: Partial<ICommunityComment>,
   ) => Promise<ICommunityComment>;
   reportPost: (report: IReportPost) => Promise<void>;
 }
@@ -258,6 +264,38 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     return newComment;
   }
 
+  async function editComment(
+    postId: string,
+    commentId: string,
+    updatedCommentData: Partial<ICommunityComment>,
+  ): Promise<ICommunityComment> {
+    // Reference to the specific post document
+    const postDocRef = doc(db, "posts", postId);
+
+    // Reference to the comments sub-collection of the specific post
+    const commentDocRef = doc(postDocRef, "comments", commentId);
+
+    // Update the Firestore document
+    await updateDoc(commentDocRef, updatedCommentData);
+
+    // Update local state
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.id === commentId) {
+          // Merge the updated fields with the existing fields
+          return { ...comment, ...updatedCommentData };
+        }
+        return comment;
+      }),
+    );
+
+    const updatedComment: ICommunityComment = {
+      ...comments.find((c) => c.id === commentId)!,
+      ...updatedCommentData,
+    };
+    return updatedComment;
+  }
+
   async function reportPost(report: IReportPost): Promise<void> {
     // Firestore reference
     const postsRef = collection(db, "post_reports");
@@ -282,6 +320,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         hasMoreComments,
         addPost,
         addComment,
+        editComment,
         reportPost,
       }}
     >
