@@ -51,6 +51,7 @@ function SinglePost({ postId }: Props) {
     loadingComments,
     hasMoreComments,
     loadingSinglePost,
+    deletePost,
     deleteComment,
   } = useCommunity();
 
@@ -68,6 +69,9 @@ function SinglePost({ postId }: Props) {
   const [mentionedUser, setMentionedUser] = useState<Partial<IUser> | null>(
     null,
   );
+
+  const [showDeletePostDialog, setShowDeletePostDialog] =
+    useState<boolean>(false);
 
   useEffect(() => {
     fetchPost(postId);
@@ -119,10 +123,22 @@ function SinglePost({ postId }: Props) {
                     <DropdownMenuContent align="end">
                       {user && user.id === post.user.id && (
                         <>
-                          <DropdownMenuItem className="cursor-pointer">
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.preventDefault();
+                            }}
+                            className="cursor-pointer"
+                          >
                             <Edit3Icon className="mr-2 size-4" /> Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer">
+
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setShowDeletePostDialog(true);
+                            }}
+                            className="cursor-pointer"
+                          >
                             <Trash2Icon className="mr-2 size-4" /> Delete
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
@@ -156,6 +172,7 @@ function SinglePost({ postId }: Props) {
                 {post.date && (
                   <div className="text-xs text-muted-foreground">
                     {(post.date as Timestamp).toDate().toLocaleString()}
+                    {post.hasBeenEdited && <span> • Edited</span>}
                   </div>
                 )}
               </div>
@@ -239,7 +256,7 @@ function SinglePost({ postId }: Props) {
 
               <ConfirmationDialog
                 title="Are you absolutely sure?"
-                description="This action cannot be undone! This will permanently delete your account translation history."
+                description="This action cannot be undone! This will permanently delete your comment."
                 onOK={() => {
                   deleteComment(post.id, commentToDelete as string);
                   setCommentToDelete(null);
@@ -297,6 +314,17 @@ function SinglePost({ postId }: Props) {
       ) : (
         <SinglePostSkeleton />
       )}
+
+      <ConfirmationDialog
+        title="Are you absolutely sure?"
+        description="This action cannot be undone! This will permanently delete your post."
+        onOK={() => {
+          deletePost(post?.id as string);
+          setShowDeletePostDialog(false);
+        }}
+        onAbort={() => setShowDeletePostDialog(false)}
+        isOpen={showDeletePostDialog}
+      />
     </div>
   );
 }

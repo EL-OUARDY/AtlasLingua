@@ -27,7 +27,7 @@ import { useCommunity } from "@/contexts/CommunityContext";
 const commentSchema = z.object({
   content: z
     .string()
-    .min(1, { message: "Comment is too short" })
+    .min(1, { message: "Please write your comment" })
     .max(1000, { message: "Comment is too long" }),
   anonymous: z.boolean().default(false).optional(),
 });

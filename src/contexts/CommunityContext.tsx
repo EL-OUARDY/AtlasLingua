@@ -24,6 +24,8 @@ import {
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
 import ReportPostProvider from "./ReportPostContext";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 interface ICommunityContext {
   posts: ICommunityPost[];
@@ -38,6 +40,7 @@ interface ICommunityContext {
   loadingComments: boolean;
   hasMoreComments: boolean;
   addPost: (post: Omit<ICommunityPost, "id">) => Promise<ICommunityPost>;
+  deletePost: (postId: string) => Promise<void>;
   addComment: (
     postId: string,
     comment: Omit<ICommunityComment, "id">,
@@ -81,6 +84,8 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
   // Store the "last comment document" fetched to implement pagination
   const lastFetchedCommentDoc =
     useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
+
+  const navigate = useNavigate();
 
   async function fetchPosts() {
     setLoadingPosts(true);
@@ -244,6 +249,31 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     return newPost;
   }
 
+  async function deletePost(postId: string): Promise<void> {
+    try {
+      // References to Firestore document
+      const postDocRef = doc(db, "posts", postId);
+
+      // Delete the post document
+      await deleteDoc(postDocRef);
+
+      // Update local state
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+      if (post && post.id === postId) {
+        setPost(undefined);
+        setComments([]);
+        navigate(ROUTES.community);
+      }
+    } catch (error) {
+      toast("Failed to delete post", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    }
+  }
+
   async function addComment(
     postId: string,
     comment: Omit<ICommunityComment, "id">,
@@ -402,6 +432,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         loadingComments,
         hasMoreComments,
         addPost,
+        deletePost,
         addComment,
         editComment,
         deleteComment,

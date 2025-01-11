@@ -30,9 +30,10 @@ interface Props {
   post: ICommunityPost;
   selectedPost: string;
   onSelect: (id: string) => void;
+  onDelete: (postId: string) => void;
 }
 
-function PostCard({ post, selectedPost, onSelect }: Props) {
+function PostCard({ post, selectedPost, onSelect, onDelete }: Props) {
   const { user } = useUser();
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
@@ -76,7 +77,10 @@ function PostCard({ post, selectedPost, onSelect }: Props) {
                           <Edit3Icon className="mr-2 size-4" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(post.id);
+                          }}
                           className="cursor-pointer"
                         >
                           <Trash2Icon className="mr-2 size-4" /> Delete

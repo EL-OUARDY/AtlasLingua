@@ -5,14 +5,18 @@ import PostCard from "./PostCard";
 import PostCardSkeleton from "../skeletons/PostCardSkeleton";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 interface Props {
   filter: ICommunityFilter;
   onPostSelected: (id: string) => void;
 }
 function PostsList({ filter, onPostSelected }: Props) {
-  const { posts, fetchPosts, loadingPosts, hasMorePosts } = useCommunity();
+  const { posts, fetchPosts, loadingPosts, hasMorePosts, deletePost } =
+    useCommunity();
   const [selectedPost, setSelectedPost] = useState<string>("");
+
+  const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
   // On mount, load posts
   useEffect(() => {
@@ -40,6 +44,7 @@ function PostsList({ filter, onPostSelected }: Props) {
                 setSelectedPost(id);
                 onPostSelected(id);
               }}
+              onDelete={(postId) => setPostToDelete(postId)}
             />
           ))}
           {loadingPosts &&
@@ -59,6 +64,16 @@ function PostsList({ filter, onPostSelected }: Props) {
             </Button>
           )}
         </div>
+        <ConfirmationDialog
+          title="Are you absolutely sure?"
+          description="This action cannot be undone! This will permanently delete your post."
+          onOK={() => {
+            deletePost(postToDelete as string);
+            setPostToDelete(null);
+          }}
+          onAbort={() => setPostToDelete(null)}
+          isOpen={!!postToDelete}
+        />
         <ScrollBar orientation="horizontal" className="cursor-grab" />
       </ScrollArea>
     </>

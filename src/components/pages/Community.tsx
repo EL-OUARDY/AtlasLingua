@@ -21,7 +21,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
-import NewPost from "../community/NewPost";
+import PostForm from "../community/PostForm";
 import WTooltip from "../ui/custom/WTooltip";
 import { ICommunityFilter } from "@/models/Community";
 import {
@@ -355,7 +355,7 @@ function Community() {
               {selectedPostId ? (
                 <SinglePost postId={selectedPostId} />
               ) : (
-                <NewPost />
+                <PostForm />
               )}
             </div>
           </ResizablePanel>

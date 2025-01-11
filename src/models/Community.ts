@@ -9,6 +9,7 @@ export interface ICommunityPost {
   user: Partial<IUser>;
   date: Timestamp | FieldValue;
   commentsCount?: number;
+  hasBeenEdited?: boolean;
 }
 
 export interface ICommunityComment {

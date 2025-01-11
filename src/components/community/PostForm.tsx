@@ -71,7 +71,7 @@ const defaultValues = {
   tags: [] as Tag[],
 };
 
-function NewPost() {
+function PostForm() {
   const { user, isAuthenticated } = useUser();
   const { addPost } = useCommunity();
 
@@ -379,4 +379,4 @@ function NewPost() {
   );
 }
 
-export default NewPost;
+export default PostForm;
