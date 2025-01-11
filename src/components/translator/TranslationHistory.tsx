@@ -15,21 +15,11 @@ import HistorySkeleton from "../skeletons/HistorySkeleton";
 import { useUser } from "@/contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "../ui/alert-dialog";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { cn } from "@/lib/utils";
 import HistoryCard from "../HistoryCard";
 import { useEffect } from "react";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 function TranslationHistory() {
   const {
@@ -115,30 +105,19 @@ function TranslationHistory() {
         <SheetFooter className="px-4 pb-4 sm:px-6 sm:pb-6">
           <SheetClose asChild>
             {user && historyList.length > 0 && !isLoading && (
-              <AlertDialog>
-                <AlertDialogTrigger
-                  className={buttonVariants({ variant: "default" })}
+              <ConfirmationDialog
+                title="Are you absolutely sure?"
+                description="This action cannot be undone! This will permanently delete your account translation history."
+                onOK={clearAllHistory}
+              >
+                <div
+                  className={
+                    buttonVariants({ variant: "default" }) + " cursor-pointer"
+                  }
                 >
                   Clear history
-                </AlertDialogTrigger>
-                <AlertDialogContent className="w-11/12">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone! This will permanently delete
-                      your account translation history.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={clearAllHistory}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                </div>
+              </ConfirmationDialog>
             )}
           </SheetClose>
         </SheetFooter>

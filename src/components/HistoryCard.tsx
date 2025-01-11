@@ -1,15 +1,5 @@
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "./ui/alert-dialog";
 import { formatDistanceToNow } from "date-fns";
 import { Expand, Calendar, Copy, Trash2, Check } from "lucide-react";
-import { AlertDialogHeader, AlertDialogFooter } from "./ui/alert-dialog";
 import {
   Card,
   CardContent,
@@ -19,6 +9,7 @@ import {
 } from "./ui/card";
 import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
 import { useState } from "react";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 interface Props {
   item: ITranslationHistoryFetchDataResult;
@@ -93,26 +84,13 @@ function HistoryCard({ item, showHistory, deleteHistory }: Props) {
                 <Check className="size-4 hover:text-primary" />
               )}
             </div>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Trash2 className="size-4 cursor-pointer hover:text-primary" />
-              </AlertDialogTrigger>
-              <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently erase
-                    your selected history records.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => deleteHistory(item.id)}>
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <ConfirmationDialog
+              title="Are you absolutely sure?"
+              description="This action cannot be undone. This will permanently erase your selected history records."
+              onOK={() => deleteHistory(item.id)}
+            >
+              <Trash2 className="size-4 cursor-pointer hover:text-primary" />
+            </ConfirmationDialog>
           </div>
         </div>
       </CardContent>

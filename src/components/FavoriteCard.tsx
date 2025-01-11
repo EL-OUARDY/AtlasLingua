@@ -16,17 +16,6 @@ import {
 } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import WTooltip from "./ui/custom/WTooltip";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
 import { IFavorite } from "@/services/favoriteService";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -46,6 +35,7 @@ import {
 } from "./ui/accordion";
 import { Textarea } from "./ui/textarea";
 import { isRTL } from "@/lib/utils";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 interface Props {
   favorite: IFavorite;
@@ -127,38 +117,24 @@ function FavoriteCard({ favorite, className, removeFavorite }: Props) {
               )}
             </Button>
 
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <div>
-                  <WTooltip side="top" content="Remove from list">
-                    <Button
-                      variant="ghost"
-                      size={"icon"}
-                      className="border border-muted text-muted-foreground hover:text-foreground"
-                    >
-                      <StarOffIcon className="size-4 cursor-pointer" />
-                    </Button>
-                  </WTooltip>
-                </div>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="w-11/12 rounded-lg sm:w-[450px]">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action will remove the selected item from your
-                    favorites list. it will no longer appear here.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => removeFavorite(favorite.id as number)}
+            <ConfirmationDialog
+              title="Are you absolutely sure?"
+              description="This action will remove the selected item from your favorites list. it will no longer appear here."
+              onOK={() => removeFavorite(favorite.id as number)}
+            >
+              <div>
+                <WTooltip side="top" content="Remove from list">
+                  <Button
+                    variant="ghost"
+                    size={"icon"}
+                    className="border border-muted text-muted-foreground hover:text-foreground"
                   >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                    <StarOffIcon className="size-4 cursor-pointer" />
+                  </Button>
+                </WTooltip>
+              </div>
+            </ConfirmationDialog>
+
             <div className="ml-auto">
               <WTooltip side="top" content="Expand">
                 <Button

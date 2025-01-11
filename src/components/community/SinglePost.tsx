@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import {
   CheckCircle2Icon,
   Edit3Icon,
-  EllipsisVertical,
   Flag,
   MoreVertical,
   ReplyAllIcon,
@@ -35,6 +34,8 @@ import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { ICommunityComment } from "@/models/Community";
 import { IUser } from "@/models/User";
+import CommentCard from "./CommentCard";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 interface Props {
   postId: string;
@@ -50,10 +51,13 @@ function SinglePost({ postId }: Props) {
     loadingComments,
     hasMoreComments,
     loadingSinglePost,
+    deleteComment,
   } = useCommunity();
 
   const [commentToUpdate, setCommentToUpdate] =
     useState<ICommunityComment | null>(null);
+
+  const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
 
   const [isCommentFormVisible, setIsCommentFormVisible] =
     useState<boolean>(false);
@@ -217,92 +221,32 @@ function SinglePost({ postId }: Props) {
                 </div>
               )}
               {comments.map((comment, index) => (
-                <div
+                <CommentCard
                   key={index}
-                  className="w-full rounded-lg border bg-background p-2 text-muted-foreground dark:bg-muted/40"
-                >
-                  <span className="capitalize tracking-tight text-primary">{`${comment.user.name}: `}</span>
-                  {comment.mentionedUser && `@${comment.mentionedUser} `}
-                  {comment.content}
-                  <Separator className="mb-2 mt-4" />
-                  <div className="flex items-center">
-                    <div className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(
-                        (comment.date as Timestamp).toDate().toLocaleString(),
-                        { addSuffix: true },
-                      )}
-                    </div>
-                    <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-                      <div className="flex gap-4">
-                        <WTooltip content="Upvote">
-                          <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                            <UpVoteIcon className="mr-2 size-3 stroke-1" />
-                            {comment.votes}
-                          </div>
-                        </WTooltip>
-                        <WTooltip content="Reply">
-                          <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                            <ReplyAllIcon
-                              onClick={() => {
-                                setMentionedUser(comment.user);
-                                setIsCommentFormVisible(true);
-                              }}
-                              className="mr-2 size-5 stroke-1"
-                            />
-                          </div>
-                        </WTooltip>
-                      </div>
-                      <div className="flex gap-1">
-                        <Separator orientation="vertical" className="h-4" />
-                        <DropdownMenu>
-                          <WTooltip content="More">
-                            <DropdownMenuTrigger asChild>
-                              <EllipsisVertical className="size-4 cursor-pointer text-muted-foreground hover:text-foreground" />
-                            </DropdownMenuTrigger>
-                          </WTooltip>
-                          <DropdownMenuContent
-                            align="end"
-                            alignOffset={-5}
-                            className=""
-                            forceMount
-                          >
-                            {user && user.id === comment.user.id && (
-                              <>
-                                <DropdownMenuItem
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setCommentToUpdate(comment);
-                                    setIsCommentFormVisible(true);
-                                  }}
-                                  className="cursor-pointer"
-                                >
-                                  <Edit3Icon className="mr-2 size-4" /> Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="cursor-pointer"
-                                >
-                                  <Trash2Icon className="mr-2 size-4" /> Delete
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                              </>
-                            )}
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                openReportDialog(post.id, comment.id);
-                              }}
-                              className="cursor-pointer"
-                            >
-                              <Flag className="mr-2 size-4" /> Report
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  post={post}
+                  comment={comment}
+                  onReply={() => {
+                    setMentionedUser(comment.user);
+                    setIsCommentFormVisible(true);
+                  }}
+                  onEdit={() => {
+                    setCommentToUpdate(comment);
+                    setIsCommentFormVisible(true);
+                  }}
+                  onDelete={(commentId) => setCommentToDelete(commentId)}
+                />
               ))}
+
+              <ConfirmationDialog
+                title="Are you absolutely sure?"
+                description="This action cannot be undone! This will permanently delete your account translation history."
+                onOK={() => {
+                  deleteComment(post.id, commentToDelete as string);
+                  setCommentToDelete(null);
+                }}
+                onAbort={() => setCommentToDelete(null)}
+                isOpen={!!commentToDelete}
+              />
 
               {/* Show a loader while fetching comments */}
               {loadingComments &&

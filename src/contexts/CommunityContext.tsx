@@ -18,6 +18,8 @@ import {
   addDoc,
   Timestamp,
   updateDoc,
+  increment,
+  deleteDoc,
 } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -45,6 +47,7 @@ interface ICommunityContext {
     commentId: string,
     updatedCommentData: Partial<ICommunityComment>,
   ) => Promise<ICommunityComment>;
+  deleteComment: (postId: string, commentId: string) => Promise<void>;
   reportPost: (report: IReportPost) => Promise<void>;
 }
 
@@ -261,6 +264,33 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
       date: Timestamp.fromDate(new Date()),
     };
     setComments((prevComments) => [...prevComments, newComment]);
+
+    // Increment commentsCount of target post
+    await updateDoc(postDocRef, {
+      commentsCount: increment(1),
+    });
+
+    setPost((prevPost) => {
+      if (prevPost?.id === postId) {
+        return {
+          ...prevPost,
+          commentsCount: (prevPost.commentsCount || 0) + 1,
+        };
+      }
+      return prevPost;
+    });
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            commentsCount: (post.commentsCount || 0) + 1,
+          };
+        }
+        return post;
+      }),
+    );
+
     return newComment;
   }
 
@@ -296,6 +326,59 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     return updatedComment;
   }
 
+  async function deleteComment(
+    postId: string,
+    commentId: string,
+  ): Promise<void> {
+    try {
+      // References to Firestore documents
+      const postDocRef = doc(db, "posts", postId);
+      const commentDocRef = doc(postDocRef, "comments", commentId);
+
+      // Delete the comment document
+      await deleteDoc(commentDocRef);
+
+      // Decrement commentsCount of target post
+      await updateDoc(postDocRef, {
+        commentsCount: increment(-1),
+      });
+
+      // Update local state
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId),
+      );
+
+      setPost((prevPost) => {
+        if (prevPost?.id === postId) {
+          return {
+            ...prevPost,
+            commentsCount: Math.max((prevPost.commentsCount || 0) - 1, 0),
+          };
+        }
+        return prevPost;
+      });
+
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post.id === postId) {
+            return {
+              ...post,
+              commentsCount: Math.max((post.commentsCount || 0) - 1, 0),
+            };
+          }
+          return post;
+        }),
+      );
+    } catch (error) {
+      toast("Failed to delete comment", {
+        action: {
+          label: "Hide",
+          onClick: () => {},
+        },
+      });
+    }
+  }
+
   async function reportPost(report: IReportPost): Promise<void> {
     // Firestore reference
     const postsRef = collection(db, "post_reports");
@@ -321,6 +404,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         addPost,
         addComment,
         editComment,
+        deleteComment,
         reportPost,
       }}
     >
