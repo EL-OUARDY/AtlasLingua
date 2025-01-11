@@ -40,7 +40,8 @@ function TranslationHistory() {
     if (user && historyList.length === 0 && isHistoryOpen) {
       loadHistory();
     }
-  }, [user, isHistoryOpen, historyList, loadHistory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isHistoryOpen]);
 
   function showHistory(history: ITranslationHistoryFetchDataResult) {
     setIsHistoryOpen(false);
