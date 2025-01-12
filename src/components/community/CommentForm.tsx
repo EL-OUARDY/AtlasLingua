@@ -111,9 +111,10 @@ function CommentForm({
           content: data.content,
           user: {
             id: user.id as number,
-            name: data.anonymous ? comment.user.name : user.name,
+            name: data.anonymous ? ANONYMOUS_NAME : user.name,
             role: user.role || USER_ROLES.MEMBER,
           },
+          hasBeenEdited: true,
         };
         const updatedComment = await editComment(
           post.id,

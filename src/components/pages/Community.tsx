@@ -34,12 +34,14 @@ import {
 import { CommunityProvider } from "@/contexts/CommunityContext";
 
 function Community() {
-  const [selectedPostId, setSelectedPostId] = useState<string | undefined>();
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
   const [filter, setFilter] = useState<ICommunityFilter>({
     searchQuery: "",
     sortBy: "latest",
   });
+
+  const [postToEdit, setPostToEdit] = useState<string | null>(null);
 
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
   const [secondaryPanelVisible, setSecondaryPanelVisible] =
@@ -50,12 +52,15 @@ function Community() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // get post id from the url
+    // get query parameters from the url
     const searchParams = new URLSearchParams(location.search);
     const newPost = searchParams.get("new_post");
-    const postId = searchParams.get("post_id");
-    setSelectedPostId(postId ? postId : undefined);
-    if (newPost) setSelectedPostId(undefined);
+    const editPost = searchParams.get("edit_post");
+    const selectedPost = searchParams.get("post_id");
+
+    setSelectedPostId(selectedPost ? selectedPost : null);
+    setPostToEdit(editPost ? editPost : null);
+    if (newPost || editPost) setSelectedPostId(null);
 
     // set panels size
     function resizeContentPanel() {
@@ -70,7 +75,7 @@ function Community() {
 
       // on smaller screens: only show one panel
       if (wd < breakpoints.lg)
-        if (postId || newPost) setPanelsLayout([0, 100]);
+        if (selectedPost || newPost || editPost) setPanelsLayout([0, 100]);
         else setPanelsLayout([100, 0]);
     }
     resizeContentPanel();
@@ -88,8 +93,13 @@ function Community() {
     }
   };
 
-  function newPostButtonClick() {
+  function showNewPostForm() {
     navigate(`${ROUTES.community}/?new_post=true`);
+    existSearch();
+  }
+
+  function showEditPostForm(postId: string) {
+    navigate(`${ROUTES.community}/?edit_post=${postId}`);
     existSearch();
   }
 
@@ -267,7 +277,7 @@ function Community() {
                 <Search className="size-5" />
               </Button>
             </div>
-            <Button className="hidden xl:flex" onClick={newPostButtonClick}>
+            <Button className="hidden xl:flex" onClick={showNewPostForm}>
               <SquarePen className="mr-2 size-4" /> New Post
             </Button>
             {!secondaryPanelVisible && (
@@ -301,7 +311,7 @@ function Community() {
             )}
             {!secondaryPanelVisible && !isSearchVisible && (
               <Button
-                onClick={newPostButtonClick}
+                onClick={showNewPostForm}
                 variant={"outline"}
                 size={"icon"}
                 className="lg:hidden"
@@ -334,12 +344,17 @@ function Community() {
         >
           <ResizablePanel defaultSize={100}>
             <div className="relative flex h-full flex-col">
-              <PostsList onPostSelected={showPostPanel} filter={filter} />
+              <PostsList
+                onPostSelected={showPostPanel}
+                filter={filter}
+                selectedPostId={selectedPostId || postToEdit}
+                onEdit={showEditPostForm}
+              />
               {selectedPostId && (
                 <div className="absolute bottom-4 right-4 hidden md:flex">
                   <WTooltip side="top" content="New post">
                     <a
-                      onClick={newPostButtonClick}
+                      onClick={showNewPostForm}
                       className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center shadow-lg`}
                     >
                       <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
@@ -353,9 +368,9 @@ function Community() {
           <ResizablePanel defaultSize={0}>
             <div className="flex h-full items-center justify-center">
               {selectedPostId ? (
-                <SinglePost postId={selectedPostId} />
+                <SinglePost postId={selectedPostId} onEdit={showEditPostForm} />
               ) : (
-                <PostForm />
+                <PostForm postId={postToEdit} />
               )}
             </div>
           </ResizablePanel>

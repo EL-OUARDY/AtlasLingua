@@ -10,11 +10,13 @@ import ConfirmationDialog from "../ConfirmationDialog";
 interface Props {
   filter: ICommunityFilter;
   onPostSelected: (id: string) => void;
+  selectedPostId: string | null;
+  onEdit: (postId: string) => void;
 }
-function PostsList({ filter, onPostSelected }: Props) {
+function PostsList({ filter, onPostSelected, selectedPostId, onEdit }: Props) {
   const { posts, fetchPosts, loadingPosts, hasMorePosts, deletePost } =
     useCommunity();
-  const [selectedPost, setSelectedPost] = useState<string>("");
+  const [selectedPost, setSelectedPost] = useState<string | null>(null);
 
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
 
@@ -23,6 +25,10 @@ function PostsList({ filter, onPostSelected }: Props) {
     fetchPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setSelectedPost(selectedPostId);
+  }, [selectedPostId]);
 
   return (
     <>
@@ -45,6 +51,7 @@ function PostsList({ filter, onPostSelected }: Props) {
                 onPostSelected(id);
               }}
               onDelete={(postId) => setPostToDelete(postId)}
+              onEdit={onEdit}
             />
           ))}
           {loadingPosts &&

@@ -43,6 +43,7 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
             (comment.date as Timestamp).toDate().toLocaleString(),
             { addSuffix: true },
           )}
+          {comment.hasBeenEdited && <span> • Edited</span>}
         </div>
         <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
           <div className="flex gap-4">

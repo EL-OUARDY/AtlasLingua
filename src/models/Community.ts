@@ -19,6 +19,7 @@ export interface ICommunityComment {
   user: Partial<IUser>;
   date: Timestamp | FieldValue;
   mentionedUser?: string;
+  hasBeenEdited?: boolean;
 }
 
 export interface ICommunityFilter {

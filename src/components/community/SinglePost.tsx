@@ -39,9 +39,10 @@ import ConfirmationDialog from "../ConfirmationDialog";
 
 interface Props {
   postId: string;
+  onEdit: (postId: string) => void;
 }
 
-function SinglePost({ postId }: Props) {
+function SinglePost({ postId, onEdit }: Props) {
   const { user } = useUser();
   const {
     post,
@@ -126,6 +127,7 @@ function SinglePost({ postId }: Props) {
                           <DropdownMenuItem
                             onClick={(e) => {
                               e.preventDefault();
+                              onEdit(postId);
                             }}
                             className="cursor-pointer"
                           >

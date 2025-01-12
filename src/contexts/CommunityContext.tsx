@@ -33,6 +33,7 @@ interface ICommunityContext {
   hasMorePosts: boolean;
   fetchPosts: () => Promise<void>;
   post: ICommunityPost | null | undefined;
+  getPost: (postId: string) => Promise<ICommunityPost | null>;
   fetchPost: (postId: string) => Promise<void>;
   loadingSinglePost: boolean;
   comments: ICommunityComment[];
@@ -40,6 +41,10 @@ interface ICommunityContext {
   loadingComments: boolean;
   hasMoreComments: boolean;
   addPost: (post: Omit<ICommunityPost, "id">) => Promise<ICommunityPost>;
+  editPost: (
+    postId: string,
+    updatedPostData: Partial<ICommunityPost>,
+  ) => Promise<ICommunityPost>;
   deletePost: (postId: string) => Promise<void>;
   addComment: (
     postId: string,
@@ -249,6 +254,34 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     return newPost;
   }
 
+  async function editPost(
+    postId: string,
+    updatedPostData: Partial<ICommunityPost>,
+  ): Promise<ICommunityPost> {
+    // Reference to the specific post document
+    const postDocRef = doc(db, "posts", postId);
+
+    // Update the Firestore document
+    await updateDoc(postDocRef, updatedPostData);
+
+    // Update local state
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => {
+        if (post.id === postId) {
+          // Merge the updated fields with the existing fields
+          return { ...post, ...updatedPostData };
+        }
+        return post;
+      }),
+    );
+
+    const updatedPost: ICommunityPost = {
+      ...posts.find((p) => p.id === postId)!,
+      ...updatedPostData,
+    };
+    return updatedPost;
+  }
+
   async function deletePost(postId: string): Promise<void> {
     try {
       // References to Firestore document
@@ -425,6 +458,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         hasMorePosts,
         fetchPosts,
         post,
+        getPost,
         fetchPost,
         loadingSinglePost,
         comments,
@@ -432,6 +466,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         loadingComments,
         hasMoreComments,
         addPost,
+        editPost,
         deletePost,
         addComment,
         editComment,

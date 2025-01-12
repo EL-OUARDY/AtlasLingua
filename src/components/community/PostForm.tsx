@@ -26,7 +26,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import { useEffect, useState } from "react";
@@ -71,9 +71,14 @@ const defaultValues = {
   tags: [] as Tag[],
 };
 
-function PostForm() {
+interface Props {
+  postId?: string | null;
+}
+function PostForm({ postId = null }: Props) {
   const { user, isAuthenticated } = useUser();
-  const { addPost } = useCommunity();
+  const { addPost, editPost, getPost } = useCommunity();
+
+  const [post, setPost] = useState<ICommunityPost | null>(null);
 
   const form = useForm<INewPost>({
     resolver: zodResolver(newPostSchema),
@@ -89,20 +94,48 @@ function PostForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const location = useLocation();
+
   useEffect(() => {
-    setValue(
-      "content",
-      localStorage.getItem(APP_NAME + "-new-post-content") || "",
-    );
+    if (!postId) return;
+
+    const fetchPost = async () => {
+      const p = await getPost(postId);
+      if (p) {
+        setPost(p);
+        setValue("content", p.content);
+        setValue("anonymous", p.user.name === ANONYMOUS_NAME ? true : false);
+        if (p.tags) {
+          const _tags = p.tags?.map((tag, index) => ({
+            id: index.toString(),
+            text: tag,
+          }));
+          setValue("tags", _tags);
+          setTags(_tags);
+        }
+      }
+    };
+    fetchPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postId]);
+
+  useEffect(() => {
+    if (!postId)
+      setValue(
+        "content",
+        localStorage.getItem(APP_NAME + "-new-post-content") || "",
+      );
     return () => {
       // Component unmounted
       // Save new post content before leaving
-      localStorage.setItem(
-        APP_NAME + "-new-post-content",
-        getValues("content"),
-      );
+      if (!postId)
+        // Only save content when adding a new post not updating it
+        localStorage.setItem(
+          APP_NAME + "-new-post-content",
+          getValues("content"),
+        );
     };
-  }, [getValues, setValue]);
+  }, [getValues, postId, setValue]);
 
   async function onSubmit(data: INewPost) {
     if (!user || !isAuthenticated) {
@@ -110,33 +143,60 @@ function PostForm() {
       return;
     }
     setIsSubmitting(true);
-    // Construct a new post
-    const post: Omit<ICommunityPost, "id"> = {
-      content: data.content,
-      tags: data.tags.map((x) => x.text),
-      user: {
-        id: user.id as number,
-        name: data.anonymous ? ANONYMOUS_NAME : user.name,
-        avatar: "",
-        role: user.role || USER_ROLES.MEMBER,
-      },
-      date: serverTimestamp(),
-      votes: 0,
-      commentsCount: 0,
-    };
 
     try {
-      await addPost(post);
-      toast("Post created successfully.", {
-        action: {
-          label: "Hide",
-          onClick: () => {},
-        },
-      });
-      setTags([]);
-      reset();
-      localStorage.removeItem(APP_NAME + "-new-post-content");
-      navigate(ROUTES.community);
+      if (postId && post) {
+        // update post
+        // Construct an updated post
+        const postObj: ICommunityPost = {
+          ...post,
+          content: data.content,
+          user: {
+            id: user.id as number,
+            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            role: user.role || USER_ROLES.MEMBER,
+          },
+          tags: data.tags.map((x) => x.text),
+          hasBeenEdited: true,
+        };
+        await editPost(post.id, postObj);
+        toast("Post updated successfully.", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+        setTags([]);
+        reset();
+        navigate(-1); // go back
+      } else {
+        // add post
+        // Construct a new post
+        const postObj: Omit<ICommunityPost, "id"> = {
+          content: data.content,
+          tags: data.tags.map((x) => x.text),
+          user: {
+            id: user.id as number,
+            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            avatar: "",
+            role: user.role || USER_ROLES.MEMBER,
+          },
+          date: serverTimestamp(),
+          votes: 0,
+          commentsCount: 0,
+        };
+        await addPost(postObj);
+        toast("Post created successfully.", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+        setTags([]);
+        reset();
+        localStorage.removeItem(APP_NAME + "-new-post-content");
+        navigate(ROUTES.community);
+      }
     } catch (err) {
       toast("Can't proccess your request. Please try again!", {
         action: {
@@ -153,10 +213,15 @@ function PostForm() {
     // save return url
     localStorage.setItem(
       APP_NAME + "-return-url",
-      ROUTES.community + "?new_post=true",
+      location.pathname + location.search,
     );
     // Save new post content before leaving
-    localStorage.setItem(APP_NAME + "-new-post-content", getValues("content"));
+    if (!postId)
+      // Only save content when adding a new post not updating it
+      localStorage.setItem(
+        APP_NAME + "-new-post-content",
+        getValues("content"),
+      );
     // navigate to login
     navigate(ROUTES.login);
   }
@@ -343,16 +408,30 @@ function PostForm() {
 
                 <div className="mt-auto flex flex-col">
                   <div className="flex items-center">
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setTags([]);
-                        reset();
-                      }}
-                      variant="outline"
-                    >
-                      Clear
-                    </Button>
+                    {postId ? (
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setTags([]);
+                          reset();
+                          navigate(-1);
+                        }}
+                        variant="outline"
+                      >
+                        Cancel
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setTags([]);
+                          reset();
+                        }}
+                        variant="outline"
+                      >
+                        Clear
+                      </Button>
+                    )}
                     <Button
                       disabled={isSubmitting}
                       type="submit"
@@ -365,7 +444,7 @@ function PostForm() {
                           Please wait
                         </>
                       ) : (
-                        "Post"
+                        <span>{postId ? "Edit" : "Post"}</span>
                       )}
                     </Button>
                   </div>
