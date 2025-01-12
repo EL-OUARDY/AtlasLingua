@@ -27,6 +27,13 @@ export interface ICommunityFilter {
   sortBy: "latest" | "popular" | "unanswered" | "user";
 }
 
+export enum SortOption {
+  Latest = "latest",
+  Popular = "popular",
+  Unanswered = "unanswered",
+  User = "user",
+}
+
 export interface IReportPost {
   userId: number | undefined;
   postId: string;

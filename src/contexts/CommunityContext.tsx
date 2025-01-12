@@ -1,7 +1,9 @@
 import {
   ICommunityComment,
+  ICommunityFilter,
   ICommunityPost,
   IReportPost,
+  SortOption,
 } from "@/models/Community";
 import { db } from "@/services/firebaseConfig";
 import {
@@ -20,13 +22,22 @@ import {
   updateDoc,
   increment,
   deleteDoc,
+  where,
+  QueryConstraint,
 } from "firebase/firestore";
-import { createContext, ReactNode, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "sonner";
 import ReportPostProvider from "./ReportPostContext";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-
+import { useUser } from "./UserContext";
 interface ICommunityContext {
   posts: ICommunityPost[];
   loadingPosts: boolean;
@@ -71,8 +82,13 @@ export function useCommunity() {
 interface Props {
   children: ReactNode;
   fetchLimit?: number;
+  filter: ICommunityFilter;
 }
-export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
+export function CommunityProvider({
+  children,
+  fetchLimit = 20,
+  filter,
+}: Props) {
   const [posts, setPosts] = useState<ICommunityPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
@@ -92,6 +108,15 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
 
   const navigate = useNavigate();
 
+  const { user } = useUser();
+
+  useEffect(() => {
+    lastFetchedPostDoc.current = null;
+    setPosts([]);
+    fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
   async function fetchPosts() {
     setLoadingPosts(true);
 
@@ -99,17 +124,52 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
       const postsRef = collection(db, "posts");
 
       // Create query to get most recent x number of posts, ordered by 'date' descending
-      // If we already have a "lastDoc", we use startAfter() to get the next page
-      const postsQuery = lastFetchedPostDoc.current
-        ? query(
-            postsRef,
-            orderBy("date", "desc"),
-            startAfter(lastFetchedPostDoc.current),
-            limit(fetchLimit),
-          )
-        : query(postsRef, orderBy("date", "desc"), limit(fetchLimit));
+      const constraints: QueryConstraint[] = [limit(fetchLimit)];
 
-      const snapshot = await getDocs(postsQuery);
+      // Sort by latest posts
+      if (filter.sortBy === SortOption.Latest) {
+        constraints.push(orderBy("date", "desc"));
+      }
+
+      // Sort by popular posts
+      if (filter.sortBy === SortOption.Popular) {
+        // Get the timestamp for one month ago
+        const oneMonthAgo = Timestamp.fromDate(
+          new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        ); // 30 days ago
+        constraints.push(where("date", ">", oneMonthAgo));
+        constraints.push(orderBy("votes", "desc"));
+      }
+
+      // Sort by user's posts
+      if (filter.sortBy === SortOption.User) {
+        if (user) {
+          constraints.push(orderBy("date", "desc"));
+          constraints.push(where("user.id", "==", user.id));
+        } else {
+          navigate(ROUTES.login);
+        }
+      }
+
+      // Sort by unanswered posts
+      if (filter.sortBy === SortOption.Unanswered) {
+        constraints.push(orderBy("date", "desc"));
+        constraints.push(where("commentsCount", "==", 0));
+      }
+
+      // Add the where clause if there's a search query
+      // if (filter && filter.searchQuery) {
+      //   constraints.push(
+      //     where("content", "array-contains", filter.searchQuery),
+      //   );
+      // }
+
+      // If we already have a "lastDoc", we use startAfter() to get the next page
+      if (lastFetchedPostDoc.current) {
+        constraints.push(startAfter(lastFetchedPostDoc.current));
+      }
+
+      const snapshot = await getDocs(query(postsRef, ...constraints));
 
       if (!snapshot.empty) {
         // Save the last document from this snapshot; used in next fetch

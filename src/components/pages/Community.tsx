@@ -128,7 +128,7 @@ function Community() {
   }, []);
 
   return (
-    <CommunityProvider>
+    <CommunityProvider filter={filter}>
       <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
         <div className="flex items-center gap-2 md:flex-row">
           <div className="flex flex-1 items-center">
@@ -180,6 +180,11 @@ function Community() {
                   id="search"
                   onChange={(e) => {
                     setSearch(e.target.value);
+                    if (e.target.value === "")
+                      setFilter({
+                        ...filter,
+                        searchQuery: e.target.value,
+                      });
                   }}
                   type="search"
                   placeholder="Search..."
@@ -258,6 +263,11 @@ function Community() {
                 id="search"
                 onChange={(e) => {
                   setSearch(e.target.value);
+                  if (e.target.value === "")
+                    setFilter({
+                      ...filter,
+                      searchQuery: e.target.value,
+                    });
                 }}
                 type="search"
                 placeholder="Search..."
@@ -346,7 +356,6 @@ function Community() {
             <div className="relative flex h-full flex-col">
               <PostsList
                 onPostSelected={showPostPanel}
-                filter={filter}
                 selectedPostId={selectedPostId || postToEdit}
                 onEdit={showEditPostForm}
               />

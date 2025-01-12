@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ICommunityFilter } from "@/models/Community";
 import { Button } from "../ui/button";
 import PostCard from "./PostCard";
 import PostCardSkeleton from "../skeletons/PostCardSkeleton";
@@ -8,23 +7,16 @@ import { useCommunity } from "@/contexts/CommunityContext";
 import ConfirmationDialog from "../ConfirmationDialog";
 
 interface Props {
-  filter: ICommunityFilter;
   onPostSelected: (id: string) => void;
   selectedPostId: string | null;
   onEdit: (postId: string) => void;
 }
-function PostsList({ filter, onPostSelected, selectedPostId, onEdit }: Props) {
+function PostsList({ onPostSelected, selectedPostId, onEdit }: Props) {
   const { posts, fetchPosts, loadingPosts, hasMorePosts, deletePost } =
     useCommunity();
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
 
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
-
-  // On mount, load posts
-  useEffect(() => {
-    fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     setSelectedPost(selectedPostId);
