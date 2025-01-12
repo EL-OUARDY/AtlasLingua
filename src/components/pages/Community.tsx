@@ -1,17 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  BlocksIcon,
-  ChevronDown,
-  MessageSquareOffIcon,
-  Search,
-  SquarePen,
-  TrendingUp,
-  UserIcon,
-  X,
-} from "lucide-react";
-import { Input } from "../ui/input";
+import { useEffect, useRef, useState } from "react";
+import { SquarePen } from "lucide-react";
 import { ResizableHandle, ResizablePanel } from "../ui/resizable";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import { ImperativePanelGroupHandle, PanelGroup } from "react-resizable-panels";
 import { breakpoints } from "@/shared/screen-breakpoints";
 import PostsList from "../community/PostsList";
@@ -19,31 +9,20 @@ import { APP_NAME } from "@/shared/constants";
 import SinglePost from "../community/SinglePost";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
 import PostForm from "../community/PostForm";
 import WTooltip from "../ui/custom/WTooltip";
-import { ICommunityFilter } from "@/models/Community";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import Filter from "../community/Filter";
 import { CommunityProvider } from "@/contexts/CommunityContext";
 
 function Community() {
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+
   const [search, setSearch] = useState<string>("");
-  const [filter, setFilter] = useState<ICommunityFilter>({
-    searchQuery: "",
-    sortBy: "latest",
-  });
+  const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
 
   const [postToEdit, setPostToEdit] = useState<string | null>(null);
 
-  const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
   const [secondaryPanelVisible, setSecondaryPanelVisible] =
     useState<boolean>(true);
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
@@ -95,252 +74,32 @@ function Community() {
 
   function showNewPostForm() {
     navigate(`${ROUTES.community}/?new_post=true`);
-    existSearch();
+    setIsSearchVisible(false);
   }
 
   function showEditPostForm(postId: string) {
     navigate(`${ROUTES.community}/?edit_post=${postId}`);
-    existSearch();
+    setIsSearchVisible(false);
   }
 
   function showPostPanel(id: string) {
     navigate(`${ROUTES.community}/?post_id=${id}`);
   }
 
-  function hidePostPanel() {
-    navigate(ROUTES.community);
-  }
-
-  function existSearch() {
-    setIsSearchVisible(false);
-    setSearch("");
-    setFilter({
-      ...filter,
-      searchQuery: "",
-    });
-  }
-
-  // Callback ref function to focus the input when it mounts
-  const focusOnMountRef = useCallback((element: HTMLInputElement | null) => {
-    if (element) {
-      element.focus();
-    }
-  }, []);
-
   return (
-    <CommunityProvider filter={filter}>
+    <CommunityProvider>
       <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
-        <div className="flex items-center gap-2 md:flex-row">
-          <div className="flex flex-1 items-center">
-            <Tabs
-              className="hidden lg:block"
-              defaultValue={filter.sortBy}
-              onValueChange={(value) =>
-                setFilter({
-                  ...filter,
-                  sortBy: value as ICommunityFilter["sortBy"],
-                })
-              }
-            >
-              <div className="flex items-center">
-                <TabsList className="">
-                  <TabsTrigger
-                    value="latest"
-                    className="text-zinc-600 dark:text-zinc-200"
-                  >
-                    Latest
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="popular"
-                    className="text-zinc-600 dark:text-zinc-200"
-                  >
-                    Popular
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="unanswered"
-                    className="text-zinc-600 dark:text-zinc-200"
-                  >
-                    Unanswered
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="user"
-                    className="text-zinc-600 dark:text-zinc-200"
-                  >
-                    My Posts
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-            </Tabs>
-
-            <div className="w-full lg:hidden">
-              {!secondaryPanelVisible && isSearchVisible ? (
-                <Input
-                  ref={focusOnMountRef}
-                  value={search}
-                  id="search"
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                    if (e.target.value === "")
-                      setFilter({
-                        ...filter,
-                        searchQuery: e.target.value,
-                      });
-                  }}
-                  type="search"
-                  placeholder="Search..."
-                  className="w-full rounded-lg bg-background no-ring md:block md:w-[150px] lg:w-[250px]"
-                  autoComplete="off"
-                />
-              ) : (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-[140px] justify-between px-3 py-2 capitalize"
-                    >
-                      {filter.sortBy === "user" ? "My Posts" : filter.sortBy}
-                      <ChevronDown className="h-4 w-4 opacity-50" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="start"
-                    alignOffset={0}
-                    className=""
-                    forceMount
-                  >
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFilter({ ...filter, sortBy: "latest" });
-                        hidePostPanel();
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <BlocksIcon className="mr-2 size-4" /> Latest
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFilter({ ...filter, sortBy: "popular" });
-                        hidePostPanel();
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <TrendingUp className="mr-2 size-4" /> Popular
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFilter({ ...filter, sortBy: "unanswered" });
-                        hidePostPanel();
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <MessageSquareOffIcon className="mr-2 size-4" />{" "}
-                      Unanswered
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFilter({ ...filter, sortBy: "user" });
-                        hidePostPanel();
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <UserIcon className="mr-2 size-4" /> My Posts
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-          </div>
-          <div className="ml-auto flex gap-2 md:grow-0">
-            <div className="hidden gap-1 md:flex">
-              <Input
-                value={search}
-                id="search"
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  if (e.target.value === "")
-                    setFilter({
-                      ...filter,
-                      searchQuery: e.target.value,
-                    });
-                }}
-                type="search"
-                placeholder="Search..."
-                className="hidden w-full rounded-lg bg-background no-ring md:block md:w-[150px] lg:w-[250px]"
-                autoComplete="off"
-              />
-              <Button
-                onClick={() => {
-                  setFilter({
-                    ...filter,
-                    searchQuery: search,
-                  });
-                }}
-                variant="outline"
-                size="icon"
-              >
-                <Search className="size-5" />
-              </Button>
-            </div>
-            <Button className="hidden xl:flex" onClick={showNewPostForm}>
-              <SquarePen className="mr-2 size-4" /> New Post
-            </Button>
-            {!secondaryPanelVisible && (
-              <Button
-                onClick={() => {
-                  if (isSearchVisible) {
-                    setFilter({
-                      ...filter,
-                      searchQuery: search,
-                    });
-                  } else {
-                    setIsSearchVisible(true);
-                  }
-                }}
-                variant={"outline"}
-                size={"icon"}
-                className="hover:bg-background focus:bg-background md:hidden"
-              >
-                <Search className="size-4 md:size-5" />
-              </Button>
-            )}
-            {!secondaryPanelVisible && isSearchVisible && (
-              <Button
-                onClick={() => existSearch()}
-                variant={"outline"}
-                size={"icon"}
-                className="lg:hidden"
-              >
-                <X className="size-4 md:size-5" />
-              </Button>
-            )}
-            {!secondaryPanelVisible && !isSearchVisible && (
-              <Button
-                onClick={showNewPostForm}
-                variant={"outline"}
-                size={"icon"}
-                className="lg:hidden"
-              >
-                <SquarePen className="size-4 md:size-5" />
-              </Button>
-            )}
-            {secondaryPanelVisible && (
-              <Button
-                onClick={hidePostPanel}
-                variant={"outline"}
-                size={"icon"}
-                className="lg:hidden"
-              >
-                <X className="size-4 md:size-5" />
-              </Button>
-            )}
-          </div>
-        </div>
+        <Filter
+          search={search}
+          setSearch={setSearch}
+          isSearchVisible={isSearchVisible}
+          setIsSearchVisible={setIsSearchVisible}
+          existSearch={() => {
+            setIsSearchVisible(false);
+            setSearch("");
+          }}
+          isMobileLayout={secondaryPanelVisible}
+        />
         <PanelGroup
           onLayout={(layout) =>
             localStorage.setItem(

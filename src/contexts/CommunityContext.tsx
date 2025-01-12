@@ -68,6 +68,8 @@ interface ICommunityContext {
   ) => Promise<ICommunityComment>;
   deleteComment: (postId: string, commentId: string) => Promise<void>;
   reportPost: (report: IReportPost) => Promise<void>;
+  filter: ICommunityFilter;
+  setFilter: (filter: ICommunityFilter) => void;
 }
 
 const CommunityContext = createContext<ICommunityContext>(
@@ -82,13 +84,8 @@ export function useCommunity() {
 interface Props {
   children: ReactNode;
   fetchLimit?: number;
-  filter: ICommunityFilter;
 }
-export function CommunityProvider({
-  children,
-  fetchLimit = 20,
-  filter,
-}: Props) {
+export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
   const [posts, setPosts] = useState<ICommunityPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
@@ -106,14 +103,21 @@ export function CommunityProvider({
   const lastFetchedCommentDoc =
     useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
 
+  const [filter, setFilter] = useState<ICommunityFilter>({
+    searchQuery: "",
+    sortBy: "latest",
+  });
+
   const navigate = useNavigate();
 
   const { user } = useUser();
 
   useEffect(() => {
+    console.log(filter);
     lastFetchedPostDoc.current = null;
     setPosts([]);
     fetchPosts();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter]);
 
@@ -532,6 +536,8 @@ export function CommunityProvider({
         editComment,
         deleteComment,
         reportPost,
+        filter,
+        setFilter,
       }}
     >
       <ReportPostProvider>{children}</ReportPostProvider>
