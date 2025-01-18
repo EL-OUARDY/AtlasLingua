@@ -27,24 +27,16 @@ import { useUser } from "@/contexts/UserContext";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { Highlight } from "react-instantsearch";
-
+import type { BaseHit, Hit } from "instantsearch.js";
 interface Props {
-  post: ICommunityPost;
+  post: ICommunityPost | Hit<BaseHit>;
   selectedPost: string | null;
   onSelect: (id: string) => void;
   onDelete: (postId: string) => void;
   onEdit: (postId: string) => void;
-  isSearch?: boolean;
 }
 
-function PostCard({
-  post,
-  selectedPost,
-  onSelect,
-  onDelete,
-  onEdit,
-  isSearch = false,
-}: Props) {
+function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
   const { user } = useUser();
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
@@ -64,7 +56,7 @@ function PostCard({
             <div className="flex w-full items-center gap-1">
               <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
                 <div className="mr-auto flex items-center gap-2 capitalize">
-                  {isSearch ? (
+                  {post._highlightResult ? (
                     <Highlight
                       attribute="user.name"
                       hit={post as any}
@@ -140,7 +132,7 @@ function PostCard({
           </div>
         </div>
         <div className="line-clamp-3 cursor-pointer text-sm text-muted-foreground">
-          {isSearch ? (
+          {post._highlightResult ? (
             <Highlight
               attribute="content"
               hit={post as any}
@@ -155,7 +147,7 @@ function PostCard({
         <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag: string) => (
                 <Badge
                   key={tag}
                   variant={"outline"}

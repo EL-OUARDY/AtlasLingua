@@ -38,8 +38,11 @@ import ReportPostProvider from "./ReportPostContext";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { useUser } from "./UserContext";
+import type { BaseHit, Hit } from "instantsearch.js";
 interface ICommunityContext {
   posts: ICommunityPost[];
+  updatePosts: (hits: Hit<BaseHit>[]) => void;
+  resetPosts: () => void;
   loadingPosts: boolean;
   hasMorePosts: boolean;
   fetchPosts: () => Promise<void>;
@@ -85,7 +88,7 @@ interface Props {
   children: ReactNode;
   fetchLimit?: number;
 }
-export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
+export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   const [posts, setPosts] = useState<ICommunityPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
@@ -104,6 +107,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
 
   const [filter, setFilter] = useState<ICommunityFilter>({
+    searchQuery: "",
     sortBy: "latest",
   });
 
@@ -112,12 +116,20 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
   const { user } = useUser();
 
   useEffect(() => {
+    resetPosts();
+    setFilter({
+      ...filter,
+      searchQuery: "",
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter.sortBy]);
+
+  function resetPosts() {
     lastFetchedPostDoc.current = null;
     setPosts([]);
     fetchPosts();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }
 
   async function fetchPosts() {
     setLoadingPosts(true);
@@ -304,8 +316,10 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
       ...post,
       id: docRef.id,
       date: Timestamp.fromDate(new Date()),
+      _highlightResult: undefined,
     };
     setPosts((prevPosts) => [newPost, ...prevPosts]);
+
     return newPost;
   }
 
@@ -324,7 +338,7 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
       prevPosts.map((post) => {
         if (post.id === postId) {
           // Merge the updated fields with the existing fields
-          return { ...post, ...updatedPostData };
+          return { ...post, ...updatedPostData, _highlightResult: undefined };
         }
         return post;
       }),
@@ -504,10 +518,29 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     await addDoc(postsRef, report);
   }
 
+  function updatePosts(hits: Hit<BaseHit>[]) {
+    const _posts: ICommunityPost[] = hits.map((hit) => {
+      return {
+        id: hit.objectID,
+        content: hit.content,
+        votes: hit.votes,
+        tags: hit.tags,
+        user: hit.user,
+        commentsCount: hit.commentsCount,
+        hasBeenEdited: hit.hasBeenEdited,
+        date: Timestamp.fromDate(new Date(Number(hit.date))),
+        _highlightResult: hit._highlightResult,
+      };
+    });
+
+    setPosts(_posts);
+  }
   return (
     <CommunityContext.Provider
       value={{
         posts,
+        updatePosts,
+        resetPosts,
         loadingPosts,
         hasMorePosts,
         fetchPosts,

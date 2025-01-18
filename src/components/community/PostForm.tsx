@@ -208,7 +208,6 @@ function PostForm({ postId = null }: Props) {
         localStorage.removeItem(APP_NAME + "-new-post-content");
         setSearchParams((prev) => {
           prev.delete("new_post");
-          prev.delete("search_query");
           prev.set("created", "true");
           return prev;
         });

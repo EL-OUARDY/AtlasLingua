@@ -1,5 +1,6 @@
 import { FieldValue, Timestamp } from "firebase/firestore";
 import { IUser } from "./User";
+import type { HitHighlightResult } from "instantsearch.js";
 
 export interface ICommunityPost {
   id: string;
@@ -10,6 +11,7 @@ export interface ICommunityPost {
   date: Timestamp | FieldValue;
   commentsCount?: number;
   hasBeenEdited?: boolean;
+  _highlightResult?: HitHighlightResult | undefined;
 }
 
 export interface ICommunityComment {
@@ -23,6 +25,7 @@ export interface ICommunityComment {
 }
 
 export interface ICommunityFilter {
+  searchQuery: string;
   sortBy: "latest" | "popular" | "unanswered" | "user";
 }
 

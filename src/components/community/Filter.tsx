@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCommunity } from "@/contexts/CommunityContext";
 
@@ -37,30 +37,20 @@ function Filter({
   existSearch,
 }: Props) {
   const { filter, setFilter } = useCommunity();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [search, setSearch] = useState<string>(
-    searchParams.get("search_query") || "",
-  );
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     // Update URL when search changes
     setSearchParams((prev) => {
-      if (search) {
-        prev.set("search_query", search);
+      if (filter.searchQuery) {
+        prev.set("search_query", filter.searchQuery);
       } else {
         prev.delete("search_query");
       }
       return prev;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
-
-  useEffect(() => {
-    // Clear search if URL changes
-    const query = searchParams.get("search_query") || "";
-    if (!query) setSearch("");
-  }, [searchParams]);
+  }, [filter.searchQuery]);
 
   // Callback ref function to focus the input when it mounts
   const focusOnMountRef = useCallback((element: HTMLInputElement | null) => {
@@ -124,10 +114,13 @@ function Filter({
           {!secondaryPanelVisible && isSearchVisible ? (
             <Input
               ref={focusOnMountRef}
-              value={search}
+              value={filter.searchQuery}
               id="search"
               onChange={(e) => {
-                setSearch(e.target.value);
+                setFilter({
+                  ...filter,
+                  searchQuery: e.target.value,
+                });
               }}
               type="search"
               placeholder="Search..."
@@ -201,10 +194,13 @@ function Filter({
       <div className="ml-auto flex gap-2 md:grow-0">
         <div className="hidden gap-1 md:flex">
           <Input
-            value={search}
+            value={filter.searchQuery}
             id="search"
             onChange={(e) => {
-              setSearch(e.target.value);
+              setFilter({
+                ...filter,
+                searchQuery: e.target.value,
+              });
             }}
             type="search"
             placeholder="Search..."
@@ -239,7 +235,10 @@ function Filter({
         {!secondaryPanelVisible && isSearchVisible && (
           <Button
             onClick={() => {
-              setSearch("");
+              setFilter({
+                ...filter,
+                searchQuery: "",
+              });
               existSearch();
             }}
             variant={"outline"}
