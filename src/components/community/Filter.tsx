@@ -19,30 +19,48 @@ import {
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/routes/routes";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useCommunity } from "@/contexts/CommunityContext";
 
 interface Props {
-  search: string;
-  setSearch: (query: string) => void;
   isSearchVisible: boolean;
   setIsSearchVisible: (visible: boolean) => void;
-  isMobileLayout: boolean;
+  secondaryPanelVisible: boolean;
   existSearch: () => void;
 }
 
 function Filter({
-  isMobileLayout,
-  search,
-  setSearch,
+  secondaryPanelVisible,
   isSearchVisible,
   setIsSearchVisible,
   existSearch,
 }: Props) {
   const { filter, setFilter } = useCommunity();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [search, setSearch] = useState<string>(
+    searchParams.get("search_query") || "",
+  );
+
+  useEffect(() => {
+    // Update URL when search changes
+    setSearchParams((prev) => {
+      if (search) {
+        prev.set("search_query", search);
+      } else {
+        prev.delete("search_query");
+      }
+      return prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
+  useEffect(() => {
+    // Clear search if URL changes
+    const query = searchParams.get("search_query") || "";
+    if (!query) setSearch("");
+  }, [searchParams]);
 
   // Callback ref function to focus the input when it mounts
   const focusOnMountRef = useCallback((element: HTMLInputElement | null) => {
@@ -52,7 +70,12 @@ function Filter({
   }, []);
 
   function hidePostPanel() {
-    navigate(ROUTES.community);
+    setSearchParams((prev) => {
+      prev.delete("new_post");
+      prev.delete("post_id");
+      prev.delete("edit_post");
+      return prev;
+    });
   }
   return (
     <div className="flex items-center gap-2 md:flex-row">
@@ -98,18 +121,13 @@ function Filter({
         </Tabs>
 
         <div className="w-full lg:hidden">
-          {!isMobileLayout && isSearchVisible ? (
+          {!secondaryPanelVisible && isSearchVisible ? (
             <Input
               ref={focusOnMountRef}
               value={search}
               id="search"
               onChange={(e) => {
                 setSearch(e.target.value);
-                if (e.target.value === "")
-                  setFilter({
-                    ...filter,
-                    searchQuery: e.target.value,
-                  });
               }}
               type="search"
               placeholder="Search..."
@@ -187,54 +205,29 @@ function Filter({
             id="search"
             onChange={(e) => {
               setSearch(e.target.value);
-              if (e.target.value === "")
-                setFilter({
-                  ...filter,
-                  searchQuery: e.target.value,
-                });
             }}
             type="search"
             placeholder="Search..."
             className="hidden w-full rounded-lg bg-background no-ring md:block md:w-[150px] lg:w-[250px]"
             autoComplete="off"
           />
-          <Button
-            onClick={() => {
-              setFilter({
-                ...filter,
-                searchQuery: search,
-              });
-            }}
-            variant="outline"
-            size="icon"
-          >
-            <Search className="size-5" />
-          </Button>
         </div>
         <Button
           className="hidden xl:flex"
           onClick={() => {
-            navigate(`${ROUTES.community}/?new_post=true`);
-            setFilter({
-              ...filter,
-              searchQuery: "",
+            setSearchParams((prev) => {
+              prev.set("new_post", "true");
+              prev.delete("post_id");
+              return prev;
             });
-            existSearch();
           }}
         >
           <SquarePen className="mr-2 size-4" /> New Post
         </Button>
-        {!isMobileLayout && (
+        {!secondaryPanelVisible && !isSearchVisible && (
           <Button
             onClick={() => {
-              if (isSearchVisible) {
-                setFilter({
-                  ...filter,
-                  searchQuery: search,
-                });
-              } else {
-                setIsSearchVisible(true);
-              }
+              setIsSearchVisible(true);
             }}
             variant={"outline"}
             size={"icon"}
@@ -243,13 +236,10 @@ function Filter({
             <Search className="size-4 md:size-5" />
           </Button>
         )}
-        {!isMobileLayout && isSearchVisible && (
+        {!secondaryPanelVisible && isSearchVisible && (
           <Button
             onClick={() => {
-              setFilter({
-                ...filter,
-                searchQuery: "",
-              });
+              setSearch("");
               existSearch();
             }}
             variant={"outline"}
@@ -259,15 +249,14 @@ function Filter({
             <X className="size-4 md:size-5" />
           </Button>
         )}
-        {!isMobileLayout && !isSearchVisible && (
+        {!secondaryPanelVisible && !isSearchVisible && (
           <Button
             onClick={() => {
-              navigate(`${ROUTES.community}/?new_post=true`);
-              setFilter({
-                ...filter,
-                searchQuery: "",
+              setSearchParams((prev) => {
+                prev.set("new_post", "true");
+                prev.delete("post_id");
+                return prev;
               });
-              existSearch();
             }}
             variant={"outline"}
             size={"icon"}
@@ -276,7 +265,7 @@ function Filter({
             <SquarePen className="size-4 md:size-5" />
           </Button>
         )}
-        {isMobileLayout && (
+        {secondaryPanelVisible && (
           <Button
             onClick={hidePostPanel}
             variant={"outline"}

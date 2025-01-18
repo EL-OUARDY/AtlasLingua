@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils";
 import { ICommunityPost } from "@/models/Community";
 import {
@@ -25,6 +26,7 @@ import { useReportPost } from "@/contexts/ReportPostContext";
 import { useUser } from "@/contexts/UserContext";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
+import { Highlight } from "react-instantsearch";
 
 interface Props {
   post: ICommunityPost;
@@ -32,16 +34,24 @@ interface Props {
   onSelect: (id: string) => void;
   onDelete: (postId: string) => void;
   onEdit: (postId: string) => void;
+  isSearch?: boolean;
 }
 
-function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
+function PostCard({
+  post,
+  selectedPost,
+  onSelect,
+  onDelete,
+  onEdit,
+  isSearch = false,
+}: Props) {
   const { user } = useUser();
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
   return (
     <div
       onClick={() => {
-        onSelect(post.id);
+        onSelect(post.id as string);
       }}
       className={cn(
         "relative flex h-fit flex-col items-start gap-3 overflow-hidden rounded-lg border bg-background p-4 text-left text-sm transition-all dark:bg-muted/40",
@@ -54,7 +64,17 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
             <div className="flex w-full items-center gap-1">
               <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
                 <div className="mr-auto flex items-center gap-2 capitalize">
-                  {post.user.name}
+                  {isSearch ? (
+                    <Highlight
+                      attribute="user.name"
+                      hit={post as any}
+                      classNames={{
+                        highlighted: " bg-yellow-400",
+                      }}
+                    />
+                  ) : (
+                    post.user.name
+                  )}
                   {post.user.role === "contributor" && (
                     <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                   )}
@@ -74,7 +94,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                         <DropdownMenuItem
                           onClick={(e) => {
                             e.stopPropagation();
-                            onEdit(post.id);
+                            onEdit(post.id as string);
                           }}
                           className="cursor-pointer"
                         >
@@ -83,7 +103,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                         <DropdownMenuItem
                           onClick={(e) => {
                             e.stopPropagation();
-                            onDelete(post.id);
+                            onDelete(post.id as string);
                           }}
                           className="cursor-pointer"
                         >
@@ -96,7 +116,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                       onClick={(e) => {
                         e.stopPropagation();
                         openShareDialog(
-                          `${window.location.origin + ROUTES.community}?post_id=${post.id}`,
+                          `${window.location.origin + ROUTES.community}?post_id=${post.id as string}`,
                         );
                       }}
                       className="cursor-pointer"
@@ -107,7 +127,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                     <DropdownMenuItem
                       onClick={(e) => {
                         e.stopPropagation();
-                        openReportDialog(post.id);
+                        openReportDialog(post.id as string);
                       }}
                       className="cursor-pointer"
                     >
@@ -119,8 +139,18 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
             </div>
           </div>
         </div>
-        <div className="line-clamp-2 text-sm text-muted-foreground">
-          {post.content.substring(0, 300)}
+        <div className="line-clamp-3 cursor-pointer text-sm text-muted-foreground">
+          {isSearch ? (
+            <Highlight
+              attribute="content"
+              hit={post as any}
+              classNames={{
+                highlighted: "bg-yellow-400",
+              }}
+            />
+          ) : (
+            post.content.substring(0, 300)
+          )}
         </div>
         <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
           {post.tags && post.tags.length > 0 && (
@@ -129,7 +159,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                 <Badge
                   key={tag}
                   variant={"outline"}
-                  className="font-thin group-[.post-selected]:border-muted-foreground/20 group-[.post-selected]:bg-secondary"
+                  className="font-thin capitalize group-[.post-selected]:border-muted-foreground/20 group-[.post-selected]:bg-secondary"
                 >
                   {tag}
                 </Badge>
@@ -140,7 +170,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
       </div>
       <Separator className="group-[.post-selected]:bg-muted-foreground/10" />
       <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
-        <div className="flex w-full items-center justify-center gap-4 sm:flex-1">
+        <div className="flex w-full items-center justify-center sm:flex-1">
           <div
             className={cn(
               "mr-auto flex-1 text-xs",
@@ -172,7 +202,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
             <WTooltip content="Comments">
               <div
                 onClick={() => {
-                  onSelect(post.id);
+                  onSelect(post.id as string);
                 }}
                 className="flex cursor-pointer items-center justify-center hover:text-foreground"
               >

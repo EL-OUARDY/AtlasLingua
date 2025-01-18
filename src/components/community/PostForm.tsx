@@ -26,7 +26,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import { useEffect, useState } from "react";
@@ -95,6 +100,7 @@ function PostForm({ postId = null }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const location = useLocation();
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (!postId) return;
@@ -168,7 +174,12 @@ function PostForm({ postId = null }: Props) {
         });
         setTags([]);
         reset();
-        navigate(-1); // go back
+        setSearchParams((prev) => {
+          prev.set("post_id", postId);
+          prev.delete("edit_post");
+          prev.set("updated", "true");
+          return prev;
+        });
       } else {
         // add post
         // Construct a new post
@@ -195,7 +206,12 @@ function PostForm({ postId = null }: Props) {
         setTags([]);
         reset();
         localStorage.removeItem(APP_NAME + "-new-post-content");
-        navigate(ROUTES.community);
+        setSearchParams((prev) => {
+          prev.delete("new_post");
+          prev.delete("search_query");
+          prev.set("created", "true");
+          return prev;
+        });
       }
     } catch (err) {
       toast("Can't proccess your request. Please try again!", {
@@ -414,7 +430,10 @@ function PostForm({ postId = null }: Props) {
                           e.preventDefault();
                           setTags([]);
                           reset();
-                          navigate(-1);
+                          setSearchParams((prev) => {
+                            prev.delete("edit_post");
+                            return prev;
+                          });
                         }}
                         variant="outline"
                       >

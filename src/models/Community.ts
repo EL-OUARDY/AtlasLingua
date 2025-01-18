@@ -23,7 +23,6 @@ export interface ICommunityComment {
 }
 
 export interface ICommunityFilter {
-  searchQuery: string;
   sortBy: "latest" | "popular" | "unanswered" | "user";
 }
 

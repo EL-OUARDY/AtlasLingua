@@ -7,18 +7,25 @@ import { breakpoints } from "@/shared/screen-breakpoints";
 import PostsList from "../community/PostsList";
 import { APP_NAME } from "@/shared/constants";
 import SinglePost from "../community/SinglePost";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ROUTES } from "@/routes/routes";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 import PostForm from "../community/PostForm";
 import WTooltip from "../ui/custom/WTooltip";
 import Filter from "../community/Filter";
 import { CommunityProvider } from "@/contexts/CommunityContext";
+import SearchList from "../community/SearchList";
+import { Configure, InstantSearch } from "react-instantsearch";
+import { algoliasearch } from "algoliasearch";
+
+// Initialize the Algolia search client
+const searchClient = algoliasearch(
+  import.meta.env.VITE_ALGOLIA_APPLICATION_ID,
+  import.meta.env.VITE_ALGOLIA_SEARCH_ONLY_API_KEY,
+);
 
 function Community() {
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
 
-  const [search, setSearch] = useState<string>("");
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
 
   const [postToEdit, setPostToEdit] = useState<string | null>(null);
@@ -28,7 +35,28 @@ function Community() {
   const panelGroupRef = useRef<ImperativePanelGroupHandle>(null);
 
   const location = useLocation();
-  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchParams.get("search_query") || "",
+  );
+
+  useEffect(() => {
+    const query = searchParams.get("search_query") || "";
+    const change =
+      searchParams.get("deleted") || searchParams.get("updated") || "";
+    if (change) {
+      const timeoutId = setTimeout(() => {
+        // Wait for Algolia changes
+        refreshSearchList();
+        setSearchQuery(query);
+      }, 3000);
+      // Cleanup function to cancel the timeout if searchParams changes a second time
+      return () => clearTimeout(timeoutId);
+    } else setSearchQuery(query);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   useEffect(() => {
     // get query parameters from the url
@@ -63,6 +91,17 @@ function Community() {
     return () => window.removeEventListener("resize", resizeContentPanel); // clean up
   }, [location]);
 
+  function refreshSearchList() {
+    searchClient.transporter.requestsCache.clear();
+    searchClient.transporter.responsesCache.clear();
+    setSearchParams((prev) => {
+      prev.delete("deleted");
+      prev.delete("updated");
+      prev.delete("created");
+      return prev;
+    });
+  }
+
   // Function to update the panel layout
   const setPanelsLayout = (sizes: number[]) => {
     // track the state of the post  panel
@@ -73,32 +112,44 @@ function Community() {
   };
 
   function showNewPostForm() {
-    navigate(`${ROUTES.community}/?new_post=true`);
+    setSearchParams((prev) => {
+      prev.set("new_post", "true");
+      prev.delete("post_id");
+      return prev;
+    });
     setIsSearchVisible(false);
   }
 
   function showEditPostForm(postId: string) {
-    navigate(`${ROUTES.community}/?edit_post=${postId}`);
+    setSearchParams((prev) => {
+      prev.set("edit_post", postId);
+      return prev;
+    });
     setIsSearchVisible(false);
   }
 
   function showPostPanel(id: string) {
-    navigate(`${ROUTES.community}/?post_id=${id}`);
+    setSearchParams((prev) => {
+      prev.set("post_id", id);
+      prev.delete("new_post");
+      return prev;
+    });
   }
 
   return (
     <CommunityProvider>
       <div className="flex h-full flex-col overflow-auto p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed">
         <Filter
-          search={search}
-          setSearch={setSearch}
           isSearchVisible={isSearchVisible}
           setIsSearchVisible={setIsSearchVisible}
           existSearch={() => {
             setIsSearchVisible(false);
-            setSearch("");
+            setSearchParams((prev) => {
+              prev.delete("search_query");
+              return prev;
+            });
           }}
-          isMobileLayout={secondaryPanelVisible}
+          secondaryPanelVisible={secondaryPanelVisible}
         />
         <PanelGroup
           onLayout={(layout) =>
@@ -113,11 +164,28 @@ function Community() {
         >
           <ResizablePanel defaultSize={100}>
             <div className="relative flex h-full flex-col">
-              <PostsList
-                onPostSelected={showPostPanel}
-                selectedPostId={selectedPostId || postToEdit}
-                onEdit={showEditPostForm}
-              />
+              {searchQuery ? (
+                // Algolia search
+                <InstantSearch
+                  searchClient={searchClient}
+                  indexName="posts"
+                  future={{ preserveSharedStateOnUnmount: true }}
+                >
+                  <Configure query={searchQuery} hitsPerPage={30} />
+
+                  <SearchList
+                    onPostSelected={showPostPanel}
+                    selectedPostId={selectedPostId || postToEdit}
+                    onEdit={showEditPostForm}
+                  />
+                </InstantSearch>
+              ) : (
+                <PostsList
+                  onPostSelected={showPostPanel}
+                  selectedPostId={selectedPostId || postToEdit}
+                  onEdit={showEditPostForm}
+                />
+              )}
               {selectedPostId && (
                 <div className="absolute bottom-4 right-4 hidden md:flex">
                   <WTooltip side="top" content="New post">

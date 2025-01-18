@@ -104,7 +104,6 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
     useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
 
   const [filter, setFilter] = useState<ICommunityFilter>({
-    searchQuery: "",
     sortBy: "latest",
   });
 
@@ -113,7 +112,6 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
   const { user } = useUser();
 
   useEffect(() => {
-    console.log(filter);
     lastFetchedPostDoc.current = null;
     setPosts([]);
     fetchPosts();
@@ -160,13 +158,6 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
         constraints.push(orderBy("date", "desc"));
         constraints.push(where("commentsCount", "==", 0));
       }
-
-      // Add the where clause if there's a search query
-      // if (filter && filter.searchQuery) {
-      //   constraints.push(
-      //     where("content", "array-contains", filter.searchQuery),
-      //   );
-      // }
 
       // If we already have a "lastDoc", we use startAfter() to get the next page
       if (lastFetchedPostDoc.current) {
@@ -359,7 +350,6 @@ export function CommunityProvider({ children, fetchLimit = 20 }: Props) {
       if (post && post.id === postId) {
         setPost(undefined);
         setComments([]);
-        navigate(ROUTES.community);
       }
     } catch (error) {
       toast("Failed to delete post", {

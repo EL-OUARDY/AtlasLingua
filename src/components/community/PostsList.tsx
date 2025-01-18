@@ -5,6 +5,7 @@ import PostCardSkeleton from "../skeletons/PostCardSkeleton";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
 import ConfirmationDialog from "../ConfirmationDialog";
+import { useSearchParams } from "react-router-dom";
 
 interface Props {
   onPostSelected: (id: string) => void;
@@ -17,6 +18,8 @@ function PostsList({ onPostSelected, selectedPostId, onEdit }: Props) {
   const [selectedPost, setSelectedPost] = useState<string | null>(null);
 
   const [postToDelete, setPostToDelete] = useState<string | null>(null);
+
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     setSelectedPost(selectedPostId);
@@ -69,6 +72,12 @@ function PostsList({ onPostSelected, selectedPostId, onEdit }: Props) {
           onOK={() => {
             deletePost(postToDelete as string);
             setPostToDelete(null);
+            setSearchParams((prev) => {
+              prev.set("deleted", "true");
+              prev.delete("post_id");
+              prev.delete("edit_post");
+              return prev;
+            });
           }}
           onAbort={() => setPostToDelete(null)}
           isOpen={!!postToDelete}

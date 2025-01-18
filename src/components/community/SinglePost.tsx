@@ -36,6 +36,7 @@ import { ICommunityComment } from "@/models/Community";
 import { IUser } from "@/models/User";
 import CommentCard from "./CommentCard";
 import ConfirmationDialog from "../ConfirmationDialog";
+import { useSearchParams } from "react-router-dom";
 
 interface Props {
   postId: string;
@@ -73,6 +74,8 @@ function SinglePost({ postId, onEdit }: Props) {
 
   const [showDeletePostDialog, setShowDeletePostDialog] =
     useState<boolean>(false);
+
+  const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     fetchPost(postId);
@@ -323,6 +326,12 @@ function SinglePost({ postId, onEdit }: Props) {
         onOK={() => {
           deletePost(post?.id as string);
           setShowDeletePostDialog(false);
+          setSearchParams((prev) => {
+            prev.set("deleted", "true");
+            prev.delete("post_id");
+            prev.delete("edit_post");
+            return prev;
+          });
         }}
         onAbort={() => setShowDeletePostDialog(false)}
         isOpen={showDeletePostDialog}
