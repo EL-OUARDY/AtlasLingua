@@ -386,10 +386,7 @@ function TranslateText() {
                       {isTransliterating ? (
                         <Loader2 className="size-5 animate-spin text-orange-500" />
                       ) : (
-                        <TransliterationIcon
-                          className="size-5"
-                          color="#f97316"
-                        />
+                        <TransliterationIcon className="size-5 text-[#f97316]" />
                       )}
 
                       <span className="sr-only">

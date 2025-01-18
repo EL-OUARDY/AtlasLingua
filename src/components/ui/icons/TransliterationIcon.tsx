@@ -1,17 +1,11 @@
-function TransliterationIcon({
-  className,
-  color = "",
-}: {
-  className?: string;
-  color?: string;
-}) {
+function TransliterationIcon({ className }: { className?: string }) {
   return (
     <svg
       id="Layer_1"
       data-name="Layer 1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1000 1000"
-      className={`!text-[${color}] ${className}`}
+      className={className}
     >
       <defs></defs>
       <g>
@@ -22,7 +16,7 @@ function TransliterationIcon({
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={"40px"}
+          strokeWidth={"80px"}
           d="m590.65,926.3c138.17,0,250.19-106.9,250.19-238.76v-79.59"
         />
         <polyline
@@ -32,7 +26,7 @@ function TransliterationIcon({
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={"40px"}
+          strokeWidth={"80px"}
           points="757.44 687.54 840.84 607.96 924.24 687.54"
         />
       </g>
@@ -44,7 +38,7 @@ function TransliterationIcon({
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={"40px"}
+          strokeWidth={"80px"}
           d="m427.57,82.25c-131.61,0-238.32,111.85-238.32,249.81v83.27"
         />
         <polyline
@@ -54,7 +48,7 @@ function TransliterationIcon({
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={"40px"}
+          strokeWidth={"80px"}
           points="109.81 332.05 189.25 415.32 268.69 332.05"
         />
       </g>
