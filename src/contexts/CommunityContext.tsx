@@ -24,6 +24,7 @@ import {
   deleteDoc,
   where,
   QueryConstraint,
+  writeBatch,
 } from "firebase/firestore";
 import {
   createContext,
@@ -355,6 +356,32 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     try {
       // References to Firestore document
       const postDocRef = doc(db, "posts", postId);
+
+      // Delete post's comments
+      const colRef = collection(postDocRef, "comments");
+      const snapshot = await getDocs(colRef);
+      if (!snapshot.empty) {
+        let batch = writeBatch(db);
+        let count = 0;
+
+        for (const document of snapshot.docs) {
+          // Add each delete operation to the batch
+          batch.delete(doc(colRef, document.id));
+          count++;
+
+          // If we reach 100 deletes in this batch, commit and start a new batch
+          if (count === 100) {
+            await batch.commit();
+
+            // Reset batch and counter
+            batch = writeBatch(db);
+            count = 0;
+          }
+        }
+        if (count > 0) {
+          await batch.commit();
+        }
+      }
 
       // Delete the post document
       await deleteDoc(postDocRef);
