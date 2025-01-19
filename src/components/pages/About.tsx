@@ -1,7 +1,7 @@
-import { Hash } from "lucide-react";
 import { APP_NAME, FEATURES, GET_STARTED, APP_INFO } from "@/shared/constants";
 import { Separator } from "../ui/separator";
 import { Link } from "react-router-dom";
+import Logo from "../ui/icons/Logo";
 
 function About() {
   return (
@@ -20,7 +20,7 @@ function About() {
                   className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                   to="/"
                 >
-                  <Hash className="h-6 w-6" />
+                  <Logo className="size-5" />
                   <div className="mb-2 mt-4 text-lg font-medium">
                     {APP_NAME}
                   </div>

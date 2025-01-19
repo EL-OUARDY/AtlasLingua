@@ -6,7 +6,6 @@ import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import {
   CheckCircle2Icon,
-  Hash,
   Loader2,
   MoreVertical,
   Settings2,
@@ -53,6 +52,7 @@ import { ICommunityPost } from "@/models/Community";
 import { serverTimestamp } from "firebase/firestore";
 import { ANONYMOUS_NAME, USER_ROLES } from "@/models/User";
 import { toast } from "sonner";
+import Logo from "../ui/icons/Logo";
 
 const newPostSchema = z.object({
   content: z
@@ -259,7 +259,7 @@ function PostForm({ postId = null }: Props) {
                     .map((chunk) => chunk[0])
                     .join("")
                 ) : (
-                  <Hash className="size-4" />
+                  <Logo className="size-4" />
                 )}
               </AvatarFallback>
             </Avatar>

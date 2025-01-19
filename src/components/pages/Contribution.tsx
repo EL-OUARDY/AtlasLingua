@@ -6,7 +6,6 @@ import {
 } from "@/shared/constants";
 import {
   GithubIcon,
-  Hash,
   Loader2,
   MailIcon,
   TerminalIcon,
@@ -36,6 +35,7 @@ import { toast } from "sonner";
 import { CanceledError } from "axios";
 import { useUser } from "@/contexts/UserContext";
 import { ROUTES } from "@/routes/routes";
+import Logo from "../ui/icons/Logo";
 
 const contributionSchema = z.object({
   contribution_type: z.string().min(1, { message: "Field is required!" }),
@@ -106,7 +106,7 @@ function Contribution() {
         <div className="grid h-full w-full flex-1 gap-8 rounded-lg p-4 sm:p-6 md:gap-4 md:bg-background xl:grid-cols-[1fr_1fr]">
           <div className="h-full">
             <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-background/50 to-background p-6 no-underline outline-none focus:shadow-md dark:from-muted/50 dark:to-muted md:from-muted/50 md:to-muted">
-              <Hash className="h-6 w-6" />
+              <Logo className="size-5" />
               <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
               <p className="leading-tight text-muted-foreground">
                 Contributions are crucial to the success and growth of our

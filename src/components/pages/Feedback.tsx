@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Separator } from "../ui/separator";
-import { Hash, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { APP_NAME } from "@/shared/constants";
 import {
   Card,
@@ -23,6 +23,7 @@ import { Label } from "../ui/label";
 import { useUser } from "@/contexts/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import Logo from "../ui/icons/Logo";
 
 const feedbackSchema = z.object({
   subject: z.string().min(1, { message: "Subject field is required!" }),
@@ -188,7 +189,7 @@ function Feedback() {
         </Card>
         <div className="h-full">
           <div className="flex h-full w-full select-none flex-col justify-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-            <Hash className="h-6 w-6" />
+            <Logo className="size-5" />
             <div className="mb-2 mt-4 text-lg font-medium">{APP_NAME}</div>
             <p className="leading-tight text-muted-foreground">
               Feedback is vital to the growth and improvement of our translator.

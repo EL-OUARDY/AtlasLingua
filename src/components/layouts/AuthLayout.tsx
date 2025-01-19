@@ -12,8 +12,9 @@ import {
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/routes/routes";
 import { APP_NAME, APP_INFO } from "@/shared/constants";
-import { ChevronUp, Hash } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import Logo from "../ui/icons/Logo";
 
 type Role = "login" | "signup" | "forgot-password";
 
@@ -52,15 +53,15 @@ function AuthLayout({ children, role, description }: Props) {
         to={ROUTES.home}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "font-bg absolute left-4 top-4 md:left-8 md:top-8 lg:hidden",
+          "font-bg absolute left-4 top-4 flex items-center gap-1 md:left-8 md:top-8 lg:hidden",
         )}
       >
-        <Hash />
+        <Logo className="size-4" />
         {APP_NAME}
       </Link>
       <div className="hidden h-screen flex-col bg-background p-10 dark:border-r dark:bg-muted lg:flex">
         <div className="flex items-center text-lg font-medium">
-          <Hash className="mr-2 size-6" />
+          <Logo className="mr-2 size-5" />
           <Link to={ROUTES.home}>{APP_NAME}</Link>
         </div>
         <div className="flex flex-1 items-center justify-center p-4">

@@ -1,4 +1,4 @@
-import { Settings, PanelLeftOpen, PanelLeftClose, Hash } from "lucide-react";
+import { Settings, PanelLeftOpen, PanelLeftClose } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { ROUTES } from "@/routes/routes";
 import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
 import WTooltip from "./ui/custom/WTooltip";
+import Logo from "./ui/icons/Logo";
 
 function SideBar() {
   const storageKey = APP_NAME + "-sidebar-state";
@@ -40,7 +41,7 @@ function SideBar() {
           to={ROUTES.home}
           className="flex items-center gap-2 font-semibold outline-none"
         >
-          <Hash className="h-7 w-7" />
+          <Logo className="size-5" />
           {isSideBarOpen && <span className="">{APP_NAME}</span>}
         </Link>
       </div>

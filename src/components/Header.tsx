@@ -1,4 +1,4 @@
-import { User, Hash } from "lucide-react";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ import { CanceledError } from "axios";
 import { toast } from "sonner";
 import { signOut } from "firebase/auth";
 import { auth } from "@/services/firebaseConfig";
+import Logo from "./ui/icons/Logo";
 
 function Header() {
   const { toggleNotification } = useNotification();
@@ -78,7 +79,7 @@ function Header() {
 
       <div className="m-auto flex items-center md:hidden">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <Hash className="h-6 w-6" />
+          <Logo className="size-5" />
           <span className="hidden sm:block">{APP_NAME}</span>
         </Link>
       </div>

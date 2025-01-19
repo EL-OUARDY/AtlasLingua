@@ -1,4 +1,4 @@
-import { PanelLeft, Hash } from "lucide-react";
+import { PanelLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import { MenuLinks } from "@/shared/menu-links";
 import { ScrollArea } from "./ui/scroll-area";
 import React from "react";
 import { APP_NAME } from "@/shared/constants";
+import Logo from "./ui/icons/Logo";
 
 function MobileSideBar() {
   const [open, setOpen] = React.useState(false);
@@ -40,7 +41,7 @@ function MobileSideBar() {
               to="#"
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
-              <Hash className="h-5 w-5 transition-all group-hover:scale-110" />
+              <Logo className="size-4 transition-all group-hover:scale-110" />
               <span className="sr-only">{APP_NAME}</span>
             </Link>
 
