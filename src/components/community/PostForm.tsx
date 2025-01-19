@@ -251,10 +251,7 @@ function PostForm({ postId = null }: Props) {
         <div className="flex w-full items-start pb-4">
           <div className="flex w-full items-start gap-4 text-sm">
             <Avatar>
-              <AvatarImage
-                // src={user.avatar}
-                alt={APP_NAME}
-              />
+              <AvatarImage src={user?.avatar} alt={user?.name} />
               <AvatarFallback className="bg-background dark:bg-secondary">
                 {user?.name ? (
                   user?.name

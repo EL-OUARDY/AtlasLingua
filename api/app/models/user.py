@@ -11,6 +11,7 @@ class User(db.Model, BaseModel):
     password = db.Column(db.String(128), nullable=False)
     bio = db.Column(db.String(255), nullable=True)
     role = db.Column(db.String(64), nullable=True)
+    avatar = db.Column(db.String(255), nullable=True)
     feedback = db.relationship("Feedback", backref="user", lazy=True)
     contributions = db.relationship("Contribution", backref="user", lazy=True)
     favorites = db.relationship("Favorite", backref="user", lazy=True)

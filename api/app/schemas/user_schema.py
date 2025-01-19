@@ -12,6 +12,7 @@ class UserSchema(ma.Schema):
     )
     bio = ma.String(required=False)
     role = ma.String(required=False)
+    avatar = ma.String(required=False)
 
     @validates("email")
     def validate_email(self, value):

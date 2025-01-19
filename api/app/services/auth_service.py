@@ -41,15 +41,17 @@ class AuthService:
             user = User(
                 name=user_info["name"],
                 email=user_info["email"],
+                avatar=user_info["picture"],
+                # Other necessary fields
                 password=bcrypt.generate_password_hash(
                     generate_password()
                 ).decode("utf-8"),
-                # Other necessary fields
             )
             db.session.add(user)
         else:
             # Update existing user details
             user.name = user_info["name"]
+            user.avatar = user_info["picture"]
             # Other updates
 
         db.session.commit()

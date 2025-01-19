@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { signOut } from "firebase/auth";
 import { auth } from "@/services/firebaseConfig";
 import Logo from "./ui/icons/Logo";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 function Header() {
   const { toggleNotification } = useNotification();
@@ -115,9 +116,14 @@ function Header() {
             <Button
               variant="outline"
               size="icon"
-              className="overflow-hidden md:rounded-full"
+              className="flex items-center justify-center overflow-hidden md:rounded-full"
             >
-              <User className="size-5" />
+              <Avatar className="size-6">
+                <AvatarImage src={user?.avatar} alt={user?.name} className="" />
+                <AvatarFallback className="!bg-background">
+                  <User className="size-5" />
+                </AvatarFallback>
+              </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
