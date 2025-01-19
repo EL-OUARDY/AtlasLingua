@@ -10,30 +10,55 @@ import {
 import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
 import { getCookie, setCookie } from "@/lib/utils";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { db } from "@/services/firebaseConfig";
+
+interface IWelcomeMessage {
+  id?: string;
+  title: string;
+  body: string;
+}
 
 function Welcome() {
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState<IWelcomeMessage>({
+    title: "",
+    body: "",
+  });
 
   useEffect(() => {
-    const hasSeenWelcome = getCookie("isWelcomeMessageShown");
+    getWelcomeMessage();
+  }, []);
+
+  const getWelcomeMessage = async () => {
+    const q = query(collection(db, "welcome_message"), limit(1));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      setOpen(false);
+      return;
+    }
+
+    const firstDoc = querySnapshot.docs[0];
+    setMessage({
+      id: firstDoc.id,
+      ...(firstDoc.data() as Omit<IWelcomeMessage, "id">),
+    });
+
+    const hasSeenWelcome = getCookie(`isWelcomeMessageShown-${firstDoc.id}`);
     if (!hasSeenWelcome) {
       setOpen(true);
-      setCookie("isWelcomeMessageShown", "true", 7); // expires after 7 day
+      setCookie(`isWelcomeMessageShown-${firstDoc.id}`, "true", 7); // expires after 7 day
     }
-  }, []);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-11/12 rounded-lg sm:w-[450px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Hey There!</DialogTitle>
+          <DialogTitle className="text-2xl">{message.title}</DialogTitle>
           <DialogDescription className="text-justify">
-            You're viewing a beta version that doesn't reflect the final
-            product. The website is currently under development, Some features
-            may not be fully functional. We invite you to explore and provide
-            feedback as we continue to improve. Your input is valuable in
-            shaping the final version of our app. Thank you for your
-            understanding and participation in this early stage.
+            {message.body}
           </DialogDescription>
         </DialogHeader>
         <Separator />
