@@ -13,7 +13,7 @@ import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import FavoriteCardSkeleton from "../skeletons/FavoriteCardSkeleton";
 
-function Favorites({ fetchLimit = 4 }: { fetchLimit: number }) {
+function Favorites({ fetchLimit = 10 }: { fetchLimit: number }) {
   const [favorites, setFavorites] = useState<IFavorite[]>();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -55,7 +55,6 @@ function Favorites({ fetchLimit = 4 }: { fetchLimit: number }) {
     // Reset pagination to first page when search query changes
     setFetchPage(1);
     setFavorites(undefined);
-    console.log("exec");
   }, [searchQuery]);
 
   function removeFavorite(id: number) {

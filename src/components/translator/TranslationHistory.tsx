@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -15,11 +15,12 @@ import HistorySkeleton from "../skeletons/HistorySkeleton";
 import { useUser } from "@/contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
+import { IHistory } from "@/services/historyService";
 import { cn } from "@/lib/utils";
 import HistoryCard from "../HistoryCard";
 import { useEffect } from "react";
 import ConfirmationDialog from "../ConfirmationDialog";
+import { Loader2 } from "lucide-react";
 
 function TranslationHistory() {
   const {
@@ -30,6 +31,8 @@ function TranslationHistory() {
     isLoading,
     deleteHistory,
     clearAllHistory,
+    fetchNextPage,
+    hasMore,
   } = useHistory();
 
   const { user } = useUser();
@@ -43,7 +46,7 @@ function TranslationHistory() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isHistoryOpen]);
 
-  function showHistory(history: ITranslationHistoryFetchDataResult) {
+  function showHistory(history: IHistory) {
     setIsHistoryOpen(false);
     // send state data through route
     navigate(ROUTES.translate.index, {
@@ -63,7 +66,13 @@ function TranslationHistory() {
         </SheetHeader>
         <ScrollArea className="flex-1 overflow-auto px-4 sm:px-6">
           <div className="flex h-full w-full flex-col items-start gap-4 py-4">
-            {!user ? (
+            {isLoading &&
+              historyList.length === 0 &&
+              Array(5)
+                .fill(null)
+                .map((_, index) => <HistorySkeleton key={index} />)}
+
+            {!user && (
               <div className="flex size-full items-center justify-center text-center">
                 <div className="flex flex-col gap-4">
                   <p className="">
@@ -82,11 +91,9 @@ function TranslationHistory() {
                   </Link>
                 </div>
               </div>
-            ) : isLoading ? (
-              Array(5)
-                .fill(null)
-                .map((_, index) => <HistorySkeleton key={index} />)
-            ) : (
+            )}
+
+            {historyList &&
               historyList.map((item, index) => (
                 <HistoryCard
                   key={index}
@@ -94,8 +101,20 @@ function TranslationHistory() {
                   showHistory={showHistory}
                   deleteHistory={deleteHistory}
                 />
-              ))
+              ))}
+
+            {hasMore && (
+              <Button
+                onClick={() => fetchNextPage()}
+                variant="outline"
+                className="m-auto max-w-fit text-xs"
+                disabled={isLoading}
+              >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Load More
+              </Button>
             )}
+
             {user && historyList.length == 0 && !isLoading && (
               <div className="flex size-full items-center justify-center text-center">
                 <p>Your translation history will be recorded here.</p>
@@ -111,13 +130,7 @@ function TranslationHistory() {
                 description="This action cannot be undone! This will permanently delete your account translation history."
                 onOK={clearAllHistory}
               >
-                <div
-                  className={
-                    buttonVariants({ variant: "default" }) + " cursor-pointer"
-                  }
-                >
-                  Clear history
-                </div>
+                <Button variant={"default"}>Clear history</Button>
               </ConfirmationDialog>
             )}
           </SheetClose>

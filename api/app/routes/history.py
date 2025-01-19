@@ -1,18 +1,26 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, abort, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.services.history_service import HistoryService
+
+from app.schemas.history_schema import paginated_history_schema
 
 
 bp = Blueprint("history", __name__, url_prefix="/api/history")
 
 
-@bp.route("/")
+@bp.route("/", methods=["POST"])
 @jwt_required()
 def list():
     user_id = get_jwt_identity()
-    list = HistoryService.get_user_history(user_id)
-    return jsonify(list), 200
+    page = request.json.get("page", 1)
+    per_page = request.json.get("per_page", 10)
+
+    result = HistoryService.get_user_history(user_id, page, per_page)
+    if result or result == []:
+        return paginated_history_schema.jsonify(result), 200
+    else:
+        abort(400, description="Bad Request")
 
 
 @bp.route("/delete/<int:history_id>", methods=["DELETE"])

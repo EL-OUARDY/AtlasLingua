@@ -1,12 +1,10 @@
-import historyService, {
-  ITranslationHistoryFetchDataResult,
-} from "@/services/historyService";
+import historyService, { IHistory } from "@/services/historyService";
 import { CanceledError } from "axios";
 import React, { ReactNode, useContext, useState } from "react";
 import { toast } from "sonner";
 
 interface IHistoryContext {
-  historyList: ITranslationHistoryFetchDataResult[];
+  historyList: IHistory[];
   loadHistory: () => void;
   isHistoryOpen: boolean;
   setIsHistoryOpen: (value: boolean) => void;
@@ -20,6 +18,8 @@ interface IHistoryContext {
     shareable_link: string,
   ) => void;
   isLoading: boolean;
+  fetchNextPage: () => void;
+  hasMore: boolean;
 }
 
 const HistoryContext = React.createContext<IHistoryContext>(
@@ -33,25 +33,29 @@ export function useHistory() {
 
 interface Props {
   children: ReactNode;
+  fetchLimit?: number;
 }
 
-export function HistoryProvider({ children }: Props) {
-  const [historyList, setHistoryList] = useState<
-    ITranslationHistoryFetchDataResult[]
-  >([]);
+export function HistoryProvider({ children, fetchLimit = 10 }: Props) {
+  const [historyList, setHistoryList] = useState<IHistory[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
   const [isLoading, setIsloading] = useState<boolean>(false);
 
   const [historyLoaded, setHistoryLoaded] = useState<boolean>(false);
 
+  const [fetchPage, setFetchPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+
   function loadHistory() {
     setIsloading(true);
-    const { request } = historyService.getHistory();
+    const { request } = historyService.getHistory(fetchPage, fetchLimit);
 
     request
       .then(({ data }) => {
         setHistoryLoaded(true);
-        setHistoryList(data);
+        setHistoryList((prev) => [...(prev || []), ...data.items]);
+        setHasMore(fetchPage < data.pages);
+        setFetchPage((prev) => prev + 1);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
@@ -115,7 +119,7 @@ export function HistoryProvider({ children }: Props) {
     shareable_link: string,
   ) {
     if (historyLoaded) {
-      const newHistory: ITranslationHistoryFetchDataResult = {
+      const newHistory: IHistory = {
         id: id,
         english: english,
         darija: darija,
@@ -126,6 +130,10 @@ export function HistoryProvider({ children }: Props) {
 
       setHistoryList([newHistory, ...historyList]);
     }
+  }
+
+  function fetchNextPage() {
+    loadHistory();
   }
 
   return (
@@ -139,6 +147,8 @@ export function HistoryProvider({ children }: Props) {
         deleteHistory,
         clearAllHistory,
         addToHistory,
+        fetchNextPage,
+        hasMore,
       }}
     >
       {children}

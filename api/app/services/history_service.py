@@ -1,23 +1,36 @@
 from flask import abort
-from sqlalchemy import desc
+from sqlalchemy import desc, and_
 from app import db
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.models.history import History
 from app.schemas.history_schema import history_schema, histories_schema
 from app.utils.shared import LanguagesEnum
+from app.models.user import User
 
 
 class HistoryService:
 
     @staticmethod
-    def get_user_history(user_id):
-        result = (
-            History.query.filter_by(user_id=user_id, deleted=False)
-            .order_by(desc(History.created_at))
-            .limit(100)  # pagination will be implimented later
-            .all()
+    def get_user_history(user_id, page=1, per_page=10):
+        user = User.query.get(user_id)
+        if not user:
+            abort(404, "User Not Found!")
+
+        query = History.query.filter(
+            and_(History.user_id == user_id, History.deleted == False)
+        ).order_by(desc(History.created_at))
+
+        paginated_query = query.paginate(
+            page=page, per_page=per_page, error_out=False
         )
-        return histories_schema.dump(result)
+
+        return {
+            "page": paginated_query.page,
+            "per_page": paginated_query.per_page,
+            "total": paginated_query.total,
+            "pages": paginated_query.pages,
+            "items": paginated_query.items,
+        }
 
     @staticmethod
     @jwt_required(optional=True)

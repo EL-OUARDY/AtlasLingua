@@ -1,4 +1,5 @@
 from app import ma
+from marshmallow import fields
 
 
 class HistorySchema(ma.Schema):
@@ -10,5 +11,14 @@ class HistorySchema(ma.Schema):
     shareable_link = ma.String(dump_only=True)
 
 
+class PaginatedHistorySchema(ma.Schema):
+    page = fields.Int()
+    per_page = fields.Int()
+    total = fields.Int()
+    pages = fields.Int()
+    items = fields.List(fields.Nested(HistorySchema))
+
+
 history_schema = HistorySchema()
 histories_schema = HistorySchema(many=True)
+paginated_history_schema = PaginatedHistorySchema()

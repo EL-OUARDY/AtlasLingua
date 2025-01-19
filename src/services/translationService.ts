@@ -1,6 +1,6 @@
 import apiClient from "./api";
 import { Language } from "@/models/Translator";
-import { ITranslationHistoryFetchDataResult } from "./historyService";
+import { IHistory } from "./historyService";
 
 export interface ITranslationFetchDataRequest {
   text: string;
@@ -62,12 +62,9 @@ class translationService {
 
   get_shared_translation(link: string) {
     const controller = new AbortController();
-    const request = apiClient.get<ITranslationHistoryFetchDataResult>(
-      `/translate/get/${link}`,
-      {
-        signal: controller.signal,
-      },
-    );
+    const request = apiClient.get<IHistory>(`/translate/get/${link}`, {
+      signal: controller.signal,
+    });
 
     return { request, cancel: () => controller.abort() };
   }

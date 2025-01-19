@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { ITranslationHistoryFetchDataResult } from "@/services/historyService";
+import { IHistory } from "@/services/historyService";
 import { useState } from "react";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 interface Props {
-  item: ITranslationHistoryFetchDataResult;
-  showHistory: (item: ITranslationHistoryFetchDataResult) => void;
+  item: IHistory;
+  showHistory: (item: IHistory) => void;
   deleteHistory: (id: number) => void;
 }
 
@@ -24,7 +24,7 @@ function HistoryCard({ item, showHistory, deleteHistory }: Props) {
       <CardHeader className="relative flex flex-row gap-4 space-y-0 p-4 sm:p-4">
         <div className="flex-1 space-y-1">
           <CardTitle className="flex items-center gap-2 text-base leading-tight sm:text-lg">
-            <div className="mr-auto line-clamp-2">
+            <div className="mr-auto line-clamp-2 text-sm">
               <p
                 className={
                   item.source_language === "english" ? "first-word-cap" : ""
