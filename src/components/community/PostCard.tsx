@@ -28,6 +28,7 @@ import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { Highlight } from "react-instantsearch";
 import type { BaseHit, Hit } from "instantsearch.js";
+import { USER_ROLES } from "@/models/User";
 interface Props {
   post: ICommunityPost | Hit<BaseHit>;
   selectedPost: string | null;
@@ -55,7 +56,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
           <div className="flex items-center">
             <div className="flex w-full items-center gap-1">
               <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
-                <div className="mr-auto flex items-center gap-2 capitalize">
+                <div className="mr-auto flex items-center gap-1 capitalize">
                   {post._highlightResult ? (
                     <Highlight
                       attribute="user.name"
@@ -67,7 +68,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                   ) : (
                     post.user.name
                   )}
-                  {post.user.role === "contributor" && (
+                  {post.user.role === USER_ROLES.CONTRIBUTOR && (
                     <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                   )}
                 </div>

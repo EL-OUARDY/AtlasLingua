@@ -20,7 +20,6 @@ import {
   addDoc,
   Timestamp,
   updateDoc,
-  increment,
   deleteDoc,
   where,
   QueryConstraint,
@@ -423,11 +422,6 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     };
     setComments((prevComments) => [...prevComments, newComment]);
 
-    // Increment commentsCount of target post
-    await updateDoc(postDocRef, {
-      commentsCount: increment(1),
-    });
-
     setPost((prevPost) => {
       if (prevPost?.id === postId) {
         return {
@@ -495,11 +489,6 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
 
       // Delete the comment document
       await deleteDoc(commentDocRef);
-
-      // Decrement commentsCount of target post
-      await updateDoc(postDocRef, {
-        commentsCount: increment(-1),
-      });
 
       // Update local state
       setComments((prevComments) =>

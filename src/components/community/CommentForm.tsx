@@ -117,6 +117,7 @@ function CommentForm({
             role: user.role || USER_ROLES.MEMBER,
           },
           hasBeenEdited: true,
+          postUserId: post.user.id as number,
         };
         const updatedComment = await editComment(
           post.id,
@@ -143,6 +144,7 @@ function CommentForm({
             mentionedUser.id !== user.id
               ? mentionedUser.name
               : "",
+          postUserId: post.user.id as number,
         };
         const newComment = await addComment(post.id, commentObj);
         reset();

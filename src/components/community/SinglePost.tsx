@@ -33,7 +33,7 @@ import CommentForm from "./CommentForm";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { ICommunityComment } from "@/models/Community";
-import { isAnonymousUsername, IUser } from "@/models/User";
+import { isAnonymousUsername, IUser, USER_ROLES } from "@/models/User";
 import CommentCard from "./CommentCard";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { useSearchParams } from "react-router-dom";
@@ -118,7 +118,7 @@ function SinglePost({ postId, onEdit }: Props) {
                 <div className="flex items-center font-semibold">
                   <div className="mr-auto flex items-center gap-1 capitalize">
                     {post.user.name}
-                    {post.user.role === "contributor" && (
+                    {post.user.role === USER_ROLES.CONTRIBUTOR && (
                       <CheckCircle2Icon className="size-4 rounded-full text-green-600" />
                     )}
                   </div>
