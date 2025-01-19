@@ -10,29 +10,31 @@ from app.schemas.dictionary_schema import dictionary_schema
 
 class FavoriteService:
     @staticmethod
-    def get_user_favorites(user_id, search):
+    def get_user_favorites(user_id, search, page=1, per_page=10):
         user = User.query.get(user_id)
         if not user:
             abort(404, "User Not Found!")
 
-        favorites = (
-            Favorite.query.filter(
-                Favorite.user_id == user_id,
-                or_(
-                    Favorite.darija.ilike(f"%{search}%"),
-                    Favorite.english.ilike(f"%{search}%"),
-                    Favorite.arabic.ilike(f"%{search}%"),
-                ),
-            )
-            .order_by(desc(Favorite.created_at))
-            .limit(50)  # pagination will be implemented later
-            .all()
+        query = Favorite.query.filter(
+            Favorite.user_id == user_id,
+            or_(
+                Favorite.darija.ilike(f"%{search}%"),
+                Favorite.english.ilike(f"%{search}%"),
+                Favorite.arabic.ilike(f"%{search}%"),
+            ),
+        ).order_by(desc(Favorite.created_at))
+
+        paginated_query = query.paginate(
+            page=page, per_page=per_page, error_out=False
         )
 
-        if not favorites:
-            return []
-
-        return favorites
+        return {
+            "page": paginated_query.page,
+            "per_page": paginated_query.per_page,
+            "total": paginated_query.total,
+            "pages": paginated_query.pages,
+            "favorites": paginated_query.items,
+        }
 
     @staticmethod
     def add_favorite(english, darija, arabic, verified, word_type, user_id):

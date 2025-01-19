@@ -1,4 +1,4 @@
-from marshmallow import validate
+from marshmallow import fields
 from app import ma
 
 
@@ -13,5 +13,14 @@ class FavoriteSchema(ma.Schema):
     user_id = ma.Number(dump_only=True)
 
 
+class PaginatedFavoritesSchema(ma.Schema):
+    page = fields.Int()
+    per_page = fields.Int()
+    total = fields.Int()
+    pages = fields.Int()
+    favorites = fields.List(fields.Nested(FavoriteSchema))
+
+
 favorite_schema = FavoriteSchema()
 favorites_schema = FavoriteSchema(many=True)
+paginated_favorites_schema = PaginatedFavoritesSchema()

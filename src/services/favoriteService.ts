@@ -10,12 +10,20 @@ export interface IFavorite {
   created_at?: string;
 }
 
+interface IFavoriteResponse {
+  favorites: IFavorite[];
+  page: number;
+  pages: number;
+  per_page: number;
+  total: number;
+}
+
 class FavoriteService {
-  getFavorites(searchQuery: string) {
+  getFavorites(searchQuery: string, page: number, perPage: number) {
     const controller = new AbortController();
-    const request = apiClient.post<IFavorite[]>(
+    const request = apiClient.post<IFavoriteResponse>(
       "/favorite/list",
-      { search: searchQuery },
+      { search: searchQuery, page: page, per_page: perPage },
       {
         signal: controller.signal,
       },

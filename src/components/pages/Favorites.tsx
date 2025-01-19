@@ -1,6 +1,6 @@
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
@@ -13,9 +13,13 @@ import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import FavoriteCardSkeleton from "../skeletons/FavoriteCardSkeleton";
 
-function Favorites() {
+function Favorites({ fetchLimit = 4 }: { fetchLimit: number }) {
   const [favorites, setFavorites] = useState<IFavorite[]>();
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [fetchPage, setFetchPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState(true);
 
   const { user } = useUser();
 
@@ -23,22 +27,36 @@ function Favorites() {
 
   useEffect(() => {
     if (!user) return;
-    const { request, cancel } = favoriteService.getFavorites(searchQuery);
+    setLoading(true);
+    const { request, cancel } = favoriteService.getFavorites(
+      searchQuery,
+      fetchPage,
+      fetchLimit,
+    );
     request
       .then(({ data }) => {
-        setFavorites(data);
+        setFavorites((prev) => [...(prev || []), ...data.favorites]);
+        setHasMore(fetchPage < data.pages);
       })
       .catch((err) => {
         if (err instanceof CanceledError) return;
-        toast("Failed to load data. Please refresh the page", {
+        toast("Failed to load favorites. Please refresh the page", {
           action: {
             label: "OK",
             onClick: () => window.location.reload(),
           },
         });
-      });
+      })
+      .finally(() => setLoading(false));
     return () => cancel(); // abort http request
-  }, [searchQuery, user]);
+  }, [fetchLimit, fetchPage, searchQuery, user]);
+
+  useEffect(() => {
+    // Reset pagination to first page when search query changes
+    setFetchPage(1);
+    setFavorites(undefined);
+    console.log("exec");
+  }, [searchQuery]);
 
   function removeFavorite(id: number) {
     const { request } = favoriteService.deleteFavorite(id);
@@ -90,19 +108,42 @@ function Favorites() {
       </div>
       <Separator className="my-6" />
 
-      {favorites && favorites.length > 0 && (
+      {isLoading && (
         <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-          {favorites.map((item, index) => (
-            <FavoriteCard
-              key={index}
-              favorite={item}
-              removeFavorite={removeFavorite}
-            />
-          ))}
+          {Array(12)
+            .fill(null)
+            .map((_, index) => (
+              <FavoriteCardSkeleton key={index} />
+            ))}
         </div>
       )}
 
-      {!user ? (
+      {favorites && favorites.length > 0 && (
+        <>
+          <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
+            {favorites.map((item, index) => (
+              <FavoriteCard
+                key={index}
+                favorite={item}
+                removeFavorite={removeFavorite}
+              />
+            ))}
+          </div>
+          {hasMore && (
+            <Button
+              onClick={() => setFetchPage((prev) => prev + 1)}
+              variant="outline"
+              className="m-auto my-4 max-w-fit text-xs"
+              disabled={isLoading}
+            >
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Load More
+            </Button>
+          )}
+        </>
+      )}
+
+      {!user && (
         <div className="flex size-full items-center justify-center text-center">
           <div className="flex flex-col gap-4">
             <p className="">Please login to see your favorites list.</p>
@@ -111,19 +152,8 @@ function Favorites() {
             </Button>
           </div>
         </div>
-      ) : (
-        !favorites && (
-          <div className="grid h-fit gap-4 sm:grid-cols-auto-fill-270">
-            {Array(12)
-              .fill(null)
-              .map((_, index) => (
-                <FavoriteCardSkeleton key={index} />
-              ))}
-          </div>
-        )
       )}
-
-      {favorites && favorites.length == 0 && (
+      {favorites && favorites.length == 0 && !isLoading && (
         <div className="flex h-full items-center justify-center">
           No saved entries.
         </div>

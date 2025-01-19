@@ -1,7 +1,10 @@
 from flask import Blueprint, abort, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from app.schemas.favorite_schema import favorite_schema, favorites_schema
+from app.schemas.favorite_schema import (
+    favorite_schema,
+    paginated_favorites_schema,
+)
 from app.services.favorite_service import FavoriteService
 
 
@@ -13,10 +16,12 @@ bp = Blueprint("favorite", __name__, url_prefix="/api/favorite")
 def get_favorites():
     user_id = get_jwt_identity()
     search = request.json.get("search", None)
+    page = request.json.get("page", 1)
+    per_page = request.json.get("per_page", 10)
 
-    result = FavoriteService.get_user_favorites(user_id, search)
+    result = FavoriteService.get_user_favorites(user_id, search, page, per_page)
     if result or result == []:
-        return favorites_schema.jsonify(result), 200
+        return paginated_favorites_schema.jsonify(result), 200
     else:
         abort(400, description="Bad Request")
 
