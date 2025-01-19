@@ -21,4 +21,12 @@ export const USER_ROLES = {
 // Type for type-safety
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
-export const ANONYMOUS_NAME = "No Name";
+export function generateAnonymousUsername(): string {
+  const randomNumber = Math.floor(1000 + Math.random() * 9000);
+  return `Member#${randomNumber}`;
+}
+
+export function isAnonymousUsername(name: string): boolean {
+  const anonymousUsernamePattern = /^Member#\d{4}$/;
+  return anonymousUsernamePattern.test(name);
+}

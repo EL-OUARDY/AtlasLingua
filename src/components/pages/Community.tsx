@@ -123,6 +123,7 @@ function Community() {
     setSearchParams((prev) => {
       prev.set("post_id", id);
       prev.delete("new_post");
+      prev.delete("edit_post");
       return prev;
     });
   }

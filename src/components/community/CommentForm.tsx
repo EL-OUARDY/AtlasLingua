@@ -20,7 +20,12 @@ import { CornerDownRight, Loader2, XIcon } from "lucide-react";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { serverTimestamp } from "firebase/firestore";
-import { ANONYMOUS_NAME, IUser, USER_ROLES } from "@/models/User";
+import {
+  generateAnonymousUsername,
+  isAnonymousUsername,
+  IUser,
+  USER_ROLES,
+} from "@/models/User";
 import { toast } from "sonner";
 import { useCommunity } from "@/contexts/CommunityContext";
 
@@ -78,10 +83,7 @@ function CommentForm({
       );
     else {
       setValue("content", comment.content);
-      setValue(
-        "anonymous",
-        comment.user.name === ANONYMOUS_NAME ? true : false,
-      );
+      setValue("anonymous", isAnonymousUsername(comment.user.name as string));
     }
     return () => {
       // Component unmounted
@@ -111,7 +113,7 @@ function CommentForm({
           content: data.content,
           user: {
             id: user.id as number,
-            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
           },
           hasBeenEdited: true,
@@ -130,14 +132,14 @@ function CommentForm({
           content: data.content,
           user: {
             id: user.id as number,
-            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
           },
           date: serverTimestamp(),
           votes: 0,
           mentionedUser:
             mentionedUser &&
-            mentionedUser.name !== ANONYMOUS_NAME &&
+            !isAnonymousUsername(mentionedUser.name as string) &&
             mentionedUser.id !== user.id
               ? mentionedUser.name
               : "",
@@ -185,7 +187,7 @@ function CommentForm({
             <span>
               Replying to @
               {mentionedUser &&
-              mentionedUser.name !== ANONYMOUS_NAME &&
+              !isAnonymousUsername(mentionedUser.name as string) &&
               mentionedUser.id !== user?.id
                 ? mentionedUser.name
                 : post.user.name}

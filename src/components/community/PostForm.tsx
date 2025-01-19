@@ -50,7 +50,11 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
 import { ICommunityPost } from "@/models/Community";
 import { serverTimestamp } from "firebase/firestore";
-import { ANONYMOUS_NAME, USER_ROLES } from "@/models/User";
+import {
+  generateAnonymousUsername,
+  isAnonymousUsername,
+  USER_ROLES,
+} from "@/models/User";
 import { toast } from "sonner";
 import Logo from "../ui/icons/Logo";
 
@@ -110,7 +114,7 @@ function PostForm({ postId = null }: Props) {
       if (p) {
         setPost(p);
         setValue("content", p.content);
-        setValue("anonymous", p.user.name === ANONYMOUS_NAME ? true : false);
+        setValue("anonymous", isAnonymousUsername(p.user.name as string));
         if (p.tags) {
           const _tags = p.tags?.map((tag, index) => ({
             id: index.toString(),
@@ -159,7 +163,7 @@ function PostForm({ postId = null }: Props) {
           content: data.content,
           user: {
             id: user.id as number,
-            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
           },
           tags: data.tags.map((x) => x.text),
@@ -188,7 +192,7 @@ function PostForm({ postId = null }: Props) {
           tags: data.tags.map((x) => x.text),
           user: {
             id: user.id as number,
-            name: data.anonymous ? ANONYMOUS_NAME : user.name,
+            name: data.anonymous ? generateAnonymousUsername() : user.name,
             avatar: "",
             role: user.role || USER_ROLES.MEMBER,
           },

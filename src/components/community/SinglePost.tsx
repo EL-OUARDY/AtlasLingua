@@ -33,10 +33,11 @@ import CommentForm from "./CommentForm";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { ICommunityComment } from "@/models/Community";
-import { IUser } from "@/models/User";
+import { isAnonymousUsername, IUser } from "@/models/User";
 import CommentCard from "./CommentCard";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { useSearchParams } from "react-router-dom";
+import Logo from "../ui/icons/Logo";
 
 interface Props {
   postId: string;
@@ -102,11 +103,15 @@ function SinglePost({ postId, onEdit }: Props) {
               <Avatar>
                 <AvatarImage src={post.user.avatar} alt={post.user.name} />
                 <AvatarFallback className="bg-background dark:bg-secondary">
-                  {(post.user.name as string)
-                    .split(" ")
-                    .slice(0, 2)
-                    .map((chunk) => chunk[0])
-                    .join("")}
+                  {!isAnonymousUsername(post.user.name as string) ? (
+                    (post.user.name as string)
+                      .split(" ")
+                      .slice(0, 2)
+                      .map((chunk) => chunk[0])
+                      .join("")
+                  ) : (
+                    <Logo className="size-4" />
+                  )}
                 </AvatarFallback>
               </Avatar>
               <div className="grid w-full gap-1">
