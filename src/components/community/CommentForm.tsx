@@ -19,7 +19,6 @@ import {
 import { CornerDownRight, Loader2, XIcon } from "lucide-react";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
-import { serverTimestamp } from "firebase/firestore";
 import {
   generateAnonymousUsername,
   isAnonymousUsername,
@@ -108,16 +107,16 @@ function CommentForm({
       if (comment) {
         // update comment
         // Construct an updated comment
-        const commentObj: ICommunityComment = {
-          ...comment,
+        const commentObj: Omit<ICommunityComment, "id"> = {
           content: data.content,
           user: {
             id: user.id as number,
             name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
+            avatar: user.avatar || "",
           },
+          mentionedUser: comment.mentionedUser,
           hasBeenEdited: true,
-          postUserId: post.user.id as number,
         };
         const updatedComment = await editComment(
           post.id,
@@ -135,16 +134,14 @@ function CommentForm({
             id: user.id as number,
             name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
+            avatar: user.avatar || "",
           },
-          date: serverTimestamp(),
-          votes: 0,
           mentionedUser:
             mentionedUser &&
             !isAnonymousUsername(mentionedUser.name as string) &&
             mentionedUser.id !== user.id
               ? mentionedUser.name
               : "",
-          postUserId: post.user.id as number,
         };
         const newComment = await addComment(post.id, commentObj);
         reset();

@@ -222,7 +222,7 @@ function SinglePost({ postId, onEdit }: Props) {
                     <WTooltip content="Upvote">
                       <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                         <UpVoteIcon className="mr-2 size-3 stroke-1" />
-                        {post.votes}
+                        {post.votesCount}
                       </div>
                     </WTooltip>
                     <WTooltip content="Reply">

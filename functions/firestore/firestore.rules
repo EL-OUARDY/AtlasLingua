@@ -1,0 +1,86 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  	// Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isResourceOwner() {
+      return request.auth.uid == string(resource.data.user.id);
+    }
+    function isRequestOwner() {
+      return request.auth.uid == string(request.resource.data.user.id);
+    }
+    function isNewPostValid() {
+    	return request.resource.data.keys().hasOnly(['content', 'tags', 'user'])
+      && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && request.resource.data.size() > 0;
+    }
+    
+    function isEditPostValid() {
+    	return request.resource.data.keys().hasOnly(['content', 'tags', 'user', 'hasBeenEdited','commentsCount','date', 'votesCount'])
+      && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && request.resource.data.hasBeenEdited == true
+      && request.resource.data.commentsCount == resource.data.commentsCount
+		  && request.resource.data.votesCount == resource.data.votesCount
+  		&& request.resource.data.date == resource.data.date
+      && request.resource.data.size() > 0;
+    }
+    
+    function isNewCommentValid() {
+    	return request.resource.data.keys().hasOnly(['content', 'mentionedUser', 'user'])
+      && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && request.resource.data.size() > 0;
+    }
+    
+    function isEditCommentValid() {
+    	return request.resource.data.keys().hasOnly(['content', 'mentionedUser', 'user','date', 'votesCount', 'hasBeenEdited'])
+      && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && request.resource.data.hasBeenEdited == true
+		  && request.resource.data.votesCount == resource.data.votesCount
+  		&& request.resource.data.date == resource.data.date
+      && request.resource.data.size() > 0;
+    }
+  
+    // Global rule for all documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // Rules for posts
+    match /posts/{postId} {
+      // Allow everyone to read posts
+      allow read: if true; 
+      // Only the post's creator can write their post
+      allow create: if isAuthenticated() && isRequestOwner() && isNewPostValid();
+      allow update: if isAuthenticated() && isRequestOwner() && isResourceOwner() && isEditPostValid();
+      allow delete: if isAuthenticated() && isResourceOwner();
+      
+    	// Rules for comments
+      match /comments/{commentId} {
+        // Allow everyone to read comments
+        allow read: if true;
+        // Only the comment's creator can write their comment
+        allow create: if isAuthenticated() && isRequestOwner() && isNewCommentValid();
+        allow update: if isAuthenticated() && isResourceOwner() && isResourceOwner() && isEditCommentValid();
+        allow delete: if isAuthenticated() && isResourceOwner();
+      }
+    }
+    
+    // Rules for welcome_message
+    match /welcome_message/{messageId} {
+      // Allow everyone to read comments
+      allow read: if true;
+    }
+    
+    // Rules for post_reports
+    match /post_reports/{reportId} {
+      // Allow only authenticated users to create reports
+      allow create: if isAuthenticated()
+      && request.resource.data.keys().hasOnly(['commentId', 'postId', 'userId', 'description', 'reasons'])
+      && request.auth.uid == string(request.resource.data.userId);
+    }
+  }
+}

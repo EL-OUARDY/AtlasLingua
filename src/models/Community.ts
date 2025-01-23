@@ -5,11 +5,11 @@ import type { HitHighlightResult } from "instantsearch.js";
 export interface ICommunityPost {
   id: string;
   content: string;
-  votes: number;
   tags?: string[];
   user: Partial<IUser>;
-  date: Timestamp | FieldValue;
+  date?: Timestamp | FieldValue;
   commentsCount?: number;
+  votesCount?: number;
   hasBeenEdited?: boolean;
   _highlightResult?: HitHighlightResult | undefined;
 }
@@ -17,10 +17,9 @@ export interface ICommunityPost {
 export interface ICommunityComment {
   id: string;
   content: string;
-  votes: number;
+  votesCount?: number;
   user: Partial<IUser>;
-  postUserId: number;
-  date: Timestamp | FieldValue;
+  date?: Timestamp | FieldValue;
   mentionedUser?: string;
   hasBeenEdited?: boolean;
 }

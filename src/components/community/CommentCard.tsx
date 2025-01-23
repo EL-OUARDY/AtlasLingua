@@ -35,16 +35,18 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
   const { openReportDialog } = useReportPost();
   return (
     <div className="w-full rounded-lg border bg-background p-2 text-muted-foreground dark:bg-muted/40">
-      <span className="capitalize tracking-tight text-primary">
+      <p className="flex items-center capitalize tracking-tight text-primary">
         {`${comment.user.name}`}
         {comment.user.role === USER_ROLES.CONTRIBUTOR ? (
           <CheckCircle2Icon className="mx-1 inline size-3 rounded-full text-green-600" />
         ) : (
           <span className="text-muted-foreground">: </span>
         )}
-      </span>
-      {comment.mentionedUser && `@${comment.mentionedUser} `}
-      {comment.content}
+      </p>
+      {comment.mentionedUser && (
+        <span className="italic text-sky-400">{`@${comment.mentionedUser} `}</span>
+      )}
+      <span className="capitalize">{comment.content}</span>
       <Separator className="mb-2 mt-4" />
       <div className="flex items-center">
         <div className="text-xs text-muted-foreground">
@@ -59,7 +61,7 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
             <WTooltip content="Upvote">
               <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
                 <UpVoteIcon className="mr-2 size-3 stroke-1" />
-                {comment.votes}
+                {comment.votesCount || 0}
               </div>
             </WTooltip>
             <WTooltip content="Reply">

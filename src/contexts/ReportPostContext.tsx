@@ -109,6 +109,7 @@ function ReportPostProvider({ children }: Props) {
         ...data,
         userId: user?.id,
       };
+
       await reportPost(newReport);
       setHasSubmitted(true);
       form.reset();

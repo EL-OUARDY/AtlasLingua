@@ -152,7 +152,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
           new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         ); // 30 days ago
         constraints.push(where("date", ">", oneMonthAgo));
-        constraints.push(orderBy("votes", "desc"));
+        constraints.push(orderBy("votesCount", "desc"));
       }
 
       // Sort by user's posts
@@ -539,7 +539,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       return {
         id: hit.objectID,
         content: hit.content,
-        votes: hit.votes,
+        votesCount: hit.votesCount,
         tags: hit.tags,
         user: hit.user,
         commentsCount: hit.commentsCount,

@@ -49,7 +49,6 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
 import { ICommunityPost } from "@/models/Community";
-import { serverTimestamp } from "firebase/firestore";
 import {
   generateAnonymousUsername,
   isAnonymousUsername,
@@ -158,17 +157,18 @@ function PostForm({ postId = null }: Props) {
       if (postId && post) {
         // update post
         // Construct an updated post
-        const postObj: ICommunityPost = {
-          ...post,
+        const postObj: Omit<ICommunityPost, "id"> = {
           content: data.content,
           user: {
             id: user.id as number,
             name: data.anonymous ? generateAnonymousUsername() : user.name,
             role: user.role || USER_ROLES.MEMBER,
+            avatar: user.avatar || "",
           },
           tags: data.tags.map((x) => x.text),
           hasBeenEdited: true,
         };
+
         await editPost(post.id, postObj);
         toast("Post updated successfully.", {
           action: {
@@ -193,13 +193,11 @@ function PostForm({ postId = null }: Props) {
           user: {
             id: user.id as number,
             name: data.anonymous ? generateAnonymousUsername() : user.name,
-            avatar: "",
+            avatar: user.avatar || "",
             role: user.role || USER_ROLES.MEMBER,
           },
-          date: serverTimestamp(),
-          votes: 0,
-          commentsCount: 0,
         };
+
         await addPost(postObj);
         toast("Post created successfully.", {
           action: {
