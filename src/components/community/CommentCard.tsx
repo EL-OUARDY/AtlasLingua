@@ -22,6 +22,12 @@ import { Separator } from "../ui/separator";
 import { useReportPost } from "@/contexts/ReportPostContext";
 import { useUser } from "@/contexts/UserContext";
 import { USER_ROLES } from "@/models/User";
+import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { APP_NAME } from "@/shared/constants";
+import { ROUTES } from "@/routes/routes";
+import { useCommunity } from "@/contexts/CommunityContext";
+import { useEffect } from "react";
 
 interface Props {
   post: ICommunityPost;
@@ -31,8 +37,37 @@ interface Props {
   onDelete: (commentId: string) => void;
 }
 function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const { openReportDialog } = useReportPost();
+  const { voteComment, hasUserVotedOnComment } = useCommunity();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !isAuthenticated) return;
+    hasUserVotedOnComment(comment.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, post.id, user]);
+
+  async function vote(comment: ICommunityComment) {
+    if (!user || !isAuthenticated) {
+      loginFirst();
+      return;
+    }
+
+    await voteComment(comment);
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(
+      APP_NAME + "-return-url",
+      location.pathname + location.search,
+    );
+
+    navigate(ROUTES.login);
+  }
+
   return (
     <div className="w-full rounded-lg border bg-background p-2 text-muted-foreground dark:bg-muted/40">
       <p className="flex items-center capitalize tracking-tight text-primary">
@@ -44,9 +79,9 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
         )}
       </p>
       {comment.mentionedUser && (
-        <span className="italic text-sky-400">{`@${comment.mentionedUser} `}</span>
+        <span className="capitalize italic text-sky-400">{`@${comment.mentionedUser} `}</span>
       )}
-      <span className="capitalize">{comment.content}</span>
+      <span className="first-letter:uppercase">{comment.content}</span>
       <Separator className="mb-2 mt-4" />
       <div className="flex items-center">
         <div className="text-xs text-muted-foreground">
@@ -59,7 +94,13 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
         <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
           <div className="flex gap-4">
             <WTooltip content="Upvote">
-              <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+              <div
+                onClick={() => vote(comment)}
+                className={cn(
+                  "flex cursor-pointer items-center justify-center hover:text-foreground",
+                  comment.isUpVoted && "text-orange-500 hover:text-orange-500",
+                )}
+              >
                 <UpVoteIcon className="mr-2 size-3 stroke-1" />
                 {comment.votesCount || 0}
               </div>

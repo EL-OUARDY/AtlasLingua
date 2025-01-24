@@ -23,7 +23,7 @@ import {
   deleteDoc,
   where,
   QueryConstraint,
-  writeBatch,
+  setDoc,
 } from "firebase/firestore";
 import {
   createContext,
@@ -73,6 +73,10 @@ interface ICommunityContext {
   reportPost: (report: IReportPost) => Promise<void>;
   filter: ICommunityFilter;
   setFilter: (filter: ICommunityFilter) => void;
+  votePost: (_post: ICommunityPost) => Promise<void>;
+  hasUserVotedOnPost: (postId: string) => Promise<boolean>;
+  voteComment: (comment: ICommunityComment) => Promise<void>;
+  hasUserVotedOnComment: (commentId: string) => Promise<boolean>;
 }
 
 const CommunityContext = createContext<ICommunityContext>(
@@ -113,7 +117,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
 
   const navigate = useNavigate();
 
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
 
   useEffect(() => {
     resetPosts();
@@ -356,32 +360,6 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       // References to Firestore document
       const postDocRef = doc(db, "posts", postId);
 
-      // Delete post's comments
-      const colRef = collection(postDocRef, "comments");
-      const snapshot = await getDocs(colRef);
-      if (!snapshot.empty) {
-        let batch = writeBatch(db);
-        let count = 0;
-
-        for (const document of snapshot.docs) {
-          // Add each delete operation to the batch
-          batch.delete(doc(colRef, document.id));
-          count++;
-
-          // If we reach 100 deletes in this batch, commit and start a new batch
-          if (count === 100) {
-            await batch.commit();
-
-            // Reset batch and counter
-            batch = writeBatch(db);
-            count = 0;
-          }
-        }
-        if (count > 0) {
-          await batch.commit();
-        }
-      }
-
       // Delete the post document
       await deleteDoc(postDocRef);
 
@@ -551,6 +529,155 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
 
     setPosts(_posts);
   }
+
+  async function votePost(_post: ICommunityPost): Promise<void> {
+    if (!user || !isAuthenticated) {
+      return;
+    }
+
+    const voteRef = doc(db, `posts/${_post.id}/votes/${user.id}`);
+
+    // UpVote
+    if (!_post.isUpVoted) {
+      await setDoc(voteRef, { userId: user.id?.toString() });
+      setPosts((prevPosts) =>
+        prevPosts.map((p) => {
+          if (p.id === _post.id) {
+            return {
+              ...p,
+              votesCount: Math.max((p.votesCount || 0) + 1, 0),
+              isUpVoted: true,
+            };
+          }
+          return p;
+        }),
+      );
+      if (post && post.id === _post.id)
+        setPost({
+          ...post,
+          votesCount: Math.max((post.votesCount || 0) + 1, 0),
+          isUpVoted: true,
+        });
+    }
+    // DownVote
+    else {
+      await deleteDoc(voteRef);
+      setPosts((prevPosts) =>
+        prevPosts.map((p) => {
+          if (p.id === _post.id) {
+            return {
+              ...p,
+              votesCount: Math.max((p.votesCount || 0) - 1, 0),
+              isUpVoted: false,
+            };
+          }
+          return p;
+        }),
+      );
+      if (post && post.id === _post.id)
+        setPost({
+          ...post,
+          votesCount: Math.max((post.votesCount || 0) - 1, 0),
+          isUpVoted: false,
+        });
+    }
+  }
+
+  async function hasUserVotedOnPost(postId: string): Promise<boolean> {
+    try {
+      // Reference the votes document
+      const voteDocRef = doc(db, `posts/${postId}/votes/${user?.id}`);
+      const docSnap = await getDoc(voteDocRef);
+
+      // Update posts
+      if (docSnap.exists()) {
+        setPosts((prevPosts) =>
+          prevPosts.map((p) => {
+            if (p.id === postId) return { ...p, isUpVoted: true };
+            return p;
+          }),
+        );
+
+        // Update post
+        if (post && post.id === postId) setPost({ ...post, isUpVoted: true });
+      }
+
+      return docSnap.exists();
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async function voteComment(comment: ICommunityComment): Promise<void> {
+    if (!user || !isAuthenticated) {
+      return;
+    }
+
+    const voteRef = doc(
+      db,
+      `posts/${post?.id}/comments/${comment.id}/votes/${user.id}`,
+    );
+
+    // UpVote
+    if (!comment.isUpVoted) {
+      await setDoc(voteRef, { userId: user.id?.toString() });
+
+      setComments((prevComments) =>
+        prevComments.map((p) => {
+          if (p.id === comment.id) {
+            return {
+              ...p,
+              votesCount: Math.max((p.votesCount || 0) + 1, 0),
+              isUpVoted: true,
+            };
+          }
+          return p;
+        }),
+      );
+    }
+    // DownVote
+    else {
+      await deleteDoc(voteRef);
+      setComments((prevComments) =>
+        prevComments.map((p) => {
+          if (p.id === comment.id) {
+            return {
+              ...p,
+              votesCount: Math.max((p.votesCount || 0) - 1, 0),
+              isUpVoted: false,
+            };
+          }
+          return p;
+        }),
+      );
+    }
+  }
+
+  async function hasUserVotedOnComment(commentId: string): Promise<boolean> {
+    try {
+      // Reference the votes document
+      const voteDocRef = doc(
+        db,
+        `posts/${post?.id}/comments/${commentId}/votes/${user?.id}`,
+      );
+      const docSnap = await getDoc(voteDocRef);
+
+      // Update comments
+      if (docSnap.exists()) {
+        setComments((prevComments) =>
+          prevComments.map((c) => {
+            if (c.id === commentId) return { ...c, isUpVoted: true };
+            return c;
+          }),
+        );
+      }
+
+      return docSnap.exists();
+    } catch (error) {
+      return false;
+    }
+  }
+
   return (
     <CommunityContext.Provider
       value={{
@@ -577,6 +704,10 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         reportPost,
         filter,
         setFilter,
+        votePost,
+        hasUserVotedOnPost,
+        voteComment,
+        hasUserVotedOnComment,
       }}
     >
       <ReportPostProvider>{children}</ReportPostProvider>

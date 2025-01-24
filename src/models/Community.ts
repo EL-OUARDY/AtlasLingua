@@ -11,6 +11,7 @@ export interface ICommunityPost {
   commentsCount?: number;
   votesCount?: number;
   hasBeenEdited?: boolean;
+  isUpVoted?: boolean;
   _highlightResult?: HitHighlightResult | undefined;
 }
 
@@ -22,6 +23,7 @@ export interface ICommunityComment {
   date?: Timestamp | FieldValue;
   mentionedUser?: string;
   hasBeenEdited?: boolean;
+  isUpVoted?: boolean;
 }
 
 export interface ICommunityFilter {

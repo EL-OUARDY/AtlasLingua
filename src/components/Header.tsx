@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MobileSideBar from "./MobileSideBar";
 import MainMenu from "./MainMenu";
 import { APP_NAME } from "@/shared/constants";
@@ -28,6 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 function Header() {
   const { toggleNotification } = useNotification();
   const { user, setUser } = useUser();
+  const navigate = useNavigate();
 
   function logout() {
     const { request } = authService.logout();
@@ -49,6 +50,16 @@ function Header() {
         });
       })
       .finally(() => {});
+  }
+
+  function loginClick() {
+    // save return url
+    localStorage.setItem(
+      APP_NAME + "-return-url",
+      location.pathname + location.search,
+    );
+
+    navigate(ROUTES.login);
   }
 
   return (
@@ -150,11 +161,9 @@ function Header() {
             )}
             <DropdownMenuSeparator />
             {!user && (
-              <Link to={ROUTES.login}>
-                <DropdownMenuItem className="cursor-pointer">
-                  Login
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem onClick={loginClick} className="cursor-pointer">
+                Login
+              </DropdownMenuItem>
             )}
             {user && (
               <DropdownMenuItem className="cursor-pointer" onClick={logout}>

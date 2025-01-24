@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Button } from "../ui/button";
@@ -32,12 +33,14 @@ import { useUser } from "@/contexts/UserContext";
 import CommentForm from "./CommentForm";
 import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
-import { ICommunityComment } from "@/models/Community";
+import { ICommunityComment, ICommunityPost } from "@/models/Community";
 import { isAnonymousUsername, IUser, USER_ROLES } from "@/models/User";
 import CommentCard from "./CommentCard";
 import ConfirmationDialog from "../ConfirmationDialog";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Logo from "../ui/icons/Logo";
+import { cn } from "@/lib/utils";
+import { APP_NAME } from "@/shared/constants";
 
 interface Props {
   postId: string;
@@ -45,7 +48,7 @@ interface Props {
 }
 
 function SinglePost({ postId, onEdit }: Props) {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const {
     post,
     fetchPost,
@@ -56,6 +59,8 @@ function SinglePost({ postId, onEdit }: Props) {
     loadingSinglePost,
     deletePost,
     deleteComment,
+    votePost,
+    hasUserVotedOnPost,
   } = useCommunity();
 
   const [commentToUpdate, setCommentToUpdate] =
@@ -77,6 +82,7 @@ function SinglePost({ postId, onEdit }: Props) {
     useState<boolean>(false);
 
   const [, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPost(postId);
@@ -85,8 +91,31 @@ function SinglePost({ postId, onEdit }: Props) {
     const searchParams = new URLSearchParams(location.search);
     const isNewComment = searchParams.get("new_comment");
     if (isNewComment) setIsCommentFormVisible(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId]);
+
+  useEffect(() => {
+    if (!user || !isAuthenticated) return;
+    if (post) hasUserVotedOnPost(postId);
+  }, [post]);
+
+  async function vote() {
+    if (!user || !isAuthenticated) {
+      loginFirst();
+      return;
+    }
+
+    await votePost(post as ICommunityPost);
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(
+      APP_NAME + "-return-url",
+      location.pathname + location.search,
+    );
+
+    navigate(ROUTES.login);
+  }
 
   function resetCommentState() {
     setIsCommentFormVisible(false);
@@ -193,7 +222,7 @@ function SinglePost({ postId, onEdit }: Props) {
             <div className="flex h-full flex-col gap-4">
               <div className="w-full rounded-lg border-0 border-l-2 border-primary/50 bg-background p-2 text-muted-foreground dark:bg-muted/40">
                 <div className="flex flex-col gap-2">
-                  <div className="">{post.content}</div>
+                  <div className="first-letter:uppercase">{post.content}</div>
                   <div className="flex w-full flex-col items-center gap-4 sm:flex-row">
                     {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap items-center gap-2 self-start sm:mr-auto">
@@ -219,8 +248,17 @@ function SinglePost({ postId, onEdit }: Props) {
                     )}
                   </div>
                   <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
-                    <WTooltip content="Upvote">
-                      <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
+                    <WTooltip content={post.isUpVoted ? "Downvote" : "Upvote"}>
+                      <div
+                        onClick={() => {
+                          vote();
+                        }}
+                        className={cn(
+                          "flex cursor-pointer items-center justify-center hover:text-foreground",
+                          post.isUpVoted &&
+                            "text-orange-500 hover:text-orange-500",
+                        )}
+                      >
                         <UpVoteIcon className="mr-2 size-3 stroke-1" />
                         {post.votesCount}
                       </div>

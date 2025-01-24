@@ -57,8 +57,18 @@ service cloud.firestore {
       allow create: if isAuthenticated() && isRequestOwner() && isNewPostValid();
       allow update: if isAuthenticated() && isRequestOwner() && isResourceOwner() && isEditPostValid();
       allow delete: if isAuthenticated() && isResourceOwner();
-      
-    	// Rules for comments
+
+      // Rules for post's votes
+      match /votes/{userId} {
+        allow read: if isAuthenticated() && request.auth.uid == userId;
+        allow create: if isAuthenticated()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['userId'])
+        && request.resource.data.userId == userId;
+        allow delete: if isAuthenticated() && request.auth.uid == userId;
+      }
+
+      // Rules for comments
       match /comments/{commentId} {
         // Allow everyone to read comments
         allow read: if true;
@@ -66,6 +76,16 @@ service cloud.firestore {
         allow create: if isAuthenticated() && isRequestOwner() && isNewCommentValid();
         allow update: if isAuthenticated() && isResourceOwner() && isResourceOwner() && isEditCommentValid();
         allow delete: if isAuthenticated() && isResourceOwner();
+
+        // Rules for comment's votes
+        match /votes/{userId} {
+          allow read: if isAuthenticated() && request.auth.uid == userId;
+          allow create: if isAuthenticated()
+          && request.auth.uid == userId
+          && request.resource.data.keys().hasOnly(['userId'])
+          && request.resource.data.userId == userId;
+          allow delete: if isAuthenticated() && request.auth.uid == userId;
+        }
       }
     }
     

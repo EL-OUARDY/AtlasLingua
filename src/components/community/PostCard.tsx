@@ -24,11 +24,16 @@ import { useShareLink } from "@/contexts/ShareLinkContext";
 import { ROUTES } from "@/routes/routes";
 import { useReportPost } from "@/contexts/ReportPostContext";
 import { useUser } from "@/contexts/UserContext";
-import UpVoteIcon from "../ui/icons/UpVoteIcon";
 import WTooltip from "../ui/custom/WTooltip";
 import { Highlight } from "react-instantsearch";
 import type { BaseHit, Hit } from "instantsearch.js";
 import { USER_ROLES } from "@/models/User";
+import { useEffect } from "react";
+import UpVoteIcon from "../ui/icons/UpVoteIcon";
+import CommentIcon from "../ui/icons/CommentIcon";
+import { APP_NAME } from "@/shared/constants";
+import { useNavigate } from "react-router-dom";
+import { useCommunity } from "@/contexts/CommunityContext";
 interface Props {
   post: ICommunityPost | Hit<BaseHit>;
   selectedPost: string | null;
@@ -38,9 +43,34 @@ interface Props {
 }
 
 function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const { openShareDialog } = useShareLink();
   const { openReportDialog } = useReportPost();
+  const { votePost, hasUserVotedOnPost } = useCommunity();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !isAuthenticated) return;
+    hasUserVotedOnPost(post.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, post.id, user]);
+
+  async function vote() {
+    if (!user || !isAuthenticated) {
+      loginFirst();
+      return;
+    }
+
+    await votePost(post as ICommunityPost);
+  }
+
+  function loginFirst() {
+    // save return url
+    localStorage.setItem(APP_NAME + "-return-url", ROUTES.community);
+    navigate(ROUTES.login);
+  }
+
   return (
     <div
       onClick={() => {
@@ -56,7 +86,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
           <div className="flex items-center">
             <div className="flex w-full items-center gap-1">
               <div className="flex w-full items-center text-lg font-semibold tracking-tighter">
-                <div className="mr-auto flex items-center gap-1 capitalize">
+                <div className="mr-auto flex cursor-pointer items-center gap-1 capitalize">
                   {post._highlightResult ? (
                     <Highlight
                       attribute="user.name"
@@ -132,7 +162,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
             </div>
           </div>
         </div>
-        <div className="line-clamp-3 cursor-pointer text-sm text-muted-foreground">
+        <div className="line-clamp-3 cursor-pointer text-sm text-muted-foreground first-letter:uppercase">
           {post._highlightResult ? (
             <Highlight
               attribute="content"
@@ -186,9 +216,18 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                 : "text-muted-foreground",
             )}
           >
-            <WTooltip content="Upvote">
-              <div className="flex cursor-pointer items-center justify-center hover:text-foreground">
-                <UpVoteIcon className="mr-2 size-3 stroke-1" />
+            <WTooltip content={post.isUpVoted ? "Downvote" : "Upvote"}>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  vote();
+                }}
+                className={cn(
+                  "flex cursor-pointer select-none items-center justify-center gap-2 text-xs transition-colors duration-300 hover:text-foreground",
+                  post.isUpVoted && "text-orange-500 hover:text-orange-500",
+                )}
+              >
+                <UpVoteIcon className="size-3" />
                 {post.votesCount || 0}
               </div>
             </WTooltip>
@@ -197,17 +236,9 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
                 onClick={() => {
                   onSelect(post.id as string);
                 }}
-                className="flex cursor-pointer items-center justify-center hover:text-foreground"
+                className="flex cursor-pointer items-center justify-center gap-2 text-xs hover:text-foreground"
               >
-                <svg
-                  className="mr-2 size-3 stroke-1"
-                  fill="currentColor"
-                  icon-name="comment-outline"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M7.725 19.872a.718.718 0 0 1-.607-.328.725.725 0 0 1-.118-.397V16H3.625A2.63 2.63 0 0 1 1 13.375v-9.75A2.629 2.629 0 0 1 3.625 1h12.75A2.63 2.63 0 0 1 19 3.625v9.75A2.63 2.63 0 0 1 16.375 16h-4.161l-4 3.681a.725.725 0 0 1-.489.191ZM3.625 2.25A1.377 1.377 0 0 0 2.25 3.625v9.75a1.377 1.377 0 0 0 1.375 1.375h4a.625.625 0 0 1 .625.625v2.575l3.3-3.035a.628.628 0 0 1 .424-.165h4.4a1.377 1.377 0 0 0 1.375-1.375v-9.75a1.377 1.377 0 0 0-1.374-1.375H3.625Z"></path>
-                </svg>
+                <CommentIcon className="size-3" />
                 {post.commentsCount || 0}
               </div>
             </WTooltip>

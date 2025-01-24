@@ -41,18 +41,26 @@ exports.onPostDeleted = onDocumentDeleted("/posts/{postId}", async (event) => {
   // Get reference to the comments collection of deleted post
   const postId = event.params.postId;
   const commentsRef = db.collection(`posts/${postId}/comments`);
-
-  // Get all comments in the post
-  const commentsSnapshot = await commentsRef.get();
-
-  // If there are no comments, return early
-  if (commentsSnapshot.empty) return null;
+  const votesRef = db.collection(`posts/${postId}/votes`);
 
   // Create a batch operation
   const batch = db.batch();
 
+  // Delete comments sub-collection
+  // Get all comments in the post
+  const commentsSnapshot = await commentsRef.get();
+
   // Add each comment deletion to the batch
   commentsSnapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+
+  // Delete votes sub-collection
+  // Get all votes in the post
+  const votesSnapshot = await votesRef.get();
+
+  // Add each vote deletion to the batch
+  votesSnapshot.docs.forEach((doc) => {
     batch.delete(doc.ref);
   });
 
@@ -100,13 +108,101 @@ exports.onCommentDeleted = onDocumentDeleted(
   async (event) => {
     if (!event.data) return null;
 
+    // Get reference to the parent post document and the votes collection
+    const postId = event.params.postId;
+    const commentId = event.params.commentId;
+    const postRef = event.data.ref.parent.parent;
+    const votesRef = db.collection(
+      `posts/${postId}/comments/${commentId}/votes`,
+    );
+
+    // Create a batch operation
+    const batch = db.batch();
+
+    if (postRef)
+      // Update the post document
+      batch.update(postRef, {
+        commentsCount: FieldValue.increment(-1),
+      });
+
+    // Delete votes sub-collection
+    // Get all votes in the post
+    const votesSnapshot = await votesRef.get();
+
+    // Add each vote deletion to the batch
+    votesSnapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    // Commit the batch
+    return batch.commit();
+  },
+);
+
+// Listens for new vote added to /posts/{postId}/votes/{userId}
+exports.onPostVoteCreated = onDocumentCreated(
+  "/posts/{postId}/votes/{userId}",
+  async (event) => {
+    if (!event.data) return null;
+
     // Get reference to the parent post document
     const postRef = event.data.ref.parent.parent;
     if (!postRef) return null;
 
     // Update the post document
     return postRef.update({
-      commentsCount: FieldValue.increment(-1),
+      votesCount: FieldValue.increment(1),
+    });
+  },
+);
+
+// Listens for vote deleted to /posts/{postId}/votes/{userId}
+exports.onPostVoteDeleted = onDocumentDeleted(
+  "/posts/{postId}/votes/{userId}",
+  async (event) => {
+    if (!event.data) return null;
+
+    // Get reference to the parent post document
+    const postRef = event.data.ref.parent.parent;
+    if (!postRef) return null;
+
+    // Update the post document
+    return postRef.update({
+      votesCount: FieldValue.increment(-1),
+    });
+  },
+);
+
+// Listens for new vote added to /posts/{postId}/comments/{commentId}/votes/{userId}
+exports.onCommentVoteCreated = onDocumentCreated(
+  "/posts/{postId}/comments/{commentId}/votes/{userId}",
+  async (event) => {
+    if (!event.data) return null;
+
+    // Get reference to the parent post document
+    const postRef = event.data.ref.parent.parent;
+    if (!postRef) return null;
+
+    // Update the post document
+    return postRef.update({
+      votesCount: FieldValue.increment(1),
+    });
+  },
+);
+
+// Listens for vote deleted to /posts/{postId}/comments/{commentId}/votes/{userId}
+exports.onCommentVoteDeleted = onDocumentDeleted(
+  "/posts/{postId}/comments/{commentId}/votes/{userId}",
+  async (event) => {
+    if (!event.data) return null;
+
+    // Get reference to the parent post document
+    const postRef = event.data.ref.parent.parent;
+    if (!postRef) return null;
+
+    // Update the post document
+    return postRef.update({
+      votesCount: FieldValue.increment(-1),
     });
   },
 );
