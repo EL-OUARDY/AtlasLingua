@@ -94,7 +94,7 @@ function SideBar() {
             content="Settings"
           >
             <NavLink
-              to={ROUTES.settings.general}
+              to={ROUTES.settings.profile}
               className="flex items-center gap-4 rounded-xl py-2 text-muted-foreground outline-none hover:text-foreground"
             >
               <Settings className="size-6" />

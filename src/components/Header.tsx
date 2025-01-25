@@ -152,13 +152,7 @@ function Header() {
                 Contact
               </DropdownMenuItem>
             </Link>
-            {user && (
-              <Link to={ROUTES.settings.general}>
-                <DropdownMenuItem className="cursor-pointer">
-                  Settings
-                </DropdownMenuItem>
-              </Link>
-            )}
+
             <DropdownMenuSeparator />
             {!user && (
               <DropdownMenuItem onClick={loginClick} className="cursor-pointer">

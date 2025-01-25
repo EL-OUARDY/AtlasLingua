@@ -4,13 +4,7 @@ import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
-import {
-  CheckCircle2Icon,
-  Loader2,
-  MoreVertical,
-  Settings2,
-  User,
-} from "lucide-react";
+import { CheckCircle2Icon, Loader2, MoreVertical, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -294,10 +288,6 @@ function PostForm({ postId = null }: Props) {
                         <Link to={ROUTES.settings.profile}>Profile</Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Settings2 className="mr-2 h-4 w-4" />
-                        <Link to={ROUTES.settings.general}>Settings</Link>
-                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}

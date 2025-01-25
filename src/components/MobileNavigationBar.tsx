@@ -42,7 +42,7 @@ function MobileNavigationBar() {
         <span className="sr-only">Learn</span>
       </NavLink>
       <NavLink
-        to={ROUTES.settings.general}
+        to={ROUTES.settings.profile}
         className="flex flex-1 justify-center gap-4 rounded-lg border border-secondary px-2.5 py-2 text-muted-foreground hover:text-foreground"
       >
         <Settings className="size-6" />

@@ -19,7 +19,6 @@ import Settings from "./components/pages/Settings";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { APP_NAME } from "@/shared/constants";
 import ProfileSettings from "./components/pages/settings/ProfileSettings";
-import GeneralSettings from "./components/pages/settings/GeneralSettings";
 import AppearanceSettings from "./components/pages/settings/AppearanceSettings";
 import NotificationSettings from "./components/pages/settings/NotificationSettings";
 import TranslateText from "./components/translator/TranslateTexts";
@@ -83,7 +82,7 @@ function App() {
                   element={<ContributionGuidelines />}
                 />
                 <Route path={ROUTES.settings.general} element={<Settings />}>
-                  <Route index element={<GeneralSettings />} />
+                  <Route index element={<ProfileSettings />} />
                   <Route
                     path={ROUTES.settings.profile}
                     element={<ProfileSettings />}

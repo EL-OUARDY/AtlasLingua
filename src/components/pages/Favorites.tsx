@@ -13,7 +13,7 @@ import { ROUTES } from "@/routes/routes";
 import { APP_NAME } from "@/shared/constants";
 import FavoriteCardSkeleton from "../skeletons/FavoriteCardSkeleton";
 
-function Favorites({ fetchLimit = 30 }: { fetchLimit: number }) {
+function Favorites({ fetchLimit = 30 }: { fetchLimit?: number }) {
   const [favorites, setFavorites] = useState<IFavorite[]>();
   const [searchQuery, setSearchQuery] = useState<string>("");
 

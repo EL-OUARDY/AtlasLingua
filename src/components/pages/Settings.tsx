@@ -5,10 +5,6 @@ import { ROUTES } from "@/routes/routes";
 function Settings() {
   const navLinks = [
     {
-      title: "General",
-      href: ROUTES.settings.general,
-    },
-    {
       title: "Profile",
       href: ROUTES.settings.profile,
     },
