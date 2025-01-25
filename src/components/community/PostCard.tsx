@@ -52,7 +52,7 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
 
   useEffect(() => {
     if (!user || !isAuthenticated) return;
-    hasUserVotedOnPost(post.id);
+    if (post.isUpVoted === undefined) hasUserVotedOnPost(post.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, post.id, user]);
 

@@ -45,7 +45,7 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
 
   useEffect(() => {
     if (!user || !isAuthenticated) return;
-    hasUserVotedOnComment(comment.id);
+    if (comment.isUpVoted === undefined) hasUserVotedOnComment(comment.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, post.id, user]);
 
@@ -97,7 +97,7 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
               <div
                 onClick={() => vote(comment)}
                 className={cn(
-                  "flex cursor-pointer items-center justify-center hover:text-foreground",
+                  "flex cursor-pointer select-none items-center justify-center hover:text-foreground",
                   comment.isUpVoted && "text-orange-500 hover:text-orange-500",
                 )}
               >

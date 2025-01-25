@@ -176,15 +176,16 @@ function Community() {
                   onEdit={showEditPostForm}
                 />
               )}
+
               {selectedPostId && (
                 <div className="absolute bottom-4 right-4 hidden md:flex">
                   <WTooltip side="top" content="New post">
-                    <a
+                    <span
                       onClick={showNewPostForm}
-                      className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center shadow-lg`}
+                      className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center !rounded-full shadow-lg`}
                     >
                       <SquarePen className="size-4 text-muted-foreground hover:text-primary md:size-5" />
-                    </a>
+                    </span>
                   </WTooltip>
                 </div>
               )}

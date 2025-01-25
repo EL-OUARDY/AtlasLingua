@@ -82,6 +82,7 @@ function PostsList({ onPostSelected, selectedPostId, onEdit }: Props) {
           onAbort={() => setPostToDelete(null)}
           isOpen={!!postToDelete}
         />
+        <div className="invisible hidden h-14 md:flex"></div>
         <ScrollBar orientation="horizontal" className="cursor-grab" />
       </ScrollArea>
     </>

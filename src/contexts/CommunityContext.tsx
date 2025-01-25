@@ -260,16 +260,16 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       const postRef = doc(db, "posts", postId);
       const commentsRef = collection(postRef, "comments");
 
-      // Create query to get most recent x number of comments, ordered by 'date' descending
+      // Create query to get most recent x number of comments, ordered by 'date' ascending
       // If we already have a "lastDoc", we use startAfter() to get the next page
       const commentsQuery = lastFetchedCommentDoc.current
         ? query(
             commentsRef,
-            orderBy("date", "desc"),
+            orderBy("date", "asc"),
             startAfter(lastFetchedCommentDoc.current),
             limit(fetchLimit),
           )
-        : query(commentsRef, orderBy("date", "desc"), limit(fetchLimit));
+        : query(commentsRef, orderBy("date", "asc"), limit(fetchLimit));
 
       const snapshot = await getDocs(commentsQuery);
 

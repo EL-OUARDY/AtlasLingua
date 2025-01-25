@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useEffect, useState } from "react";
 import {
   CheckCircle2Icon,
   Edit3Icon,
   Flag,
+  MessageCirclePlusIcon,
   MoreVertical,
   ReplyAllIcon,
   Share2Icon,
@@ -95,8 +96,8 @@ function SinglePost({ postId, onEdit }: Props) {
 
   useEffect(() => {
     if (!user || !isAuthenticated) return;
-    if (post) hasUserVotedOnPost(postId);
-  }, [post]);
+    if (post && post.isUpVoted === undefined) hasUserVotedOnPost(postId);
+  }, [user, isAuthenticated, post]);
 
   async function vote() {
     if (!user || !isAuthenticated) {
@@ -254,7 +255,7 @@ function SinglePost({ postId, onEdit }: Props) {
                           vote();
                         }}
                         className={cn(
-                          "flex cursor-pointer items-center justify-center hover:text-foreground",
+                          "flex cursor-pointer select-none items-center justify-center hover:text-foreground",
                           post.isUpVoted &&
                             "text-orange-500 hover:text-orange-500",
                         )}
@@ -341,6 +342,7 @@ function SinglePost({ postId, onEdit }: Props) {
                 )}
               </div>
             </div>
+            <div className="invisible h-10"></div>
           </ScrollArea>
 
           {isCommentFormVisible && (
@@ -379,6 +381,16 @@ function SinglePost({ postId, onEdit }: Props) {
         onAbort={() => setShowDeletePostDialog(false)}
         isOpen={showDeletePostDialog}
       />
+      {!isCommentFormVisible && (
+        <div className="absolute bottom-4 right-4">
+          <span
+            onClick={() => setIsCommentFormVisible(true)}
+            className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center !rounded-full shadow-lg`}
+          >
+            <MessageCirclePlusIcon className="size-4 text-muted-foreground hover:text-primary md:size-5" />
+          </span>
+        </div>
+      )}
     </div>
   );
 }
