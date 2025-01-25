@@ -70,6 +70,14 @@ class authService {
 
     return { request, cancel: () => controller.abort() };
   }
+
+  updateUser(data: Partial<IUser>) {
+    const controller = new AbortController();
+    const request = apiClient.post("/auth/update", data, {
+      signal: controller.signal,
+    });
+    return { request, cancel: () => controller.abort() };
+  }
 }
 
 export default new authService();

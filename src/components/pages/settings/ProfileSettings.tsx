@@ -19,35 +19,84 @@ import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { AxiosError, CanceledError } from "axios";
+import { toast } from "sonner";
+import authService from "@/services/authService";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
+  email: z.string().email({ message: "Invalid email address" }),
   bio: z.string().max(255).optional(),
+  password: z
+    .string()
+    .optional()
+    .refine((val) => !val || val.length >= 8, {
+      message: "Password must be at least 8 characters",
+    }),
 });
 
 type ProfileFormValues = z.infer<typeof FormSchema>;
 
 function ProfileSettings() {
-  const { user } = useUser();
+  const { user, updateUserProfile } = useUser();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // from database
-  const defaultValues: Partial<ProfileFormValues> = {
+  const defaultValues: ProfileFormValues = {
     name: user?.name || "",
+    email: user?.email || "",
     bio: user?.bio || "",
+    password: "",
   };
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: defaultValues,
   });
 
-  const { setValue } = form;
+  const { setValue, reset, formState } = form;
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+  function onSubmit(data: ProfileFormValues) {
+    setIsSubmitting(true);
+    const { request } = authService.updateUser(data);
+    request
+      .then(() => {
+        // Update user
+        updateUserProfile(data);
+        reset();
+        toast.error("Profile updated successfully", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      })
+      .catch((err: AxiosError) => {
+        if (err instanceof CanceledError) return;
+        const message = (err.response?.data as { message?: string })?.message;
+        toast.error(
+          message || "Something went wrong. Your profile couldn't be saved!",
+          {
+            action: {
+              label: "Hide",
+              onClick: () => {},
+            },
+          },
+        );
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
 
   function loginFirst() {
@@ -60,6 +109,7 @@ function ProfileSettings() {
   useEffect(() => {
     if (user) {
       setValue("name", user?.name);
+      setValue("email", user?.email || "");
       setValue("bio", user?.bio || "");
     }
   }, [setValue, user]);
@@ -114,24 +164,28 @@ function ProfileSettings() {
                   </FormItem>
                 )}
               />
-              <div className="space-y-2">
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Email
-                </label>
-                <Input
-                  disabled
-                  type="email"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  placeholder={`user@${APP_NAME.toLowerCase()}.com`}
-                  value={user?.email}
-                />
-                <p
-                  id=":r1rr:-form-item-description"
-                  className="text-sm text-muted-foreground"
-                >
-                  This where you'll receive notifications form us.
-                </p>
-              </div>
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={`user@${APP_NAME.toLowerCase()}.com`}
+                        autoComplete="on"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      This where you'll receive notifications form us.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="bio"
@@ -149,8 +203,56 @@ function ProfileSettings() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-fit">
-                Save changes
+
+              <Accordion
+                type="single"
+                collapsible
+                className="w-full"
+                onValueChange={() => setValue("password", "")}
+              >
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="pt-0 text-sm">
+                    Change Password
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Enter your new password"
+                              autoComplete="new-password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Enter a strong password that you haven't used
+                            before.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              <Button
+                disabled={isSubmitting || !formState.isDirty}
+                type="submit"
+                className="ml-auto"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
+                  </>
+                ) : (
+                  "Save changes"
+                )}
               </Button>
             </form>
           </Form>

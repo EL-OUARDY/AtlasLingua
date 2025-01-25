@@ -13,8 +13,7 @@ from flask_jwt_extended import (
 import os
 from datetime import timedelta
 
-from app.schemas.user_schema import user_schema
-from app.schemas.login_schema import login_schema
+from app.schemas.user_schema import user_schema, login_schema, register_schema
 from app.services.auth_service import AuthService
 
 from app import oauth
@@ -30,16 +29,16 @@ bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 @bp.route("/register", methods=["POST"])
 def register():
     # validate posted data
-    errors = user_schema.validate(request.json)
+    errors = register_schema.validate(request.json)
     if errors:
         return jsonify(errors), 400
 
-    user_data = user_schema.load(request.json)
+    user_data = register_schema.load(request.json)
 
     user = AuthService.register_user(
         user_data["name"], user_data["email"], user_data["password"]
     )
-    return user_schema.dump(user), 201
+    return register_schema.dump(user), 201
 
 
 @bp.route("/login", methods=["POST"])
@@ -187,3 +186,32 @@ def reset_password():
     # Update the user's password
     AuthService.update_user_password(user, new_password)
     return jsonify({"message": "Password updated successfully"}), 200
+
+
+@bp.route("/update", methods=["POST"])
+@jwt_required()
+def update():
+    # validate posted data
+    data = request.get_json()
+    errors = user_schema.validate(data)
+    if errors:
+        return jsonify(message="Failed to update user profile"), 400
+
+    # check if changing user's email possible
+    current_user_id = get_jwt_identity()
+    user = AuthService.get_user_by_id(current_user_id)
+    if user.email != data["email"] and AuthService.get_user_by_email(
+        data["email"]
+    ):
+        return (
+            jsonify(
+                message="The email is already registered with another account"
+            ),
+            400,
+        )
+
+    try:
+        AuthService.update_user(user, data)
+        return jsonify(message="Updated successfully"), 200
+    except Exception as e:
+        return jsonify(message="Failed to update user profile"), 400

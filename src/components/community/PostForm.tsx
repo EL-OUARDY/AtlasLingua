@@ -243,6 +243,16 @@ function PostForm({ postId = null }: Props) {
     navigate(ROUTES.login);
   }
 
+  function handleTextareaKeyDown(
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) {
+    // check if Control key (or Command key on macOS) is held down and Enter is pressed
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      // submit the form
+      form.handleSubmit(onSubmit)();
+    }
+  }
+
   return (
     <div className="relative flex h-full w-full min-w-[180px] flex-col rounded-lg border p-4">
       <div className="flex max-h-full flex-1 flex-col">
@@ -324,6 +334,7 @@ function PostForm({ postId = null }: Props) {
                           id="post-content"
                           className="h-full p-4 text-sm no-ring"
                           placeholder={`What's in your mind?`}
+                          onKeyDown={handleTextareaKeyDown}
                         />
                       </FormControl>
                       <FormMessage />
@@ -349,7 +360,7 @@ function PostForm({ postId = null }: Props) {
                             id="anonymous"
                             aria-label="post anonymously"
                           />{" "}
-                          Share anonymously
+                          Post privately
                         </Label>
                       </FormControl>
                     </FormItem>

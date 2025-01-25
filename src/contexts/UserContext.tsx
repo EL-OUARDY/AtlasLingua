@@ -11,6 +11,7 @@ interface IUserContext {
   user: IUser | undefined;
   setUser: (user: IUser | undefined) => void;
   isAuthenticated: boolean;
+  updateUserProfile: (user: Partial<IUser>) => void;
 }
 
 const UserContext = React.createContext<IUserContext>({} as IUserContext);
@@ -86,12 +87,17 @@ export function UserProvider({ children }: Props) {
     return () => unsubscribe();
   }, []);
 
+  function updateUserProfile(newUser: Partial<IUser>) {
+    setUser((prev) => ({ ...(prev as IUser), ...newUser }));
+  }
+
   return (
     <UserContext.Provider
       value={{
         user,
         setUser,
         isAuthenticated,
+        updateUserProfile,
       }}
     >
       {children}

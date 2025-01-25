@@ -3,12 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   CheckCircle2Icon,
   Edit3Icon,
   Flag,
-  MessageCirclePlusIcon,
+  MessageSquareMoreIcon,
   MoreVertical,
   ReplyAllIcon,
   Share2Icon,
@@ -84,6 +84,18 @@ function SinglePost({ postId, onEdit }: Props) {
 
   const [, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
+
+  function scrollToEnd() {
+    if (scrollAreaRef.current) {
+      const scrollArea = scrollAreaRef.current.children[1];
+      scrollArea.scrollTo({
+        top: scrollArea.scrollHeight,
+        behavior: "instant",
+      });
+    }
+  }
 
   useEffect(() => {
     fetchPost(postId);
@@ -210,8 +222,14 @@ function SinglePost({ postId, onEdit }: Props) {
                   </DropdownMenu>
                 </div>
                 {post.date && (
-                  <div className="text-xs text-muted-foreground">
-                    {(post.date as Timestamp).toDate().toLocaleString()}
+                  <div
+                    className="text-xs text-muted-foreground"
+                    title={(post.date as Timestamp).toDate().toLocaleString()}
+                  >
+                    {formatDistanceToNow(
+                      (post.date as Timestamp).toDate().toLocaleString(),
+                      { addSuffix: true },
+                    )}
                     {post.hasBeenEdited && <span> • Edited</span>}
                   </div>
                 )}
@@ -219,7 +237,10 @@ function SinglePost({ postId, onEdit }: Props) {
             </div>
           </div>
           <Separator />
-          <ScrollArea className="overflow-auto whitespace-pre-wrap pt-4 text-sm">
+          <ScrollArea
+            ref={scrollAreaRef}
+            className="overflow-auto whitespace-pre-wrap pt-4 text-sm"
+          >
             <div className="flex h-full flex-col gap-4">
               <div className="w-full rounded-lg border-0 border-l-2 border-primary/50 bg-background p-2 text-muted-foreground dark:bg-muted/40">
                 <div className="flex flex-col gap-2">
@@ -242,7 +263,10 @@ function SinglePost({ postId, onEdit }: Props) {
                 </div>
                 <Separator className="mb-2 mt-3" />
                 <div className="flex items-center">
-                  <div className="text-xs text-muted-foreground">
+                  <div
+                    className="text-xs text-muted-foreground"
+                    title={(post.date as Timestamp).toDate().toLocaleString()}
+                  >
                     {formatDistanceToNow(
                       (post.date as Timestamp).toDate().toLocaleString(),
                       { addSuffix: true },
@@ -353,7 +377,10 @@ function SinglePost({ postId, onEdit }: Props) {
                   post={post}
                   comment={commentToUpdate}
                   mentionedUser={mentionedUser}
-                  onCommentCreated={resetCommentState}
+                  onCommentCreated={() => {
+                    resetCommentState();
+                    scrollToEnd();
+                  }}
                   onCommentUpdated={resetCommentState}
                   onClose={resetCommentState}
                 />
@@ -387,7 +414,7 @@ function SinglePost({ postId, onEdit }: Props) {
             onClick={() => setIsCommentFormVisible(true)}
             className={`${buttonVariants({ variant: "outline", size: "icon" })} flex !size-12 cursor-pointer items-center justify-center !rounded-full shadow-lg`}
           >
-            <MessageCirclePlusIcon className="size-4 text-muted-foreground hover:text-primary md:size-5" />
+            <MessageSquareMoreIcon className="size-4 text-muted-foreground hover:text-primary md:size-5" />
           </span>
         </div>
       )}

@@ -131,3 +131,13 @@ class AuthService:
     def update_user_password(user, new_password):
         user.set_password(new_password)
         db.session.commit()
+
+    @staticmethod
+    def update_user(user, data):
+        user.name = data["name"]
+        user.email = data["email"]
+        user.bio = data["bio"]
+        if data.get("password"):
+            user.set_password(data["password"])
+        # avatar
+        db.session.commit()

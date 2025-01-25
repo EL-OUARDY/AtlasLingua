@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 const resetPasswordSchema = z.object({
   newPassword: z
     .string()
-    .min(6, { message: "Use a strong password (minimum 8 letters/symbols)" }),
+    .min(8, { message: "Use a strong password (minimum 8 letters/symbols)" }),
 });
 
 function ResetPassword() {

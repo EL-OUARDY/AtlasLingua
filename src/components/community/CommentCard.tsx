@@ -84,7 +84,10 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
       <span className="first-letter:uppercase">{comment.content}</span>
       <Separator className="mb-2 mt-4" />
       <div className="flex items-center">
-        <div className="text-xs text-muted-foreground">
+        <div
+          className="text-xs text-muted-foreground"
+          title={(comment.date as Timestamp).toDate().toLocaleString()}
+        >
           {formatDistanceToNow(
             (comment.date as Timestamp).toDate().toLocaleString(),
             { addSuffix: true },

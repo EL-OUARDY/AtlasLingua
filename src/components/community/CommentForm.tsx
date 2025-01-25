@@ -137,9 +137,7 @@ function CommentForm({
             avatar: user.avatar || "",
           },
           mentionedUser:
-            mentionedUser &&
-            !isAnonymousUsername(mentionedUser.name as string) &&
-            mentionedUser.id !== user.id
+            mentionedUser && mentionedUser.id !== user.id
               ? mentionedUser.name
               : "",
         };
@@ -177,6 +175,16 @@ function CommentForm({
     navigate(ROUTES.login);
   }
 
+  function handleTextareaKeyDown(
+    event: React.KeyboardEvent<HTMLTextAreaElement>,
+  ) {
+    // check if Control key (or Command key on macOS) is held down and Enter is pressed
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      // submit the form
+      form.handleSubmit(onSubmit)();
+    }
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -212,6 +220,7 @@ function CommentForm({
                     id="comment-content"
                     className="p-4 text-sm no-ring"
                     placeholder="Write your comment"
+                    onKeyDown={handleTextareaKeyDown}
                   />
                 </FormControl>
                 <FormMessage />
@@ -237,7 +246,7 @@ function CommentForm({
                         id="anonymous"
                         aria-label="Comment anonymously"
                       />{" "}
-                      Share anonymously
+                      Comment privately
                     </Label>
                   </FormControl>
                 </FormItem>
