@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { APP_NAME } from "@/shared/constants";
 import { ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { AxiosError, CanceledError } from "axios";
 import { toast } from "sonner";
 import authService from "@/services/authService";
@@ -51,6 +51,7 @@ function ProfileSettings() {
   const { user, updateUserProfile } = useUser();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
 
   // from database
   const defaultValues: ProfileFormValues = {
@@ -119,7 +120,6 @@ function ProfileSettings() {
       {!user ? (
         <div className="flex size-full items-center justify-center text-center">
           <div className="flex flex-col items-center gap-4">
-            <p className="">Please log in to edit your profile.</p>
             <Button
               variant={"outline"}
               className="w-full max-w-48"
@@ -127,6 +127,9 @@ function ProfileSettings() {
             >
               Login
             </Button>
+            <p className="text-sm text-muted-foreground">
+              Please log in to edit your profile.
+            </p>
           </div>
         </div>
       ) : (
@@ -221,12 +224,29 @@ function ProfileSettings() {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <Input
-                              type="password"
-                              placeholder="Enter your new password"
-                              autoComplete="new-password"
-                              {...field}
-                            />
+                            <div className="flex gap-1">
+                              <Input
+                                className="no-ring"
+                                type={isPasswordShown ? "text" : "password"}
+                                placeholder="Enter your new password"
+                                autoComplete="new-password"
+                                {...field}
+                              />
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                type="button"
+                                onClick={() =>
+                                  setIsPasswordShown(!isPasswordShown)
+                                }
+                              >
+                                {isPasswordShown ? (
+                                  <EyeOffIcon className="size-4 text-muted-foreground" />
+                                ) : (
+                                  <EyeIcon className="size-4 text-muted-foreground" />
+                                )}
+                              </Button>
+                            </div>
                           </FormControl>
                           <FormDescription>
                             Enter a strong password that you haven't used
