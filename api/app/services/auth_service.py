@@ -1,6 +1,7 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
 from app.models.user import User
 from app import db, bcrypt
+from app.services.firebase_service import FirebaseService
 from app.utils.helpers import generate_password
 import os
 import smtplib
@@ -15,6 +16,8 @@ class AuthService:
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
+        # Save user to Firebase
+        FirebaseService.set_user(user)
         return user
 
     @staticmethod
@@ -50,11 +53,12 @@ class AuthService:
             db.session.add(user)
         else:
             # Update existing user details
-            user.name = user_info["name"]
             user.avatar = user_info["picture"]
             # Other updates
 
         db.session.commit()
+        # Save user to Firebase
+        FirebaseService.set_user(user)
         return user
 
     @staticmethod
@@ -141,3 +145,5 @@ class AuthService:
             user.set_password(data["password"])
         # avatar
         db.session.commit()
+        # Save user to Firebase
+        FirebaseService.set_user(user, update=True)
