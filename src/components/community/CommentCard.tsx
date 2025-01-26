@@ -45,17 +45,18 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
 
   useEffect(() => {
     if (!user || !isAuthenticated) return;
-    if (comment.isUpVoted === undefined) hasUserVotedOnComment(comment.id);
+    if (comment.isUpVoted === undefined)
+      hasUserVotedOnComment(comment.id, post.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, post.id, user]);
 
-  async function vote(comment: ICommunityComment) {
+  function vote(comment: ICommunityComment) {
     if (!user || !isAuthenticated) {
       loginFirst();
       return;
     }
 
-    await voteComment(comment);
+    voteComment(comment, post.id);
   }
 
   function loginFirst() {

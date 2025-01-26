@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ICommunityComment,
   ICommunityFilter,
@@ -5,26 +6,7 @@ import {
   IReportPost,
   SortOption,
 } from "@/models/Community";
-import { db } from "@/services/firebaseConfig";
-import {
-  collection,
-  query,
-  orderBy,
-  limit,
-  DocumentData,
-  getDocs,
-  QueryDocumentSnapshot,
-  startAfter,
-  getDoc,
-  doc,
-  addDoc,
-  Timestamp,
-  updateDoc,
-  deleteDoc,
-  where,
-  QueryConstraint,
-  setDoc,
-} from "firebase/firestore";
+
 import {
   createContext,
   ReactNode,
@@ -39,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { useUser } from "./UserContext";
 import type { BaseHit, Hit } from "instantsearch.js";
+import communityService from "@/services/communityService";
+import { Timestamp } from "firebase/firestore";
 interface ICommunityContext {
   posts: ICommunityPost[];
   updatePosts: (hits: Hit<BaseHit>[]) => void;
@@ -73,10 +57,13 @@ interface ICommunityContext {
   reportPost: (report: IReportPost) => Promise<void>;
   filter: ICommunityFilter;
   setFilter: (filter: ICommunityFilter) => void;
-  votePost: (_post: ICommunityPost) => Promise<void>;
-  hasUserVotedOnPost: (postId: string) => Promise<boolean>;
-  voteComment: (comment: ICommunityComment) => Promise<void>;
-  hasUserVotedOnComment: (commentId: string) => Promise<boolean>;
+  votePost: (_post: ICommunityPost) => void;
+  hasUserVotedOnPost: (postId: string) => Promise<boolean | undefined>;
+  voteComment: (comment: ICommunityComment, postId: string) => void;
+  hasUserVotedOnComment: (
+    commentId: string,
+    postId: string,
+  ) => Promise<boolean | undefined>;
 }
 
 const CommunityContext = createContext<ICommunityContext>(
@@ -96,19 +83,16 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   const [posts, setPosts] = useState<ICommunityPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState<boolean>(true);
   const [hasMorePosts, setHasMorePosts] = useState<boolean>(true);
-  // Store the "last post document" fetched to implement pagination
-  const lastFetchedPostDoc = useRef<QueryDocumentSnapshot<DocumentData> | null>(
-    null,
-  );
+  // Store the last fetched post to implement pagination
+  const lastFetchedPost = useRef<any>(null);
 
   const [post, setPost] = useState<ICommunityPost | null>();
   const [loadingSinglePost, setLoadingSinglePost] = useState<boolean>(true);
   const [comments, setComments] = useState<ICommunityComment[]>([]);
   const [loadingComments, setLoadingComments] = useState<boolean>(true);
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(true);
-  // Store the "last comment document" fetched to implement pagination
-  const lastFetchedCommentDoc =
-    useRef<QueryDocumentSnapshot<DocumentData> | null>(null);
+  // Store the last fetched comment to implement pagination
+  const lastFetchedComment = useRef<any>(null);
 
   const [filter, setFilter] = useState<ICommunityFilter>({
     searchQuery: "",
@@ -126,71 +110,37 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       searchQuery: "",
     });
 
+    if (filter.sortBy === SortOption.User) {
+      if (!user) {
+        navigate(ROUTES.login);
+      }
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter.sortBy]);
 
   function resetPosts() {
-    lastFetchedPostDoc.current = null;
+    lastFetchedPost.current = null;
     setPosts([]);
     fetchPosts();
   }
 
   async function fetchPosts() {
-    setLoadingPosts(true);
-
     try {
-      const postsRef = collection(db, "posts");
+      setLoadingPosts(true);
 
-      // Create query to get most recent x number of posts, ordered by 'date' descending
-      const constraints: QueryConstraint[] = [limit(fetchLimit)];
+      // Get posts
+      const { fetchedPosts, lastPost, isEmpty } =
+        await communityService.fetchPosts(
+          user,
+          filter,
+          fetchLimit,
+          lastFetchedPost?.current || null,
+        );
 
-      // Sort by latest posts
-      if (filter.sortBy === SortOption.Latest) {
-        constraints.push(orderBy("date", "desc"));
-      }
-
-      // Sort by popular posts
-      if (filter.sortBy === SortOption.Popular) {
-        // Get the timestamp for one month ago
-        const oneMonthAgo = Timestamp.fromDate(
-          new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        ); // 30 days ago
-        constraints.push(where("date", ">", oneMonthAgo));
-        constraints.push(orderBy("votesCount", "desc"));
-      }
-
-      // Sort by user's posts
-      if (filter.sortBy === SortOption.User) {
-        if (user) {
-          constraints.push(orderBy("date", "desc"));
-          constraints.push(where("user.id", "==", user.id));
-        } else {
-          navigate(ROUTES.login);
-        }
-      }
-
-      // Sort by unanswered posts
-      if (filter.sortBy === SortOption.Unanswered) {
-        constraints.push(orderBy("date", "desc"));
-        constraints.push(where("commentsCount", "==", 0));
-      }
-
-      // If we already have a "lastDoc", we use startAfter() to get the next page
-      if (lastFetchedPostDoc.current) {
-        constraints.push(startAfter(lastFetchedPostDoc.current));
-      }
-
-      const snapshot = await getDocs(query(postsRef, ...constraints));
-
-      if (!snapshot.empty) {
-        // Save the last document from this snapshot; used in next fetch
-        lastFetchedPostDoc.current = snapshot.docs[snapshot.docs.length - 1];
-
-        // Map snapshot docs to ICommunityPost type
-        const fetchedPosts: ICommunityPost[] = snapshot.docs.map((doc) => {
-          const data = doc.data() as Omit<ICommunityPost, "id">;
-          return { ...data, id: doc.id };
-        });
+      if (!isEmpty) {
+        // Save the last fetched post; used in next fetch
+        lastFetchedPost.current = lastPost;
 
         // If we get data equal to the the limit, we assume there's more data
         setHasMorePosts(fetchedPosts.length === fetchLimit);
@@ -214,7 +164,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   }
 
   async function fetchPost(postId: string) {
-    lastFetchedCommentDoc.current = null;
+    lastFetchedComment.current = null;
     setComments([]);
     const post = await getPost(postId);
     setPost(post);
@@ -222,23 +172,19 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   }
 
   async function getPost(postId: string): Promise<ICommunityPost | null> {
-    setLoadingSinglePost(true);
     try {
-      const postRef = doc(db, "posts", postId);
-      const postSnap = await getDoc(postRef);
+      setLoadingSinglePost(true);
+      const post = await communityService.getPost(postId);
 
-      if (postSnap.exists()) {
-        const data = postSnap.data() as Omit<ICommunityPost, "id">;
-        return { ...data, id: postSnap.id };
-      } else {
+      if (!post) {
         toast("Post not found!", {
           action: {
             label: "Hide",
             onClick: () => {},
           },
         });
-        return null;
       }
+      return post;
     } catch (error) {
       toast("Can't process your request. Please try again!", {
         action: {
@@ -253,37 +199,19 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   }
 
   async function fetchComments(postId: string) {
-    setLoadingComments(true);
-
     try {
-      // Reference the post document to get its comments subcollection
-      const postRef = doc(db, "posts", postId);
-      const commentsRef = collection(postRef, "comments");
-
-      // Create query to get most recent x number of comments, ordered by 'date' ascending
-      // If we already have a "lastDoc", we use startAfter() to get the next page
-      const commentsQuery = lastFetchedCommentDoc.current
-        ? query(
-            commentsRef,
-            orderBy("date", "asc"),
-            startAfter(lastFetchedCommentDoc.current),
-            limit(fetchLimit),
-          )
-        : query(commentsRef, orderBy("date", "asc"), limit(fetchLimit));
-
-      const snapshot = await getDocs(commentsQuery);
-
-      if (!snapshot.empty) {
-        // Save the last document from this snapshot; used in next fetch
-        lastFetchedCommentDoc.current = snapshot.docs[snapshot.docs.length - 1];
-
-        // Map snapshot docs to ICommunityComment type
-        const fetchedComments: ICommunityComment[] = snapshot.docs.map(
-          (doc) => {
-            const data = doc.data() as Omit<ICommunityComment, "id">;
-            return { ...data, id: doc.id };
-          },
+      setLoadingComments(true);
+      // Get comments
+      const { fetchedComments, lastComment, isEmpty } =
+        await communityService.fetchComments(
+          postId,
+          lastFetchedComment?.current || null,
+          fetchLimit,
         );
+
+      if (!isEmpty) {
+        // Save the last fetched comment; used in next fetch
+        lastFetchedComment.current = lastComment;
 
         // If we get data equal to the the limit, we assume there's more data
         setHasMoreComments(fetchedComments.length === fetchLimit);
@@ -309,59 +237,60 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   async function addPost(
     post: Omit<ICommunityPost, "id">,
   ): Promise<ICommunityPost> {
-    // Firestore reference
-    const postsRef = collection(db, "posts");
+    try {
+      // Add post
+      const id = await communityService.addPost(post);
 
-    // Add the document
-    const docRef = await addDoc(postsRef, post);
+      // Add the new post to the beginning of the list
+      const newPost: ICommunityPost = {
+        ...post,
+        id: id,
+        date: Timestamp.fromDate(new Date()),
+        _highlightResult: undefined,
+      };
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
 
-    // Add the new post to the beginning of the list
-    const newPost: ICommunityPost = {
-      ...post,
-      id: docRef.id,
-      date: Timestamp.fromDate(new Date()),
-      _highlightResult: undefined,
-    };
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
-
-    return newPost;
+      return newPost;
+    } catch (error) {
+      console.error("Failed to add post:", error);
+      throw error;
+    }
   }
 
   async function editPost(
     postId: string,
     updatedPostData: Partial<ICommunityPost>,
   ): Promise<ICommunityPost> {
-    // Reference to the specific post document
-    const postDocRef = doc(db, "posts", postId);
+    try {
+      // Update post
+      await communityService.editPost(postId, updatedPostData);
 
-    // Update the Firestore document
-    await updateDoc(postDocRef, updatedPostData);
+      // Update local state
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post.id === postId) {
+            // Merge the updated fields with the existing fields
+            return { ...post, ...updatedPostData, _highlightResult: undefined };
+          }
+          return post;
+        }),
+      );
 
-    // Update local state
-    setPosts((prevPosts) =>
-      prevPosts.map((post) => {
-        if (post.id === postId) {
-          // Merge the updated fields with the existing fields
-          return { ...post, ...updatedPostData, _highlightResult: undefined };
-        }
-        return post;
-      }),
-    );
-
-    const updatedPost: ICommunityPost = {
-      ...posts.find((p) => p.id === postId)!,
-      ...updatedPostData,
-    };
-    return updatedPost;
+      const updatedPost: ICommunityPost = {
+        ...posts.find((p) => p.id === postId)!,
+        ...updatedPostData,
+      };
+      return updatedPost;
+    } catch (error) {
+      console.error("Failed to update post:", error);
+      throw error;
+    }
   }
 
   async function deletePost(postId: string): Promise<void> {
     try {
-      // References to Firestore document
-      const postDocRef = doc(db, "posts", postId);
-
-      // Delete the post document
-      await deleteDoc(postDocRef);
+      // Delete post
+      await communityService.deletePost(postId);
 
       // Update local state
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -383,45 +312,44 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     postId: string,
     comment: Omit<ICommunityComment, "id">,
   ): Promise<ICommunityComment> {
-    // Reference to the specific post document
-    const postDocRef = doc(db, "posts", postId);
+    try {
+      // Add the new comment
+      const id = await communityService.addComment(postId, comment);
 
-    // Reference to the comments sub-collection of the specific post
-    const commentsRef = collection(postDocRef, "comments");
+      // Add the new comment to the end of the list
+      const newComment: ICommunityComment = {
+        ...comment,
+        id: id,
+        date: Timestamp.fromDate(new Date()),
+      };
+      setComments((prevComments) => [...prevComments, newComment]);
 
-    // Add the new comment to the comments sub-collection
-    const docRef = await addDoc(commentsRef, comment);
-
-    // Add the new comment to the end of the list
-    const newComment: ICommunityComment = {
-      ...comment,
-      id: docRef.id,
-      date: Timestamp.fromDate(new Date()),
-    };
-    setComments((prevComments) => [...prevComments, newComment]);
-
-    setPost((prevPost) => {
-      if (prevPost?.id === postId) {
-        return {
-          ...prevPost,
-          commentsCount: (prevPost.commentsCount || 0) + 1,
-        };
-      }
-      return prevPost;
-    });
-    setPosts((prevPosts) =>
-      prevPosts.map((post) => {
-        if (post.id === postId) {
+      setPost((prevPost) => {
+        if (prevPost?.id === postId) {
           return {
-            ...post,
-            commentsCount: (post.commentsCount || 0) + 1,
+            ...prevPost,
+            commentsCount: (prevPost.commentsCount || 0) + 1,
           };
         }
-        return post;
-      }),
-    );
+        return prevPost;
+      });
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post.id === postId) {
+            return {
+              ...post,
+              commentsCount: (post.commentsCount || 0) + 1,
+            };
+          }
+          return post;
+        }),
+      );
 
-    return newComment;
+      return newComment;
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      throw error;
+    }
   }
 
   async function editComment(
@@ -429,31 +357,30 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     commentId: string,
     updatedCommentData: Partial<ICommunityComment>,
   ): Promise<ICommunityComment> {
-    // Reference to the specific post document
-    const postDocRef = doc(db, "posts", postId);
+    try {
+      // Edit comment
+      await communityService.editComment(postId, commentId, updatedCommentData);
 
-    // Reference to the comments sub-collection of the specific post
-    const commentDocRef = doc(postDocRef, "comments", commentId);
+      // Update local state
+      setComments((prevComments) =>
+        prevComments.map((comment) => {
+          if (comment.id === commentId) {
+            // Merge the updated fields with the existing fields
+            return { ...comment, ...updatedCommentData };
+          }
+          return comment;
+        }),
+      );
 
-    // Update the Firestore document
-    await updateDoc(commentDocRef, updatedCommentData);
-
-    // Update local state
-    setComments((prevComments) =>
-      prevComments.map((comment) => {
-        if (comment.id === commentId) {
-          // Merge the updated fields with the existing fields
-          return { ...comment, ...updatedCommentData };
-        }
-        return comment;
-      }),
-    );
-
-    const updatedComment: ICommunityComment = {
-      ...comments.find((c) => c.id === commentId)!,
-      ...updatedCommentData,
-    };
-    return updatedComment;
+      const updatedComment: ICommunityComment = {
+        ...comments.find((c) => c.id === commentId)!,
+        ...updatedCommentData,
+      };
+      return updatedComment;
+    } catch (error) {
+      console.error("Failed to update comment:", error);
+      throw error;
+    }
   }
 
   async function deleteComment(
@@ -461,12 +388,8 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     commentId: string,
   ): Promise<void> {
     try {
-      // References to Firestore documents
-      const postDocRef = doc(db, "posts", postId);
-      const commentDocRef = doc(postDocRef, "comments", commentId);
-
-      // Delete the comment document
-      await deleteDoc(commentDocRef);
+      // Delete comment
+      await communityService.deleteComment(postId, commentId);
 
       // Update local state
       setComments((prevComments) =>
@@ -505,11 +428,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   }
 
   async function reportPost(report: IReportPost): Promise<void> {
-    // Firestore reference
-    const postsRef = collection(db, "post_reports");
-
-    // Add the document
-    await addDoc(postsRef, report);
+    await communityService.reportPost(report);
   }
 
   function updatePosts(hits: Hit<BaseHit>[]) {
@@ -530,67 +449,76 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
     setPosts(_posts);
   }
 
-  async function votePost(_post: ICommunityPost): Promise<void> {
+  async function votePost(_post: ICommunityPost) {
     if (!user || !isAuthenticated) {
       return;
     }
 
-    const voteRef = doc(db, `posts/${_post.id}/votes/${user.id}`);
+    try {
+      await communityService.votePost(_post, user.id as number);
 
-    // UpVote
-    if (!_post.isUpVoted) {
-      await setDoc(voteRef, { userId: user.id?.toString() });
-      setPosts((prevPosts) =>
-        prevPosts.map((p) => {
-          if (p.id === _post.id) {
-            return {
-              ...p,
-              votesCount: Math.max((p.votesCount || 0) + 1, 0),
-              isUpVoted: true,
-            };
-          }
-          return p;
-        }),
-      );
-      if (post && post.id === _post.id)
-        setPost({
-          ...post,
-          votesCount: Math.max((post.votesCount || 0) + 1, 0),
-          isUpVoted: true,
-        });
-    }
-    // DownVote
-    else {
-      await deleteDoc(voteRef);
-      setPosts((prevPosts) =>
-        prevPosts.map((p) => {
-          if (p.id === _post.id) {
-            return {
-              ...p,
-              votesCount: Math.max((p.votesCount || 0) - 1, 0),
-              isUpVoted: false,
-            };
-          }
-          return p;
-        }),
-      );
-      if (post && post.id === _post.id)
-        setPost({
-          ...post,
-          votesCount: Math.max((post.votesCount || 0) - 1, 0),
-          isUpVoted: false,
-        });
+      // UpVote
+      if (!_post.isUpVoted) {
+        setPosts((prevPosts) =>
+          prevPosts.map((p) => {
+            if (p.id === _post.id) {
+              return {
+                ...p,
+                votesCount: Math.max((p.votesCount || 0) + 1, 0),
+                isUpVoted: true,
+              };
+            }
+            return p;
+          }),
+        );
+        if (post && post.id === _post.id)
+          setPost({
+            ...post,
+            votesCount: Math.max((post.votesCount || 0) + 1, 0),
+            isUpVoted: true,
+          });
+      }
+      // DownVote
+      else {
+        setPosts((prevPosts) =>
+          prevPosts.map((p) => {
+            if (p.id === _post.id) {
+              return {
+                ...p,
+                votesCount: Math.max((p.votesCount || 0) - 1, 0),
+                isUpVoted: false,
+              };
+            }
+            return p;
+          }),
+        );
+        if (post && post.id === _post.id)
+          setPost({
+            ...post,
+            votesCount: Math.max((post.votesCount || 0) - 1, 0),
+            isUpVoted: false,
+          });
+      }
+    } catch (error) {
+      console.error("Operation failed", error);
+      throw error;
     }
   }
 
-  async function hasUserVotedOnPost(postId: string): Promise<boolean> {
+  async function hasUserVotedOnPost(
+    postId: string,
+  ): Promise<boolean | undefined> {
+    if (!user || !isAuthenticated) {
+      return;
+    }
     try {
-      // Reference the votes document
-      const voteDocRef = doc(db, `posts/${postId}/votes/${user?.id}`);
-      const docSnap = await getDoc(voteDocRef);
+      const exist = await communityService.hasUserVotedOnPost(
+        postId,
+        user.id as number,
+      );
 
       // Update posts
-      if (docSnap.exists()) {
+      if (exist) {
         setPosts((prevPosts) =>
           prevPosts.map((p) => {
             if (p.id === postId) return { ...p, isUpVoted: true };
@@ -602,68 +530,72 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         if (post && post.id === postId) setPost({ ...post, isUpVoted: true });
       }
 
-      return docSnap.exists();
+      return exist;
     } catch (error) {
       return false;
     }
   }
 
-  async function voteComment(comment: ICommunityComment): Promise<void> {
+  async function voteComment(comment: ICommunityComment, postId: string) {
     if (!user || !isAuthenticated) {
       return;
     }
 
-    const voteRef = doc(
-      db,
-      `posts/${post?.id}/comments/${comment.id}/votes/${user.id}`,
-    );
+    try {
+      await communityService.voteComment(comment, postId, user.id as number);
 
-    // UpVote
-    if (!comment.isUpVoted) {
-      await setDoc(voteRef, { userId: user.id?.toString() });
-
-      setComments((prevComments) =>
-        prevComments.map((p) => {
-          if (p.id === comment.id) {
-            return {
-              ...p,
-              votesCount: Math.max((p.votesCount || 0) + 1, 0),
-              isUpVoted: true,
-            };
-          }
-          return p;
-        }),
-      );
-    }
-    // DownVote
-    else {
-      await deleteDoc(voteRef);
-      setComments((prevComments) =>
-        prevComments.map((p) => {
-          if (p.id === comment.id) {
-            return {
-              ...p,
-              votesCount: Math.max((p.votesCount || 0) - 1, 0),
-              isUpVoted: false,
-            };
-          }
-          return p;
-        }),
-      );
+      // UpVote
+      if (!comment.isUpVoted) {
+        setComments((prevComments) =>
+          prevComments.map((p) => {
+            if (p.id === comment.id) {
+              return {
+                ...p,
+                votesCount: Math.max((p.votesCount || 0) + 1, 0),
+                isUpVoted: true,
+              };
+            }
+            return p;
+          }),
+        );
+      }
+      // DownVote
+      else {
+        setComments((prevComments) =>
+          prevComments.map((p) => {
+            if (p.id === comment.id) {
+              return {
+                ...p,
+                votesCount: Math.max((p.votesCount || 0) - 1, 0),
+                isUpVoted: false,
+              };
+            }
+            return p;
+          }),
+        );
+      }
+    } catch (error) {
+      console.error("Operation failed", error);
+      throw error;
     }
   }
 
-  async function hasUserVotedOnComment(commentId: string): Promise<boolean> {
+  async function hasUserVotedOnComment(
+    commentId: string,
+    postId: string,
+  ): Promise<boolean | undefined> {
+    if (!user || !isAuthenticated) {
+      return;
+    }
     try {
-      // Reference the votes document
-      const voteDocRef = doc(
-        db,
-        `posts/${post?.id}/comments/${commentId}/votes/${user?.id}`,
+      const exist = await communityService.hasUserVotedOnComment(
+        commentId,
+        postId,
+        user.id as number,
       );
-      const docSnap = await getDoc(voteDocRef);
 
       // Update comments
-      if (docSnap.exists()) {
+      if (exist) {
         setComments((prevComments) =>
           prevComments.map((c) => {
             if (c.id === commentId) return { ...c, isUpVoted: true };
@@ -672,7 +604,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         );
       }
 
-      return docSnap.exists();
+      return exist;
     } catch (error) {
       return false;
     }

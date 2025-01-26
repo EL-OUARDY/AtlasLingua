@@ -56,13 +56,13 @@ function PostCard({ post, selectedPost, onSelect, onDelete, onEdit }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, post.id, user]);
 
-  async function vote() {
+  function vote() {
     if (!user || !isAuthenticated) {
       loginFirst();
       return;
     }
 
-    await votePost(post as ICommunityPost);
+    votePost(post as ICommunityPost);
   }
 
   function loginFirst() {
