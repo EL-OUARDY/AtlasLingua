@@ -19,9 +19,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { APP_NAME } from "@/shared/constants";
 import { useUser } from "@/contexts/UserContext";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import communityService from "@/services/communityService";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
-  type: z.enum(["all", "community", "none"], {
+  notificationScope: z.enum(["all", "community", "none"], {
     required_error: "You need to select a notification type.",
   }),
   privacy: z
@@ -30,17 +34,14 @@ const FormSchema = z.object({
     })
     .default(true),
   communication_emails: z.boolean().default(true).optional(),
-  community_emails: z.boolean().default(true).optional(),
   update_emails: z.boolean().default(true).optional(),
 });
 
 type NotificationsFormValues = z.infer<typeof FormSchema>;
 
-// from database
 const defaultValues: Partial<NotificationsFormValues> = {
-  type: "all",
+  notificationScope: "all",
   communication_emails: true,
-  community_emails: true,
   update_emails: true,
   privacy: true,
 };
@@ -48,14 +49,59 @@ const defaultValues: Partial<NotificationsFormValues> = {
 function NotificationSettings() {
   const { user } = useUser();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues,
+    defaultValues: defaultValues,
   });
 
-  function onSubmit(data: NotificationsFormValues) {
-    console.log(data);
+  const { formState, setValue, reset } = form;
+
+  useEffect(() => {
+    if (user) {
+      const result = communityService.getNotificationSettings(
+        user.id as number,
+      );
+      result.then((data) => {
+        if (!data) return;
+        reset({
+          notificationScope: data.notificationScope || "all",
+          communication_emails: data.communication_emails ?? true,
+          update_emails: data.update_emails ?? true,
+          privacy: true,
+        });
+      });
+    }
+  }, [reset, setValue, user]);
+
+  async function onSubmit(data: NotificationsFormValues) {
+    const { privacy, ...settings } = data;
+    if (user && privacy) {
+      try {
+        setIsSubmitting(true);
+        await communityService.saveNotificationSettings(
+          settings,
+          user.id as number,
+        );
+        toast.error("Updated successfully", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+        reset(data);
+      } catch (error) {
+        toast.error("Something went wrong. Your settings couldn't be saved!", {
+          action: {
+            label: "Hide",
+            onClick: () => {},
+          },
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
   }
 
   function loginFirst() {
@@ -72,7 +118,6 @@ function NotificationSettings() {
       {!user ? (
         <div className="flex size-full items-center justify-center text-center">
           <div className="flex flex-col items-center gap-4">
-            <p className="">Log in to update your notification preferences.</p>
             <Button
               variant={"outline"}
               className="w-full max-w-48"
@@ -80,6 +125,9 @@ function NotificationSettings() {
             >
               Login
             </Button>
+            <p className="text-sm text-muted-foreground">
+              Log in to update your notification preferences.
+            </p>
           </div>
         </div>
       ) : (
@@ -95,14 +143,14 @@ function NotificationSettings() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
-                name="type"
+                name="notificationScope"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
                     <FormLabel>Notify me about...</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value}
                         name={field.name}
                         className="flex flex-col space-y-1"
                       >
@@ -136,9 +184,9 @@ function NotificationSettings() {
                 )}
               />
               <div className="lg:w-4/5">
-                <h3 className="mb-4 text-lg font-medium">
-                  Email Notifications
-                </h3>
+                <h4 className="mb-4 text-lg font-medium">
+                  Other Notifications
+                </h4>
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
@@ -163,29 +211,7 @@ function NotificationSettings() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="community_emails"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Community emails
-                          </FormLabel>
-                          <FormDescription>
-                            Receive emails related to community posts.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            name={field.name}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+
                   <FormField
                     control={form.control}
                     name="update_emails"
@@ -193,7 +219,7 @@ function NotificationSettings() {
                       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                         <div className="space-y-0.5">
                           <FormLabel className="text-base">
-                            Updates emails
+                            Update emails
                           </FormLabel>
                           <FormDescription>
                             Receive emails about new products, features, and
@@ -240,7 +266,20 @@ function NotificationSettings() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Update notifications</Button>
+              <Button
+                disabled={isSubmitting || !formState.isDirty}
+                type="submit"
+                className="ml-auto"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
+                  </>
+                ) : (
+                  "Update notifications"
+                )}
+              </Button>
             </form>
           </Form>
         </>

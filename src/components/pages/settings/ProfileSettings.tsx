@@ -53,19 +53,30 @@ function ProfileSettings() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
 
-  // from database
   const defaultValues: ProfileFormValues = {
-    name: user?.name || "",
-    email: user?.email || "",
-    bio: user?.bio || "",
+    name: "",
+    email: "",
+    bio: "",
     password: "",
   };
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: defaultValues,
   });
 
   const { setValue, reset, formState } = form;
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        password: "",
+      });
+    }
+  }, [reset, setValue, user]);
 
   function onSubmit(data: ProfileFormValues) {
     setIsSubmitting(true);
@@ -81,6 +92,7 @@ function ProfileSettings() {
             onClick: () => {},
           },
         });
+        reset(data);
       })
       .catch((err: AxiosError) => {
         if (err instanceof CanceledError) return;
@@ -106,14 +118,6 @@ function ProfileSettings() {
     // navigate to login
     navigate(ROUTES.login);
   }
-
-  useEffect(() => {
-    if (user) {
-      setValue("name", user?.name);
-      setValue("email", user?.email || "");
-      setValue("bio", user?.bio || "");
-    }
-  }, [setValue, user]);
 
   return (
     <>

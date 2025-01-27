@@ -29,8 +29,8 @@ export function NotificationProvider({ children }: Props) {
   return (
     <NotificationContext.Provider
       value={{
-        isNotificationOpen: isNotificationOpen,
-        toggleNotification: toggleNotification,
+        isNotificationOpen,
+        toggleNotification,
       }}
     >
       {children}

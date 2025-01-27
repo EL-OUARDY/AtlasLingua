@@ -44,3 +44,9 @@ export interface IReportPost {
   reasons: string[];
   description?: string | undefined;
 }
+
+export interface INotificationSettings {
+  notificationScope: "all" | "community" | "none";
+  communication_emails?: boolean | undefined;
+  update_emails?: boolean | undefined;
+}

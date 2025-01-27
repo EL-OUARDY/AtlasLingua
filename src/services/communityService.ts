@@ -2,6 +2,7 @@ import {
   ICommunityComment,
   ICommunityFilter,
   ICommunityPost,
+  INotificationSettings,
   IReportPost,
   SortOption,
 } from "@/models/Community";
@@ -262,6 +263,28 @@ class communityService {
     );
     const docSnap = await getDoc(voteDocRef);
     return docSnap.exists();
+  }
+
+  async getNotificationSettings(
+    userId: number,
+  ): Promise<INotificationSettings | undefined> {
+    // Reference to the user's notification settings
+    const ref = doc(db, `users/${userId}/notification_settings/${userId}`);
+
+    // Get document
+    const postSnap = await getDoc(ref);
+    return postSnap.data() as INotificationSettings | undefined;
+  }
+
+  async saveNotificationSettings(
+    settings: INotificationSettings,
+    userId: number,
+  ) {
+    // Reference to the user's notification settings
+    const ref = doc(db, `users/${userId}/notification_settings/${userId}`);
+
+    // Add the notification object to the document
+    await setDoc(ref, settings);
   }
 }
 

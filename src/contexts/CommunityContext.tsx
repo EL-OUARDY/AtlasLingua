@@ -23,6 +23,7 @@ import { useUser } from "./UserContext";
 import type { BaseHit, Hit } from "instantsearch.js";
 import communityService from "@/services/communityService";
 import { Timestamp } from "firebase/firestore";
+import { APP_NAME } from "@/shared/constants";
 interface ICommunityContext {
   posts: ICommunityPost[];
   updatePosts: (hits: Hit<BaseHit>[]) => void;
@@ -112,6 +113,8 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
 
     if (filter.sortBy === SortOption.User) {
       if (!user) {
+        // save return url
+        localStorage.setItem(APP_NAME + "-return-url", ROUTES.community);
         navigate(ROUTES.login);
       }
     }
@@ -148,7 +151,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         // Append new posts to existing state
         setPosts((prev) => [...prev, ...fetchedPosts]);
       } else {
-        // If snapshot is empty, we assume there's no more data
+        // If empty, we assume there's no more data
         setHasMorePosts(false);
       }
     } catch (error) {
@@ -219,7 +222,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         // Append new comments to existing state
         setComments((prev) => [...prev, ...fetchedComments]);
       } else {
-        // If snapshot is empty, we assume there's no more data
+        // If empty, we assume there's no more data
         setHasMoreComments(false);
       }
     } catch (error) {
@@ -282,7 +285,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       };
       return updatedPost;
     } catch (error) {
-      console.error("Failed to update post:", error);
+      console.error("Failed to edit post:", error);
       throw error;
     }
   }
@@ -378,7 +381,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
       };
       return updatedComment;
     } catch (error) {
-      console.error("Failed to update comment:", error);
+      console.error("Failed to edit comment:", error);
       throw error;
     }
   }

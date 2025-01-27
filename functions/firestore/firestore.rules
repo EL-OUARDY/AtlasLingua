@@ -89,6 +89,11 @@ service cloud.firestore {
       }
     }
     
+    // Rule for notification_settings
+    match /users/{userId}/notification_settings/{notificationId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
     // Rules for welcome_message
     match /welcome_message/{messageId} {
       // Allow everyone to read comments
