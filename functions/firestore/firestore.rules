@@ -91,9 +91,18 @@ service cloud.firestore {
       }
     }
     
-    // Rule for notification_settings
-    match /users/{userId}/notification_settings/{notificationId} {
-      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    // Rules for users
+    match /users/{userId} {
+    	// Rules for user's notification settings
+      match /notification_settings/{notificationId} {
+        allow read, write: if isAuthenticated() && request.auth.uid == userId;
+      }
+    }
+    
+    // Rules for notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated()
+      && (request.auth.uid == string(resource.data.userId) || resource.data.userId == -1); // -1 means everyone
     }
     
     // Rules for welcome_message

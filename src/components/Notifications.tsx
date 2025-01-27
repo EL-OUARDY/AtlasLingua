@@ -5,42 +5,48 @@ import {
   DialogDescription,
   DialogHeader,
 } from "./ui/dialog";
-import { LayoutGrid, MessageSquareMore, ThumbsUp } from "lucide-react";
+import {
+  LayoutGrid,
+  MessageSquareMore,
+  TriangleAlertIcon,
+  UsersIcon,
+} from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
-import { useNotification } from "@/contexts/NotificationContext";
+import {
+  INotificationType,
+  useNotification,
+} from "@/contexts/NotificationContext";
+import { formatDistanceToNow } from "date-fns";
+import { APP_NAME } from "@/shared/constants";
+import { createElement } from "react";
+import { Link } from "react-router-dom";
 
 function Notifications() {
-  const { isNotificationOpen, toggleNotification } = useNotification();
+  const { notifications, isNotificationOpen, toggleNotification } =
+    useNotification();
 
-  const notifications = [
-    {
-      content: "Your post got a new comment",
-      date: "2 minutes ago",
-      type: "Community",
-      icon: MessageSquareMore,
-    },
-    {
-      content: "We have added new vocabulary",
-      date: "17 hours ago",
-      type: "Community",
-      icon: LayoutGrid,
-    },
-    {
-      content: "Someone liked your post",
-      date: "Yesterday",
-      type: "Community",
-      icon: ThumbsUp,
-    },
-    {
-      content: "Someone has replied on your post",
-      date: "5 days ago",
-      type: "Community",
-      icon: MessageSquareMore,
-    },
-  ];
+  function getNotificationTypeLabel(type: INotificationType) {
+    if (["new_comment", "new_mention"].includes(type)) return "Community";
+
+    if (type === "alert") return "Alert";
+    if (type === "communication") return "Communication";
+    if (type === "new_feature") return "New Feature";
+
+    return APP_NAME; // Default fallback
+  }
+
+  function getNotificationIcon(type: INotificationType) {
+    if (["new_comment", "new_mention"].includes(type)) return MessageSquareMore;
+
+    if (type === "alert") return TriangleAlertIcon;
+    if (type === "communication") return UsersIcon;
+    if (type === "new_feature") return LayoutGrid;
+
+    return LayoutGrid; // Default fallback
+  }
 
   return (
     <Dialog open={isNotificationOpen} onOpenChange={() => toggleNotification()}>
@@ -53,36 +59,56 @@ function Notifications() {
         </DialogHeader>
         <Card className="w-full border-0">
           <CardHeader className="pt-0">
-            <CardTitle>
-              Notifications{" "}
-              <small className="text-sm text-blue-600">— Demo</small>
-            </CardTitle>
+            <CardTitle>Notifications</CardTitle>
           </CardHeader>
           <Separator />
           <ScrollArea className="h-[400px]">
-            <CardContent className="flex flex-col gap-2 p-2 sm:p-6">
-              {notifications.map((n, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 rounded-lg p-3 hover:bg-secondary"
-                >
-                  <n.icon className="size-5 sm:size-6" />
-                  <div className="grid gap-2">
-                    <p className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium">
-                      {n.content}
-                    </p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <p>{n.type}</p>
-                      <Badge
-                        variant="outline"
-                        className="overflow-hidden text-ellipsis whitespace-nowrap"
-                      >
-                        {n.date}
-                      </Badge>
+            <CardContent className="flex h-full flex-col gap-2 p-2 sm:p-4">
+              {notifications.length === 0 && (
+                <div className="flex h-full flex-col items-center justify-center gap-4">
+                  <img
+                    src="img/no-notif.svg"
+                    className="h-20"
+                    alt="No Notifications"
+                  />
+                  <div className="text-center">
+                    <div className="text-lg font-bold">No Notifications</div>
+                    <div className="text-sm text-muted-foreground">
+                      Silence is gold!
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
+              {notifications &&
+                notifications.map((notification, index) => (
+                  <Link
+                    key={index}
+                    className="flex items-center gap-4 rounded-lg p-3 hover:bg-secondary"
+                    to={notification.link}
+                  >
+                    {createElement(getNotificationIcon(notification.type), {
+                      className: "size-5 sm:size-6",
+                    })}
+                    <div className="grid flex-1 gap-2">
+                      <p className="line-clamp-2 overflow-hidden text-ellipsis text-sm font-medium">
+                        {notification.body}
+                      </p>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <p>{getNotificationTypeLabel(notification.type)}</p>
+                        <Badge
+                          variant="outline"
+                          className="overflow-hidden text-ellipsis whitespace-nowrap font-normal"
+                          title={notification.date.toDate().toLocaleString()}
+                        >
+                          {formatDistanceToNow(
+                            notification.date.toDate().toLocaleString(),
+                            { addSuffix: true },
+                          )}
+                        </Badge>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
             </CardContent>
           </ScrollArea>
         </Card>

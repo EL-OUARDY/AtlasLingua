@@ -60,10 +60,13 @@ function AuthLayout({ children, role, description }: Props) {
         {APP_NAME}
       </Link>
       <div className="hidden h-screen flex-col bg-background p-10 dark:border-r dark:bg-muted lg:flex">
-        <div className="flex items-center text-lg font-medium">
+        <Link
+          to={ROUTES.home}
+          className="flex items-center text-lg font-medium"
+        >
           <Logo className="mr-2 size-5" />
-          <Link to={ROUTES.home}>{APP_NAME}</Link>
-        </div>
+          {APP_NAME}
+        </Link>
         <div className="flex flex-1 items-center justify-center p-4">
           <img src="img/art.svg" className="size-[300px] object-cover" />
         </div>

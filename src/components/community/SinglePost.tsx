@@ -87,16 +87,6 @@ function SinglePost({ postId, onEdit }: Props) {
 
   const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
 
-  function scrollToEnd() {
-    if (scrollAreaRef.current) {
-      const scrollArea = scrollAreaRef.current.children[1];
-      scrollArea.scrollTo({
-        top: scrollArea.scrollHeight,
-        behavior: "instant",
-      });
-    }
-  }
-
   useEffect(() => {
     fetchPost(postId);
 
@@ -134,6 +124,16 @@ function SinglePost({ postId, onEdit }: Props) {
     setIsCommentFormVisible(false);
     setCommentToUpdate(null);
     setMentionedUser(null);
+  }
+
+  function scrollToEnd() {
+    if (scrollAreaRef.current) {
+      const scrollArea = scrollAreaRef.current.children[1];
+      scrollArea.scrollTo({
+        top: scrollArea.scrollHeight,
+        behavior: "instant",
+      });
+    }
   }
 
   return (
@@ -263,15 +263,17 @@ function SinglePost({ postId, onEdit }: Props) {
                 </div>
                 <Separator className="mb-2 mt-3" />
                 <div className="flex items-center">
-                  <div
-                    className="text-xs text-muted-foreground"
-                    title={(post.date as Timestamp).toDate().toLocaleString()}
-                  >
-                    {formatDistanceToNow(
-                      (post.date as Timestamp).toDate().toLocaleString(),
-                      { addSuffix: true },
-                    )}
-                  </div>
+                  {post.date && (
+                    <div
+                      className="text-xs text-muted-foreground"
+                      title={(post.date as Timestamp).toDate().toLocaleString()}
+                    >
+                      {formatDistanceToNow(
+                        (post.date as Timestamp).toDate().toLocaleString(),
+                        { addSuffix: true },
+                      )}
+                    </div>
+                  )}
                   <div className="ml-auto flex items-center gap-4 text-xs text-muted-foreground">
                     <WTooltip content={post.isUpVoted ? "Downvote" : "Upvote"}>
                       <div
