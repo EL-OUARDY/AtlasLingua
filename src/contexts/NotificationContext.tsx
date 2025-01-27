@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Notifications from "@/components/Notifications";
 import {
   collection,
@@ -11,7 +12,7 @@ import {
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { useUser } from "./UserContext";
 import { db } from "@/services/firebaseConfig";
-import { useLocation } from "react-router-dom";
+import { APP_NAME } from "@/shared/constants";
 
 export type INotificationType =
   | "new_comment"
@@ -32,6 +33,7 @@ interface INotificationContext {
   notifications: INotification[];
   isNotificationOpen: boolean;
   toggleNotification: () => void;
+  hasNewNotifications: boolean;
 }
 
 const NotificationContext = React.createContext<INotificationContext>(
@@ -50,9 +52,19 @@ interface Props {
 export function NotificationProvider({ children }: Props) {
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [isNotificationOpen, setIsNotificationOpen] = useState<boolean>(false);
+  const [hasNewNotifications, setHasNewNotifications] =
+    useState<boolean>(false);
   const { user, isAuthenticated } = useUser();
 
-  const location = useLocation();
+  useEffect(() => {
+    if (isNotificationOpen && notifications.length > 0) {
+      setHasNewNotifications(false);
+      localStorage.setItem(
+        APP_NAME + "-last-seen-notification",
+        notifications[0].id,
+      );
+    }
+  }, [isNotificationOpen]);
 
   useEffect(() => {
     if (!user || !isAuthenticated) return;
@@ -82,17 +94,19 @@ export function NotificationProvider({ children }: Props) {
       })) as INotification[];
 
       setNotifications(fetchedNotifications);
-      console.log(fetchedNotifications);
+      // Check if notifications has already been seen
+      if (fetchedNotifications.length > 0) {
+        const lastSeenNotificationId = localStorage.getItem(
+          APP_NAME + "-last-seen-notification",
+        );
+        if (lastSeenNotificationId !== fetchedNotifications[0].id)
+          setHasNewNotifications(true);
+      }
     });
 
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [isAuthenticated, user]);
-
-  useEffect(() => {
-    // Close notification popup every time the URL changes
-    setIsNotificationOpen(false);
-  }, [location]);
 
   function toggleNotification() {
     setIsNotificationOpen(!isNotificationOpen);
@@ -104,6 +118,7 @@ export function NotificationProvider({ children }: Props) {
         notifications,
         toggleNotification,
         isNotificationOpen,
+        hasNewNotifications,
       }}
     >
       {children}

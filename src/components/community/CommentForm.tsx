@@ -87,7 +87,7 @@ function CommentForm({
     return () => {
       // Component unmounted
       // Save new comment content before leaving
-      if (!comment)
+      if (!comment && getValues("content"))
         // Only save content when adding a new comment not updating it
         localStorage.setItem(
           `${APP_NAME}-new-comment-content-${post.id}`,

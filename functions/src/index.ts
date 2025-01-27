@@ -106,6 +106,44 @@ exports.onCommentCreated = onDocumentCreated(
       commentsCount: FieldValue.increment(1),
     });
 
+    // Create a notification for post author
+    // Get post author's userId
+    const postSnap = await postRef.get();
+    const postAuthorId = postSnap.data()?.user?.id;
+
+    // Get comment data to create notification message
+    const commentData = event.data.data();
+    const commenterName = commentData?.user?.name;
+
+    // Check if the post author is not the commenter
+    if (postAuthorId && postAuthorId !== commentData?.user?.id) {
+      // Create notification document
+      const notificationRef = db.collection("notifications").doc();
+      batch.create(notificationRef, {
+        userId: postAuthorId,
+        type: "new_comment",
+        body: `${isAnonymousUsername(commenterName) ? "Someone" : commenterName} has replied to your post.`,
+        link: `/community?post_id=${postRef.id}&refresh_comments=true`,
+        date: Timestamp.now(),
+      });
+    }
+
+    // Create a notification for the mentioned user
+    if (
+      commentData?.mentionedUser &&
+      commentData?.mentionedUser?.id !== postAuthorId
+    ) {
+      // Create notification document
+      const notificationRef = db.collection("notifications").doc();
+      batch.create(notificationRef, {
+        userId: commentData?.mentionedUser?.id,
+        type: "new_mention",
+        body: `${isAnonymousUsername(commenterName) ? "Someone" : commenterName} has mentioned you in a comment.`,
+        link: `/community?post_id=${postRef.id}&refresh_comments=true`,
+        date: Timestamp.now(),
+      });
+    }
+
     // Commit the batch
     return batch.commit();
   },
@@ -215,3 +253,9 @@ exports.onCommentVoteDeleted = onDocumentDeleted(
     });
   },
 );
+
+// Helper functions
+function isAnonymousUsername(name: string): boolean {
+  const anonymousUsernamePattern = /^Member#\d{4}$/;
+  return anonymousUsernamePattern.test(name);
+}

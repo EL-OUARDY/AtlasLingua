@@ -82,7 +82,7 @@ function SinglePost({ postId, onEdit }: Props) {
   const [showDeletePostDialog, setShowDeletePostDialog] =
     useState<boolean>(false);
 
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null);
@@ -100,6 +100,17 @@ function SinglePost({ postId, onEdit }: Props) {
     if (!user || !isAuthenticated) return;
     if (post && post.isUpVoted === undefined) hasUserVotedOnPost(postId);
   }, [user, isAuthenticated, post]);
+
+  useEffect(() => {
+    const refreshComments = searchParams.get("refresh_comments") || "";
+    if (refreshComments) {
+      fetchComments(postId);
+      setSearchParams((prev) => {
+        prev.delete("refresh_comments");
+        return prev;
+      });
+    }
+  }, [searchParams, setSearchParams]);
 
   async function vote() {
     if (!user || !isAuthenticated) {

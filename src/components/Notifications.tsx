@@ -8,6 +8,7 @@ import {
 import {
   LayoutGrid,
   MessageSquareMore,
+  ReplyAll,
   TriangleAlertIcon,
   UsersIcon,
 } from "lucide-react";
@@ -22,11 +23,13 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { APP_NAME } from "@/shared/constants";
 import { createElement } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Notifications() {
   const { notifications, isNotificationOpen, toggleNotification } =
     useNotification();
+
+  const navigate = useNavigate();
 
   function getNotificationTypeLabel(type: INotificationType) {
     if (["new_comment", "new_mention"].includes(type)) return "Community";
@@ -39,8 +42,8 @@ function Notifications() {
   }
 
   function getNotificationIcon(type: INotificationType) {
-    if (["new_comment", "new_mention"].includes(type)) return MessageSquareMore;
-
+    if (type === "new_comment") return MessageSquareMore;
+    if (type === "new_mention") return ReplyAll;
     if (type === "alert") return TriangleAlertIcon;
     if (type === "communication") return UsersIcon;
     if (type === "new_feature") return LayoutGrid;
@@ -59,7 +62,7 @@ function Notifications() {
         </DialogHeader>
         <Card className="w-full border-0">
           <CardHeader className="pt-0">
-            <CardTitle>Notifications</CardTitle>
+            <CardTitle className="text-lg">Notifications</CardTitle>
           </CardHeader>
           <Separator />
           <ScrollArea className="h-[400px]">
@@ -81,16 +84,19 @@ function Notifications() {
               )}
               {notifications &&
                 notifications.map((notification, index) => (
-                  <Link
+                  <div
                     key={index}
-                    className="flex items-center gap-4 rounded-lg p-3 hover:bg-secondary"
-                    to={notification.link}
+                    className="flex cursor-pointer items-center gap-4 rounded-lg border p-3 hover:bg-secondary"
+                    onClick={() => {
+                      navigate(notification.link);
+                      toggleNotification();
+                    }}
                   >
                     {createElement(getNotificationIcon(notification.type), {
                       className: "size-5 sm:size-6",
                     })}
                     <div className="grid flex-1 gap-2">
-                      <p className="line-clamp-2 overflow-hidden text-ellipsis text-sm font-medium">
+                      <p className="overflow-hidden text-ellipsis text-sm font-medium">
                         {notification.body}
                       </p>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -107,7 +113,7 @@ function Notifications() {
                         </Badge>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
             </CardContent>
           </ScrollArea>

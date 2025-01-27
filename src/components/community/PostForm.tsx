@@ -131,7 +131,7 @@ function PostForm({ postId = null }: Props) {
     return () => {
       // Component unmounted
       // Save new post content before leaving
-      if (!postId)
+      if (!postId && getValues("content"))
         // Only save content when adding a new post not updating it
         localStorage.setItem(
           APP_NAME + "-new-post-content",

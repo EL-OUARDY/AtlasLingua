@@ -24,9 +24,10 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/services/firebaseConfig";
 import Logo from "./ui/icons/Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import BellIcon from "./ui/icons/BellIcon";
 
 function Header() {
-  const { toggleNotification } = useNotification();
+  const { toggleNotification, hasNewNotifications } = useNotification();
   const { user, setUser } = useUser();
   const navigate = useNavigate();
 
@@ -69,22 +70,12 @@ function Header() {
         onClick={() => toggleNotification()}
         variant="outline"
         size="icon"
-        className="overflow-hidden md:hidden md:rounded-full"
+        className="relative overflow-hidden md:hidden md:rounded-full"
       >
-        <svg
-          className="size-5"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.7}
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-          />
-        </svg>
+        <BellIcon className="size-5" />
+        {hasNewNotifications && (
+          <div className="absolute right-[0.65rem] top-[0.7rem] size-[0.5rem] rounded-full bg-red-600"></div>
+        )}
         <span className="sr-only">Notifications</span>
       </Button>
       <MainMenu className="hidden md:block" />
@@ -100,24 +91,13 @@ function Header() {
           <Button
             variant="outline"
             size="icon"
-            className="overflow-hidden md:rounded-full"
+            className="relative overflow-hidden md:rounded-full"
             onClick={() => toggleNotification()}
           >
-            <svg
-              className="size-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.7}
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-              />
-            </svg>
-
+            <BellIcon className="size-5" />
+            {hasNewNotifications && (
+              <div className="absolute right-[0.65rem] top-[0.7rem] size-[0.5rem] rounded-full bg-red-600"></div>
+            )}
             <span className="sr-only">notifications</span>
           </Button>
         </div>
