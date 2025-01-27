@@ -46,15 +46,6 @@ exports.onPostDeleted = onDocumentDeleted("/posts/{postId}", async (event) => {
   // Create a batch operation
   const batch = db.batch();
 
-  // Delete comments sub-collection
-  // Get all comments in the post
-  const commentsSnapshot = await commentsRef.get();
-
-  // Add each comment deletion to the batch
-  commentsSnapshot.docs.forEach((doc) => {
-    batch.delete(doc.ref);
-  });
-
   // Delete votes sub-collection
   // Get all votes in the post
   const votesSnapshot = await votesRef.get();
@@ -63,6 +54,24 @@ exports.onPostDeleted = onDocumentDeleted("/posts/{postId}", async (event) => {
   votesSnapshot.docs.forEach((doc) => {
     batch.delete(doc.ref);
   });
+
+  // Delete comments and their votes sub-collections
+  const commentsSnapshot = await commentsRef.get();
+
+  // Add each comment and its votes deletion to the batch
+  for (const commentDoc of commentsSnapshot.docs) {
+    // Get votes subcollection reference
+    const votesRef = commentDoc.ref.collection("votes");
+    const votesSnapshot = await votesRef.get();
+
+    // Delete all votes first
+    votesSnapshot.docs.forEach((voteDoc) => {
+      batch.delete(voteDoc.ref);
+    });
+
+    // Then delete the comment
+    batch.delete(commentDoc.ref);
+  }
 
   // Execute all deletions in a single atomic operation
   return batch.commit();
