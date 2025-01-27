@@ -6,6 +6,7 @@
 `Python`
 `TypeScript`
 `Flask`
+`Firebase`
 `TailwindCSS`
 `Shadcn/ui`
 
@@ -22,31 +23,36 @@
 
 # Overview
 
-This project is my final portfolio submission for the **ALX** Software Engineering program (**Holberton School**). It represents the culmination of my learning journey and showcases the skills I've developed throughout the course.
-
-The English ⇔ Darija Translator is more than just a technical demonstration – it's a tool designed to bridge communication gaps and support cultural exchange. As a Moroccan software engineer, I've poured my heart and expertise into creating a resource that will be truly useful for both visitors to Morocco and those interested in learning our unique dialect.
+This project is more than just a technical demonstration – it's a tool designed to bridge communication gaps and support cultural exchange. As a Moroccan software engineer, I've poured my heart and expertise into creating a resource that will be truly useful for both visitors to Morocco and those interested in learning our unique dialect.
 
 This project combines my passion for technology with a desire to contribute meaningfully to the community. It represents not just what I've learned, but also my vision for how software can solve real-world problems and bring people together.
 
+I started this as my final portfolio submission for the **ALX** Software Engineering program (**Holberton School**). But then, I decided to take it a step further and make it live for everyone to use. This project represents the culmination of my learning journey and showcases the skills I've developed throughout the course.
+
 ## The Problem
 
-The project aims to address the lack of online services that provide translation assistance for English speakers learning Moroccan Darija. This problem is particularly relevant in Morocco, where there are many foreigners, including tourists, who may struggle with communication due to language barriers.
+The project aims to address the lack of online services that provide translation assistance for English speakers learning Moroccan Darija. This problem is particularly relevant in Morocco, where many foreigners are eager to learn the local language but struggle to find reliable resources to guide them.
 
 ## Tech Stack
 
 - **Frontend**:
 
-  - `React.js` with **TypeScript** for dynamic user interface
+  - `ReactJS` with **TypeScript**.
   - `Tailwind CSS`
-  - `Shadcn/ui` library for enhanced UI features
+  - `Shadcn/ui`
 
 - **Backend**:
 
-  - `Flask` Python framework for creating **APIs** and for efficient server-side processing
+  - `Flask` (Python framework) for creating **APIs**.
 
 - **Database**:
-  - `MySQL` for structured data
-  - `Firebase` for real-time data storage and synchronization
+
+  - `MySQL` for managing structured data.
+  - `Firebase` to power the community forum.
+
+- **Third-Party Services**:
+  - `Algolia` for advanced search capabilities.
+  - `SendGrid` for handling email communications.
 
 ## Installation
 
@@ -58,8 +64,6 @@ Ensure you have the following tools installed on your machine:
 - `Node.js` (preferably v20 or later) and `npm` (Node package manager)
 - `MySQL` for structured data storage
 - `Git` for version control
-
-If you don’t have these installed, please install them first.
 
 ### 2. Setting Up the Frontend (React with TypeScript)
 
@@ -137,10 +141,6 @@ This will start the frontend development server at http://localhost:3000.
 #### 3. Access the Application:
 
 Visit http://localhost:3000 in your browser to see the frontend.
-
-## About
-
-My name is Ouadia EL-Ouardy, and I’m a dedicated programmer. I wrote my first line of code in 2016 during a training program in my city. After that, I continued learning as a self-taught student, eventually gaining solid knowledge in web development. This enabled me to land freelance projects and successfully deliver many of them. Despite this progress, I always felt there was something missing in my education, which led me to join ALX in 2023. The journey at ALX has been incredibly enjoyable and far exceeded my expectations, providing me with more knowledge and skills than I could have imagined. This project is part of my ALX portfolio, and I built it with all my heart, putting everything I know into action. I also decided to take this project further and make it available for people to use.
 
 ## Contact
 
