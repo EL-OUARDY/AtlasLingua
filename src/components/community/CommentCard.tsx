@@ -80,7 +80,7 @@ function CommentCard({ post, comment, onReply, onEdit, onDelete }: Props) {
         )}
       </p>
       {comment.mentionedUser && (
-        <span className="capitalize italic text-sky-400">{`@${comment.mentionedUser} `}</span>
+        <span className="capitalize italic text-sky-400">{`@${comment.mentionedUser.name} `}</span>
       )}
       <span className="first-letter:uppercase">{comment.content}</span>
       <Separator className="mb-2 mt-4" />

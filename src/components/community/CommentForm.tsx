@@ -138,8 +138,8 @@ function CommentForm({
           },
           mentionedUser:
             mentionedUser && mentionedUser.id !== user.id
-              ? mentionedUser.name
-              : "",
+              ? { id: mentionedUser.id, name: mentionedUser.name }
+              : null,
         };
         const newComment = await addComment(post.id, commentObj);
         reset();

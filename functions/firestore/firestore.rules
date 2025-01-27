@@ -30,14 +30,16 @@ service cloud.firestore {
     }
     
     function isNewCommentValid() {
-    	return request.resource.data.keys().hasOnly(['content', 'mentionedUser', 'user'])
+    	return request.resource.data.keys().hasOnly(['content', 'user', 'mentionedUser'])
       && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && (request.resource.data.mentionedUser == null || request.resource.data.mentionedUser.keys().hasOnly(['id', 'name']))
       && request.resource.data.size() > 0;
     }
     
     function isEditCommentValid() {
-    	return request.resource.data.keys().hasOnly(['content', 'mentionedUser', 'user','date', 'votesCount', 'hasBeenEdited'])
+    	return request.resource.data.keys().hasOnly(['content','user', 'mentionedUser','date', 'votesCount', 'hasBeenEdited'])
       && request.resource.data.user.keys().hasOnly(['id', 'name', 'role', 'avatar'])
+      && (request.resource.data.mentionedUser == null || request.resource.data.mentionedUser.keys().hasOnly(['id', 'name']))
       && request.resource.data.hasBeenEdited == true
 		  && request.resource.data.votesCount == resource.data.votesCount
   		&& request.resource.data.date == resource.data.date

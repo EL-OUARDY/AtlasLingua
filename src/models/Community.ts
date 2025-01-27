@@ -21,7 +21,7 @@ export interface ICommunityComment {
   votesCount?: number;
   user: Partial<IUser>;
   date?: Timestamp | FieldValue;
-  mentionedUser?: string;
+  mentionedUser?: Partial<IUser> | null;
   hasBeenEdited?: boolean;
   isUpVoted?: boolean;
 }
