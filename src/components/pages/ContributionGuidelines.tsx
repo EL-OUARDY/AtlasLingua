@@ -11,7 +11,7 @@ function Privacy() {
         className="flex-1 p-4 shadow-sm sm:p-6 md:rounded-lg md:border md:border-dashed"
       >
         <div className="mb-2 flex flex-col">
-          <h3 className="text-3xl font-bold tracking-tight">
+          <h3 className="text-2xl font-bold tracking-tight">
             Contribution Guidelines
           </h3>
           <span className="text-muted-foreground">
@@ -25,7 +25,7 @@ function Privacy() {
           comprehensive and accurate translation resource that will benefit
           learners, travelers, and anyone interested in Moroccan Darija.
         </p>
-        <h3 className="mb-2 mt-4 text-2xl font-bold tracking-tight">
+        <h3 className="mb-2 mt-4 text-xl font-bold tracking-tight">
           1- Submitting Contributions
         </h3>
         <p className="text-base text-muted-foreground">
@@ -34,7 +34,7 @@ function Privacy() {
           best for you. Just ensure that each file includes English phrases
           alongside their Darija translations.
         </p>
-        <h3 className="mb-2 mt-4 text-2xl font-bold tracking-tight">
+        <h3 className="mb-2 mt-4 text-xl font-bold tracking-tight">
           2- Translation Standards
         </h3>
         <p className="text-base text-muted-foreground">
@@ -143,7 +143,7 @@ function Privacy() {
           </table>
         </div>
 
-        <h3 className="mb-2 mt-4 text-2xl font-bold tracking-tight">
+        <h3 className="mb-2 mt-4 text-xl font-bold tracking-tight">
           Contact Us
         </h3>
         <p className="text-base text-muted-foreground">

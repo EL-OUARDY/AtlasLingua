@@ -2,7 +2,7 @@ import { ROUTES } from "@/routes/routes";
 
 export const APP_NAME = "AtlasLingua";
 export const APP_INFO =
-  "Our app offers a comprehensive dictionary, AI-powered translations, and audio/video summaries to make learning effortless.";
+  "Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials";
 
 export const APP_EMAIL = "ouadia@elouardy.com";
 export const APP_GITHUB = "https://github.com/EL-OUARDY";
@@ -39,16 +39,10 @@ export const FEATURES: {
   description: string;
 }[] = [
   {
-    title: "Dictionary",
-    href: ROUTES.dictionary,
+    title: "AI-Powered Translation",
+    href: ROUTES.translate.index,
     description:
-      "Unlock the richness of Darija with our comprehensive dictionary.",
-  },
-  {
-    title: "Summarization",
-    href: ROUTES.translate.summarization,
-    description:
-      "Transform lengthy texts, audio and video into concise, actionable insights.",
+      "Continually learns and adapts, delivering nuanced translations.",
   },
   {
     title: "Community",
@@ -57,21 +51,27 @@ export const FEATURES: {
       "Join a vibrant ecosystem of language enthusiasts and native speakers.",
   },
   {
+    title: "Dictionary",
+    href: ROUTES.dictionary,
+    description:
+      "Discover the richness of Darija with our user-friendly dictionary!",
+  },
+  {
+    title: "Summarization",
+    href: ROUTES.translate.summarization,
+    description:
+      "Transform lengthy texts, audio and video into concise, actionable insights.",
+  },
+  {
     title: "Learn",
     href: ROUTES.learn,
     description:
-      "Access a vast, meticulously organized collection of Darija vocabulary.",
+      "Access a vast, well-organized collection of Darija vocabulary.",
   },
   {
     title: "Live Assistance",
     href: "#",
     description:
       "Translations or cultural queries with personalized, on-demand assistance.",
-  },
-  {
-    title: "AI-Powered Translation",
-    href: ROUTES.translate.index,
-    description:
-      "Continually learns and adapts, delivering nuanced translations of both languages.",
   },
 ];

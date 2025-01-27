@@ -56,7 +56,7 @@ function AuthLayout({ children, role, description }: Props) {
           "font-bg absolute left-4 top-4 flex items-center gap-1 md:left-8 md:top-8 lg:hidden",
         )}
       >
-        <Logo className="size-4" />
+        <Logo className="mr-1 size-4" />
         {APP_NAME}
       </Link>
       <div className="hidden h-screen flex-col bg-background p-10 dark:border-r dark:bg-muted lg:flex">
