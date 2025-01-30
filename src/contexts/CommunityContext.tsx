@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ICommunityComment,
@@ -9,7 +10,9 @@ import {
 
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useRef,
@@ -65,6 +68,8 @@ interface ICommunityContext {
     commentId: string,
     postId: string,
   ) => Promise<boolean | undefined>;
+  sortCommentsBy: string;
+  setSortCommentsBy: Dispatch<SetStateAction<"date" | "votes">>;
 }
 
 const CommunityContext = createContext<ICommunityContext>(
@@ -95,6 +100,10 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
   // Store the last fetched comment to implement pagination
   const lastFetchedComment = useRef<any>(null);
 
+  const [sortCommentsBy, setSortCommentsBy] = useState<"date" | "votes">(
+    "date",
+  );
+
   const [filter, setFilter] = useState<ICommunityFilter>({
     searchQuery: "",
     sortBy: "latest",
@@ -118,9 +127,14 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         navigate(ROUTES.login);
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter.sortBy]);
+
+  useEffect(() => {
+    if (!post) return;
+    lastFetchedComment.current = null;
+    setComments([]);
+    fetchComments(post.id);
+  }, [sortCommentsBy]);
 
   function resetPosts() {
     lastFetchedPost.current = null;
@@ -209,6 +223,7 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         await communityService.fetchComments(
           postId,
           lastFetchedComment?.current || null,
+          sortCommentsBy,
           fetchLimit,
         );
 
@@ -643,6 +658,8 @@ export function CommunityProvider({ children, fetchLimit = 30 }: Props) {
         hasUserVotedOnPost,
         voteComment,
         hasUserVotedOnComment,
+        sortCommentsBy,
+        setSortCommentsBy,
       }}
     >
       <ReportPostProvider>{children}</ReportPostProvider>

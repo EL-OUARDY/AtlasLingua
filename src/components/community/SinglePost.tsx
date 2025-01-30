@@ -62,6 +62,8 @@ function SinglePost({ postId, onEdit }: Props) {
     deleteComment,
     votePost,
     hasUserVotedOnPost,
+    sortCommentsBy,
+    setSortCommentsBy,
   } = useCommunity();
 
   const [commentToUpdate, setCommentToUpdate] =
@@ -135,6 +137,10 @@ function SinglePost({ postId, onEdit }: Props) {
     setIsCommentFormVisible(false);
     setCommentToUpdate(null);
     setMentionedUser(null);
+    setSearchParams((prev) => {
+      prev.delete("new_comment");
+      return prev;
+    });
   }
 
   function scrollToEnd() {
@@ -323,6 +329,37 @@ function SinglePost({ postId, onEdit }: Props) {
                   </div>
                 </div>
               )}
+
+              {comments.length > 1 && (
+                <div className="flex justify-end gap-2">
+                  <Button
+                    onClick={() => setSortCommentsBy("date")}
+                    className={cn(
+                      "h-fit p-0",
+                      sortCommentsBy === "date"
+                        ? "text-primary"
+                        : "text-muted-foreground",
+                    )}
+                    variant="link"
+                  >
+                    Latest
+                  </Button>
+                  <Separator orientation="vertical" className="h-4" />
+                  <Button
+                    onClick={() => setSortCommentsBy("votes")}
+                    className={cn(
+                      "h-fit p-0",
+                      sortCommentsBy === "votes"
+                        ? "text-primary"
+                        : "text-muted-foreground",
+                    )}
+                    variant="link"
+                  >
+                    Popular
+                  </Button>
+                </div>
+              )}
+
               {comments.map((comment, index) => (
                 <CommentCard
                   key={index}
@@ -339,7 +376,6 @@ function SinglePost({ postId, onEdit }: Props) {
                   onDelete={(commentId) => setCommentToDelete(commentId)}
                 />
               ))}
-
               <ConfirmationDialog
                 title="Are you absolutely sure?"
                 description="This action cannot be undone! This will permanently delete your comment."
@@ -350,7 +386,6 @@ function SinglePost({ postId, onEdit }: Props) {
                 onAbort={() => setCommentToDelete(null)}
                 isOpen={!!commentToDelete}
               />
-
               {/* Show a loader while fetching comments */}
               {loadingComments &&
                 Array(4)
@@ -363,7 +398,6 @@ function SinglePost({ postId, onEdit }: Props) {
                       showTags={false}
                     />
                   ))}
-
               <div className="w-full text-center">
                 {/* "Load More" button (hidden if no more data or currently loading) */}
                 {hasMoreComments && !loadingComments && (

@@ -113,6 +113,7 @@ class communityService {
       DocumentData,
       DocumentData
     > | null,
+    sortBy: "date" | "votes",
     fetchLimit: number,
   ) {
     // Reference the post document to get its comments subcollection
@@ -124,11 +125,17 @@ class communityService {
     const commentsQuery = lastFetchedCommentDoc
       ? query(
           commentsRef,
+          ...(sortBy === "votes" ? [orderBy("votesCount", "desc")] : []),
           orderBy("date", "asc"),
           startAfter(lastFetchedCommentDoc),
           limit(fetchLimit),
         )
-      : query(commentsRef, orderBy("date", "asc"), limit(fetchLimit));
+      : query(
+          commentsRef,
+          ...(sortBy === "votes" ? [orderBy("votesCount", "desc")] : []),
+          orderBy("date", "asc"),
+          limit(fetchLimit),
+        );
 
     const snapshot = await getDocs(commentsQuery);
 
