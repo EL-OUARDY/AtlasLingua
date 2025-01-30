@@ -12,6 +12,7 @@ export interface ITranslationData {
   translation: string;
   wordType?: string;
   verified?: boolean;
+  arabic?: boolean;
 }
 
 export interface ITranslationFetchDataResult {

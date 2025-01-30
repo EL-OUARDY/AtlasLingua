@@ -34,10 +34,11 @@ class HistoryService:
 
     @staticmethod
     @jwt_required(optional=True)
-    def save(source_language, english, darija, processed_by=None):
+    def save(source_language, english, darija, arabic, processed_by=None):
         history = History(
             english=english,
             darija=darija,
+            arabic=arabic,
             processed_by=processed_by,
             source_language=source_language,
         )
@@ -50,7 +51,7 @@ class HistoryService:
         return history.id, history.shareable_link
 
     @staticmethod
-    def get_from_history(text_to_translate, source, destination, processed_by):
+    def get_from_history(text_to_translate, source, processed_by):
         filter_attribute = (
             "english" if source == LanguagesEnum.ENGLISH.value else "darija"
         )
@@ -63,9 +64,7 @@ class HistoryService:
             .order_by(History.id.desc())
             .first()
         )
-        if result:
-            # save to history again
-            return result.get(destination)
+        return result
 
     @staticmethod
     @jwt_required()

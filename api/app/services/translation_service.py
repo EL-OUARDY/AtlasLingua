@@ -11,8 +11,7 @@ from app.utils.shared import LanguagesEnum
 class TranslationService:
     @staticmethod
     def translate(text, source, destination):
-
-        # check verified entries from database
+        # check if there are verified entries in our dictionary
         entries = TranslationService.get_entries(
             text, source, verified=True, writing_variants=False
         )
@@ -22,33 +21,35 @@ class TranslationService:
                     "translation": entry[destination],
                     "verified": entry["verified"],
                     "wordType": entry["word_type"],
+                    "arabic": entry["arabic"],
                 }
                 for entry in entries
             ]
 
-            # save in history
-            if source == LanguagesEnum.ENGLISH.value:
-                translation_id, shareable_link = HistoryService.save(
-                    source_language=source,
-                    english=text,
-                    darija=TranslationService.stringify(translation),
-                )
-            else:
-                translation_id, shareable_link = HistoryService.save(
-                    source_language=source,
-                    english=TranslationService.stringify(translation),
-                    darija=text,
-                )
+            # save to history
+            english_text = (
+                text
+                if source == LanguagesEnum.ENGLISH.value
+                else TranslationService.stringify(translation)
+            )
+            darija_text = (
+                text
+                if source == LanguagesEnum.DARIJA.value
+                else TranslationService.stringify(translation)
+            )
+
+            translation_id, shareable_link = HistoryService.save(
+                source_language=source,
+                english=english_text,
+                darija=darija_text,
+                arabic=entries[0].get("arabic"),
+            )
 
             return {
                 "id": translation_id,
                 "link": shareable_link,
                 "translation": translation,
             }
-
-        # use language model
-        # prepare helpful data to the language model
-        # feed = TranslationService.get_llm_feed(text, source, destination)
 
         # call language model
         llm = LanguageModel()
@@ -62,10 +63,20 @@ class TranslationService:
                 "id": result["id"],
                 "link": result["link"],
                 "translation": [
-                    {"translation": result["translation"], "verified": False}
+                    {
+                        "translation": result["translation"],
+                        "verified": False,
+                        "arabic": result["arabic"],
+                    }
                 ],
             }
         return None
+
+    @staticmethod
+    def transliterate(text):
+        # call language model
+        llm = LanguageModel()
+        return llm.transliterate(text)
 
     @staticmethod
     def get_entry(text, source, verified=False):
@@ -146,9 +157,3 @@ class TranslationService:
                 item += f" ({curr['wordType']})"
             result.append(item)
         return " | ".join(result)
-
-    @staticmethod
-    def transliterate(text):
-        # call language model
-        llm = LanguageModel()
-        return llm.transliterate(text)
