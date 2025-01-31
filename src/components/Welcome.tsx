@@ -57,15 +57,15 @@ function Welcome() {
       <DialogContent className="w-11/12 rounded-lg sm:w-[450px]">
         <DialogHeader>
           <DialogTitle className="text-2xl">{message.title}</DialogTitle>
-          <DialogDescription className="text-justify">
-            {message.body}
-          </DialogDescription>
+          <DialogDescription
+            className="text-left"
+            dangerouslySetInnerHTML={{ __html: message.body }}
+          ></DialogDescription>
         </DialogHeader>
         <Separator />
         <DialogFooter>
           <div className="w-full text-center text-sm tracking-tighter text-muted-foreground sm:text-left">
             @{APP_NAME}
-            <span className="text-xs text-muted-foreground/60"> — Beta</span>
           </div>
         </DialogFooter>
       </DialogContent>
