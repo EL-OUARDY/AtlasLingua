@@ -41,7 +41,7 @@ def create_app():
         app,
         supports_credentials=True,
         resources={
-            r"/api/*": {"origins": os.getenv("FRONTEND_URL").split(",")}
+            r"/api/*": {"origins": os.getenv("CORS_ALLOWED_DOMAINS").split(",")}
         },
     )
 

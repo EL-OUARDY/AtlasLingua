@@ -342,7 +342,7 @@ function SinglePost({ postId, onEdit }: Props) {
                     )}
                     variant="link"
                   >
-                    Latest
+                    Date
                   </Button>
                   <Separator orientation="vertical" className="h-4" />
                   <Button
