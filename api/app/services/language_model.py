@@ -113,7 +113,7 @@ class LanguageModel:
             translation = json_response.get("translation")
 
             # handle potentiel errors
-            if response == "0":
+            if translation == "0":
                 return None
 
             if source == LanguagesEnum.ENGLISH.value:
@@ -187,7 +187,7 @@ class LanguageModel:
             json_response = json.loads(response.text)
             summarization = json_response.get("summarization")
             # handle potentiel errors
-            if response == "0":
+            if summarization == "0":
                 return None
             return summarization
         except Exception as e:
@@ -235,7 +235,7 @@ class LanguageModel:
             json_response = json.loads(response.text)
             transliteration = json_response.get("transliteration")
             # handle potentiel errors
-            if response == "0":
+            if transliteration == "0":
                 return None
             return transliteration
         except Exception as e:

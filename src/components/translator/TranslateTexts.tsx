@@ -36,7 +36,6 @@ import { APP_NAME } from "@/shared/constants";
 import favoriteService, { IFavorite } from "@/services/favoriteService";
 import ReportDialog from "../ReportDialog";
 import { useUser } from "@/contexts/UserContext";
-import { TextGenerateEffect } from "../ui/text-generate-effect";
 import VoiceInput from "../VoiceInput";
 import SpeakText from "../SpeakText";
 import TransliterationIcon from "../ui/icons/TransliterationIcon";
@@ -479,17 +478,7 @@ function TranslateText() {
               <div className="flex items-center gap-1">
                 {translation[0].translation && (
                   <span dir={isRTL(translation[0].translation) ? "rtl" : "ltr"}>
-                    {translation.length > 1 ||
-                    translation[0].wordType ||
-                    translation[0].wordType === "" ? (
-                      translation[0].translation
-                    ) : (
-                      <TextGenerateEffect
-                        duration={2}
-                        filter={false}
-                        words={translation[0].translation}
-                      />
-                    )}
+                    {translation[0].translation}
                   </span>
                 )}
                 {translation[0].wordType && (
