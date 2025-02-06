@@ -30,6 +30,7 @@ import ForgotPassword from "./components/pages/authentication/ForgotPassword";
 import ResetPassword from "./components/pages/authentication/ResetPassword";
 import Transliteration from "./components/translator/Transliteration";
 import ShareLinkProvider from "./contexts/ShareLinkContext";
+import CommunityFrontPage from "./components/community/CommunityFrontPage";
 
 function App() {
   return (
@@ -69,6 +70,10 @@ function App() {
                 <Route path={ROUTES.favorites} element={<Favorites />} />
                 <Route path={ROUTES.learn} element={<Learn />} />
                 <Route path={ROUTES.community} element={<Community />} />
+                <Route
+                  path={ROUTES.communityStartPage}
+                  element={<CommunityFrontPage isPage />}
+                />
                 <Route
                   path={ROUTES.liveAssistance}
                   element={<LiveAssistance />}

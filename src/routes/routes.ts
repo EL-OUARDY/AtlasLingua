@@ -15,6 +15,7 @@ export const ROUTES = {
   favorites: "/favorites",
   history: "/history",
   community: "/community",
+  communityStartPage: "/community-start",
   contribution: "/contribution",
   about: "/about",
   contact: "/contact",

@@ -16,12 +16,14 @@ import {
   Search,
   SquarePen,
   X,
+  InfoIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useCallback, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useCommunity } from "@/contexts/CommunityContext";
+import { ROUTES } from "@/routes/routes";
 
 interface Props {
   isSearchVisible: boolean;
@@ -109,7 +111,6 @@ function Filter({
             </TabsList>
           </div>
         </Tabs>
-
         <div className="w-full lg:hidden">
           {!secondaryPanelVisible && isSearchVisible ? (
             <Input
@@ -191,6 +192,17 @@ function Filter({
           )}
         </div>
       </div>
+      {!isSearchVisible && (
+        <Button
+          variant={"outline"}
+          size={"icon"}
+          className="hover:bg-background focus:bg-background md:text-muted-foreground"
+        >
+          <Link to={ROUTES.communityStartPage}>
+            <InfoIcon className="size-4 md:size-5" />
+          </Link>
+        </Button>
+      )}
       <div className="ml-auto flex gap-2 md:grow-0">
         <div className="hidden gap-1 md:flex">
           <Input

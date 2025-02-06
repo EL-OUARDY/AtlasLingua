@@ -6,9 +6,9 @@ import {
   DialogHeader,
 } from "./ui/dialog";
 import {
+  AtSignIcon,
   LayoutGrid,
   MessageSquareMore,
-  ReplyAll,
   TriangleAlertIcon,
   UsersIcon,
 } from "lucide-react";
@@ -43,7 +43,7 @@ function Notifications() {
 
   function getNotificationIcon(type: INotificationType) {
     if (type === "new_comment") return MessageSquareMore;
-    if (type === "new_mention") return ReplyAll;
+    if (type === "new_mention") return AtSignIcon;
     if (type === "alert") return TriangleAlertIcon;
     if (type === "communication") return UsersIcon;
     if (type === "new_feature") return LayoutGrid;

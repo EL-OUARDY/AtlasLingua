@@ -6,6 +6,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useCommunity } from "@/contexts/CommunityContext";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { useSearchParams } from "react-router-dom";
+import CommunityFrontPage from "./CommunityFrontPage";
 
 interface Props {
   onPostSelected: (id: string) => void;
@@ -28,13 +29,9 @@ function PostsList({ onPostSelected, selectedPostId, onEdit }: Props) {
   return (
     <>
       <ScrollArea className="h-full w-full">
-        {posts.length === 0 && !loadingPosts && (
-          <div className="flex size-full items-center justify-center text-center">
-            <div className="flex flex-col items-center gap-4 text-muted-foreground">
-              <p className="">No posts available.</p>
-            </div>
-          </div>
-        )}
+        {/* No posts */}
+        {posts.length === 0 && !loadingPosts && <CommunityFrontPage />}
+
         <div className="grid gap-4 pt-0 sm:grid-cols-auto-fill-270">
           {posts.map((post, index) => (
             <PostCard
