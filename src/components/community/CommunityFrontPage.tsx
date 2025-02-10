@@ -1,7 +1,6 @@
 import { ROUTES } from "@/routes/routes";
 import { PenLine, BookOpenIcon, RulerIcon, UsersRoundIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -15,8 +14,8 @@ function CommunityFrontPage({ isPage = false }: Props) {
         isPage && "mb-4 max-w-2xl p-4",
       )}
     >
-      <div className="flex flex-col rounded-lg text-center">
-        <div className="mb-6 w-full rounded-lg bg-background p-4">
+      <div className="flex flex-col gap-6 rounded-lg text-center">
+        <div className="w-full overflow-hidden rounded-lg bg-background p-4">
           <h2 className="mb-2 text-xl font-bold text-primary">
             Welcome to our Forum
           </h2>
@@ -30,7 +29,7 @@ function CommunityFrontPage({ isPage = false }: Props) {
         <div className="grid gap-6 md:grid-cols-2">
           <Link
             to={ROUTES.community + "?new_post=true"}
-            className="flex items-start rounded-lg bg-background p-4"
+            className="flex items-start overflow-hidden rounded-lg bg-background p-4"
           >
             <PenLine className="mr-3 h-6 w-6 flex-shrink-0 text-purple-500" />
             <div className="text-left">
@@ -43,7 +42,7 @@ function CommunityFrontPage({ isPage = false }: Props) {
             </div>
           </Link>
 
-          <div className="flex items-start rounded-lg bg-background p-4">
+          <div className="flex items-start overflow-hidden rounded-lg bg-background p-4">
             <UsersRoundIcon className="mr-3 h-6 w-6 flex-shrink-0 text-purple-500" />
             <div className="text-left">
               <h3 className="mb-2 font-semibold text-primary">
@@ -56,7 +55,7 @@ function CommunityFrontPage({ isPage = false }: Props) {
             </div>
           </div>
 
-          <div className="flex items-start rounded-lg bg-background p-4">
+          <div className="flex items-start overflow-hidden rounded-lg bg-background p-4">
             <BookOpenIcon className="mr-3 h-6 w-6 flex-shrink-0 text-purple-500" />
             <div className="text-left">
               <h3 className="mb-2 font-semibold text-primary">
@@ -69,7 +68,7 @@ function CommunityFrontPage({ isPage = false }: Props) {
             </div>
           </div>
 
-          <div className="flex items-start rounded-lg bg-background p-4">
+          <div className="flex items-start overflow-hidden rounded-lg bg-background p-4">
             <RulerIcon className="mr-3 h-6 w-6 flex-shrink-0 text-purple-500" />
             <div className="text-left">
               <h3 className="mb-2 font-semibold text-primary">
@@ -84,15 +83,18 @@ function CommunityFrontPage({ isPage = false }: Props) {
             </div>
           </div>
         </div>
-        <Button
-          asChild
-          className={cn(
-            "m-auto mt-4 max-w-fit bg-purple-600 text-white hover:bg-purple-700",
-            !isPage && "lg:hidden",
-          )}
-        >
-          <Link to={ROUTES.community + "?new_post=true"}>Create New Post</Link>
-        </Button>
+
+        <div className="flex w-full justify-center overflow-hidden">
+          <Link
+            to={ROUTES.community + "?new_post=true"}
+            className={cn(
+              "max-w-fit rounded-md bg-purple-600 px-4 py-2 text-sm text-white hover:bg-purple-700",
+              !isPage && "lg:hidden",
+            )}
+          >
+            Create New Post
+          </Link>
+        </div>
       </div>
     </div>
   );
