@@ -1,14 +1,9 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
 from app.models.user import User
 from app import db, bcrypt
+from app.services.email_service import EmailService
 from app.services.firebase_service import FirebaseService
 from app.utils.helpers import generate_password
-import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail, From, To
 
 
 class AuthService:
@@ -65,27 +60,9 @@ class AuthService:
 
     @staticmethod
     def send_password_reset_email(recipient_name, recipient_email, reset_link):
-        sender_email = os.getenv("MAIL_SENDER_EMAIL")
-        template_id = os.getenv("MAIL_SENDGRID_RESET_PASSWORD_TEMPLATE_ID")
-
-        message = Mail(
-            from_email=From(sender_email, os.getenv("APP_NAME")),
-            to_emails=To(recipient_email),
+        return EmailService.send_reset_email(
+            recipient_name, recipient_email, reset_link
         )
-        message.dynamic_template_data = {
-            "subject": "Password reset requested",
-            "recipient_name": recipient_name,
-            "reset_link": reset_link,
-        }
-        message.template_id = template_id
-
-        try:
-            sg = SendGridAPIClient(os.getenv("MAIL_SENDGRID_API_KEY"))
-            response = sg.send(message)
-            return response.status_code == 202
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return False
 
     @staticmethod
     def update_user_password(user, new_password):
