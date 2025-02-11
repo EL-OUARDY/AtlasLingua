@@ -2,6 +2,9 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, From, To
 
+from app.models.history import History
+from app.utils.shared import LanguagesEnum
+
 
 class EmailService:
     sender_email = os.getenv("MAIL_SENDER_EMAIL")
@@ -92,6 +95,39 @@ class EmailService:
             "type": contribution_type,
             "description": description,
             "links": links,
+        }
+        message.template_id = template_id
+
+        try:
+            sg = SendGridAPIClient(EmailService.api_key)
+            response = sg.send(message)
+            return response.status_code == 202
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return False
+
+    def send_translation_report_email(user, translation: History, comment):
+        template_id = os.getenv("MAIL_SENDGRID_TRANSLATION_REPORT_TEMPLATE_ID")
+
+        message = Mail(
+            from_email=From(EmailService.sender_email, EmailService.app_name),
+            to_emails=To(EmailService.admin_email),
+        )
+        message.dynamic_template_data = {
+            "name": user.name,
+            "email": user.email,
+            "comment": comment,
+            "translation_id": translation.id,
+            "from": (
+                "[ENGLISH] " + translation.english
+                if translation.source_language == LanguagesEnum.ENGLISH.value
+                else "[DARIJA] " + translation.darija
+            ),
+            "to": (
+                "[ENGLISH] " + translation.english
+                if translation.source_language == LanguagesEnum.DARIJA.value
+                else "[DARIJA] " + translation.darija
+            ),
         }
         message.template_id = template_id
 
