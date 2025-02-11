@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.schemas.contribution_schema import contribution_schema
+from app.services.auth_service import AuthService
 from app.services.contribution_service import ContributionService
 
 
@@ -21,11 +22,13 @@ def contribution():
         )
 
     # save contribution
+    current_user_id = get_jwt_identity()
+    user = AuthService.get_user_by_id(current_user_id)
     result = ContributionService.save(
         contribution_type=request_data["contribution_type"],
         description=request_data["description"],
         links=request_data["links"],
-        user_id=get_jwt_identity(),
+        user=user,
     )
 
     if not result:

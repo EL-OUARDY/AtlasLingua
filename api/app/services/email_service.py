@@ -18,7 +18,6 @@ class EmailService:
             to_emails=To(recipient_email),
         )
         message.dynamic_template_data = {
-            "subject": "Password reset requested",
             "recipient_name": recipient_name,
             "reset_link": reset_link,
         }
@@ -67,6 +66,32 @@ class EmailService:
             "email": user.email,
             "subject": subject,
             "feedback": feedback,
+        }
+        message.template_id = template_id
+
+        try:
+            sg = SendGridAPIClient(EmailService.api_key)
+            response = sg.send(message)
+            return response.status_code == 202
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return False
+
+    def send_contribution_form_email(
+        user, contribution_type, description, links
+    ):
+        template_id = os.getenv("MAIL_SENDGRID_CONTRIBUTION_TEMPLATE_ID")
+
+        message = Mail(
+            from_email=From(EmailService.sender_email, EmailService.app_name),
+            to_emails=To(EmailService.admin_email),
+        )
+        message.dynamic_template_data = {
+            "name": user.name,
+            "email": user.email,
+            "type": contribution_type,
+            "description": description,
+            "links": links,
         }
         message.template_id = template_id
 
