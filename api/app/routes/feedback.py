@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.schemas.feedback_schema import feedback_schema
+from app.services.auth_service import AuthService
 from app.services.feedback_service import FeedbackService
 
 
@@ -21,10 +22,12 @@ def feedback():
         )
 
     # save feedback
+    current_user_id = get_jwt_identity()
+    user = AuthService.get_user_by_id(current_user_id)
     result = FeedbackService.save(
         subject=request_data["subject"],
         body=request_data["body"],
-        user_id=get_jwt_identity(),
+        user=user,
     )
 
     if not result:
