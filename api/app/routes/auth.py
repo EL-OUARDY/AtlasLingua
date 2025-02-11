@@ -155,9 +155,14 @@ def forgot_password():
     )
 
     # send reset email
-    AuthService.send_password_reset_email(user.email, reset_link)
+    response = AuthService.send_password_reset_email(
+        user.name, user.email, reset_link
+    )
 
-    return jsonify({"message": "Password reset email sent"}), 200
+    if response:
+        return jsonify({"message": "Password reset email sent"}), 200
+
+    return jsonify({"message": "Failed to send password reset email"}), 400
 
 
 @bp.route("/reset-password", methods=["POST"])
