@@ -72,7 +72,7 @@ function ProfileSettings() {
       reset({
         name: user.name,
         email: user.email,
-        bio: user.bio,
+        bio: user.bio || "",
         password: "",
       });
     }

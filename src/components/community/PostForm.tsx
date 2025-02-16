@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { useUser } from "@/contexts/UserContext";
@@ -287,7 +286,6 @@ function PostForm({ postId = null }: Props) {
                         <User className="mr-2 h-4 w-4" />
                         <Link to={ROUTES.settings.profile}>Profile</Link>
                       </DropdownMenuItem>
-                      <DropdownMenuSeparator />
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
