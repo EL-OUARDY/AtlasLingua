@@ -282,10 +282,12 @@ function PostForm({ postId = null }: Props) {
                       </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <Link to={ROUTES.settings.profile}>Profile</Link>
-                      </DropdownMenuItem>
+                      <Link to={ROUTES.settings.profile}>
+                        <DropdownMenuItem className="cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          Profile
+                        </DropdownMenuItem>
+                      </Link>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
