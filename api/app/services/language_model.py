@@ -11,7 +11,7 @@ from app.utils.shared import LanguagesEnum
 class LanguageModel:
     def __init__(
         self,
-        model_name="gemini-2.0-flash-exp",
+        model_name="gemini-2.0-flash",
         max_tokens=8192,
         temperature=0,
     ):
