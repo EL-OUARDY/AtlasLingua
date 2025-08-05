@@ -6,7 +6,7 @@ from app.services.auth_service import AuthService
 from app.services.feedback_service import FeedbackService
 
 
-bp = Blueprint("feedback", __name__, url_prefix="/api/feedback")
+bp = Blueprint("feedback", __name__, url_prefix="/feedback")
 
 
 @bp.route("/", methods=["POST"])

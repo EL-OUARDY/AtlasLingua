@@ -4,7 +4,7 @@ from app.schemas.contact_schema import contact_schema
 from app.services.contact_service import ContactService
 
 
-bp = Blueprint("contact", __name__, url_prefix="/api/contact")
+bp = Blueprint("contact", __name__, url_prefix="/contact")
 
 
 @bp.route("/", methods=["POST"])

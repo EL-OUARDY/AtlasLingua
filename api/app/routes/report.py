@@ -6,7 +6,7 @@ from app.services.auth_service import AuthService
 from app.services.report_service import ReportService
 
 
-bp = Blueprint("report", __name__, url_prefix="/api/report")
+bp = Blueprint("report", __name__, url_prefix="/report")
 
 
 @bp.route("/", methods=["POST"])

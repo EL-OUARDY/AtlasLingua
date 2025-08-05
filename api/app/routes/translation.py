@@ -3,7 +3,7 @@ from flask import Blueprint, abort, jsonify, request
 from app.schemas.translate_request_schema import translate_request_schema
 from app.services.translation_service import TranslationService
 
-bp = Blueprint("translation", __name__, url_prefix="/api/translate")
+bp = Blueprint("translation", __name__, url_prefix="/translate")
 
 
 @bp.route("/", methods=["POST"])

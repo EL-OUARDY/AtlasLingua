@@ -6,7 +6,7 @@ from app.services.auth_service import AuthService
 from app.services.contribution_service import ContributionService
 
 
-bp = Blueprint("contribution", __name__, url_prefix="/api/contribution")
+bp = Blueprint("contribution", __name__, url_prefix="/contribution")
 
 
 @bp.route("/", methods=["POST"])

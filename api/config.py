@@ -1,4 +1,5 @@
 import os
+from urllib.parse import urlparse
 
 
 class Config:
@@ -20,7 +21,17 @@ class Config:
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_COOKIE_SECURE = True  # Only allow cookies to be sent over HTTPS
     JWT_COOKIE_CSRF_PROTECT = True  # Enable CSRF protection
-    JWT_COOKIE_SAMESITE = "Lax"  # Set SameSite policy
+    JWT_COOKIE_SAMESITE = "None"
+
+    # Extract domain from API_BASE_URL and add dot prefix for subdomain sharing
+    _api_url = os.getenv("API_BASE_URL")
+    _parsed_url = urlparse(_api_url)
+    _domain_parts = _parsed_url.netloc.split(".")
+    JWT_COOKIE_DOMAIN = (
+        f".{'.'.join(_domain_parts[-2:])}"
+        if len(_domain_parts) >= 2
+        else f".{_parsed_url.netloc}"
+    )
 
     # OAuth Config
     GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")

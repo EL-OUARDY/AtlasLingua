@@ -8,7 +8,7 @@ from app.schemas.favorite_schema import (
 from app.services.favorite_service import FavoriteService
 
 
-bp = Blueprint("favorite", __name__, url_prefix="/api/favorite")
+bp = Blueprint("favorite", __name__, url_prefix="/favorite")
 
 
 @bp.route("/list", methods=["POST"])

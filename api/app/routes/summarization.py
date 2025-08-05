@@ -5,7 +5,7 @@ from app.schemas.summarization_request_schema import (
 )
 from app.services.summarization_service import SummarizationService
 
-bp = Blueprint("summarization", __name__, url_prefix="/api/summarize")
+bp = Blueprint("summarization", __name__, url_prefix="/summarize")
 
 
 @bp.route("/", methods=["POST"])

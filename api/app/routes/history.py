@@ -6,7 +6,7 @@ from app.services.history_service import HistoryService
 from app.schemas.history_schema import paginated_history_schema
 
 
-bp = Blueprint("history", __name__, url_prefix="/api/history")
+bp = Blueprint("history", __name__, url_prefix="/history")
 
 
 @bp.route("/", methods=["POST"])

@@ -23,7 +23,7 @@ from app.services.firebase_service import FirebaseService
 google = oauth.create_client("google")
 
 
-bp = Blueprint("auth", __name__, url_prefix="/api/auth")
+bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 @bp.route("/register", methods=["POST"])

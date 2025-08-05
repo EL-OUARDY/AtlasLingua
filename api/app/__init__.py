@@ -41,7 +41,15 @@ def create_app():
         app,
         supports_credentials=True,
         resources={
-            r"/api/*": {"origins": os.getenv("CORS_ALLOWED_DOMAINS").split(",")}
+            r"/*": {
+                "origins": os.getenv("CORS_ALLOWED_DOMAINS").split(","),
+                "allow_headers": [
+                    "Content-Type",
+                    "Authorization",
+                    "X-CSRF-TOKEN",
+                ],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            }
         },
     )
 
