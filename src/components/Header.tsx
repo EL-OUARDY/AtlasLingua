@@ -111,7 +111,7 @@ function Header() {
             >
               <Avatar className="size-6">
                 <AvatarImage src={user?.avatar} alt={user?.name} className="" />
-                <AvatarFallback className="!bg-background">
+                <AvatarFallback className="!bg-transparent">
                   <User className="size-5" />
                 </AvatarFallback>
               </Avatar>
