@@ -1,47 +1,153 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Primary Meta Tags -->
+    <title>AtlasLingua — English-Darija Translator</title>
+    <meta name="title" content="AtlasLingua — English-Darija Translator" />
+    <meta
+      name="description"
+      content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials."
+    />
 
-  <!-- Primary Meta Tags -->
-  <title>AtlasLingua — English-Darija Translator</title>
-  <meta name="title" content="AtlasLingua — English-Darija Translator" />
-  <meta name="description"
-    content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials." />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://atlaslingua.com/" />
+    <meta
+      property="og:title"
+      content="AtlasLingua — English-Darija Translator"
+    />
+    <meta
+      property="og:description"
+      content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials."
+    />
+    <meta
+      property="og:image"
+      content="https://atlaslingua.com/img/thumbnail.png"
+    />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://atlaslingua.com/" />
-  <meta property="og:title" content="AtlasLingua — English-Darija Translator" />
-  <meta property="og:description"
-    content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials." />
-  <meta property="og:image" content="https://atlaslingua.com/img/thumbnail.png" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://atlaslingua.com/" />
+    <meta
+      property="twitter:title"
+      content="AtlasLingua — English-Darija Translator"
+    />
+    <meta
+      property="twitter:description"
+      content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials."
+    />
+    <meta
+      property="twitter:image"
+      content="https://atlaslingua.com/img/thumbnail.png"
+    />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://atlaslingua.com/" />
-  <meta property="twitter:title" content="AtlasLingua — English-Darija Translator" />
-  <meta property="twitter:description"
-    content="Our app offers AI-powered translations, a rich vocabulary dictionary from English to Darija, and plenty of helpful learning materials." />
-  <meta property="twitter:image" content="https://atlaslingua.com/img/thumbnail.png" />
+    <!-- JSON-LD schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://atlaslingua.com/#website",
+            "url": "https://atlaslingua.com/",
+            "name": "AtlasLingua",
+            "publisher": {
+              "@id": "https://atlaslingua.com/#organization"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://atlaslingua.com/#organization",
+            "name": "AtlasLingua",
+            "url": "https://atlaslingua.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://atlaslingua.com/logo.png"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://atlaslingua.com/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Translator",
+                "item": {
+                  "@id": "https://atlaslingua.com/translate",
+                  "@type": "WebPage",
+                  "url": "https://atlaslingua.com/translate"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Community",
+                "item": {
+                  "@id": "https://atlaslingua.com/community",
+                  "@type": "WebPage",
+                  "url": "https://atlaslingua.com/community"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Learn Darija",
+                "item": {
+                  "@id": "https://atlaslingua.com/learn",
+                  "@type": "WebPage",
+                  "url": "https://atlaslingua.com/learn"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Dictionary",
+                "item": {
+                  "@id": "https://atlaslingua.com/dictionary",
+                  "@type": "WebPage",
+                  "url": "https://atlaslingua.com/dictionary"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Contact US",
+                "item": {
+                  "@id": "https://atlaslingua.com/contact",
+                  "@type": "WebPage",
+                  "url": "https://atlaslingua.com/contact"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GOOGLE_TAG_ID%"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=%VITE_GOOGLE_TAG_ID%"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-    gtag('config', '%VITE_GOOGLE_TAG_ID%');
-  </script>
-</head>
+      gtag("config", "%VITE_GOOGLE_TAG_ID%");
+    </script>
+  </head>
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
